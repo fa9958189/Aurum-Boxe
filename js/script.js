@@ -145,33 +145,6 @@
       createParticles();
     });
 
-    const glove = document.getElementById('glove');
-    const gloveShine = document.getElementById('gloveShine');
-    const hero = document.querySelector('.hero');
-    let scrollRotation = 0;
-
-    function updateGlove(xPercent, yPercent) {
-      const rotateY = (xPercent - 0.5) * 20;
-      const rotateX = (0.5 - yPercent) * 20;
-      glove.style.setProperty('--rotate-x', `${rotateX}deg`);
-      glove.style.setProperty('--rotate-y', `${rotateY}deg`);
-      gloveShine.style.setProperty('--shine-x', `${xPercent * 100}%`);
-      gloveShine.style.setProperty('--shine-y', `${yPercent * 100}%`);
-    }
-
-    hero.addEventListener('mousemove', (event) => {
-      const rect = hero.getBoundingClientRect();
-      const xPercent = (event.clientX - rect.left) / rect.width;
-      const yPercent = (event.clientY - rect.top) / rect.height;
-      updateGlove(xPercent, yPercent);
-    });
-
-    window.addEventListener('scroll', () => {
-      scrollRotation += 0.5;
-      const scrollPercent = (scrollRotation % 100) / 100;
-      updateGlove(0.5 + Math.sin(scrollPercent * Math.PI * 2) * 0.1, 0.5);
-    }, { passive: true });
-
     const heroVideo = document.getElementById('heroVideo');
     heroVideo.addEventListener('error', () => {
       hero.classList.add('fallback');
