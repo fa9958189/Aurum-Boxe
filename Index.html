@@ -4,20 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Aurum Boxe | Boxe Olímpico em Araguaína-TO</title>
-  <meta name="description" content="Aurum Boxe - Treinos de Boxe Olímpico em Araguaína-TO. Disciplina, técnica e respeito." />
+  <meta name="description" content="Aurum Boxe - Boxe Olímpico em Araguaína-TO. Treinamento premium, metodologia olímpica e evolução real." />
   <style>
     :root {
-      --bg: #0b0b0d;
-      --bg-alt: #101115;
+      color-scheme: dark;
+      --bg: #08090b;
+      --bg-alt: #0e1015;
       --card: #14161b;
       --gold: #d6b35e;
-      --gold-soft: rgba(214, 179, 94, 0.2);
-      --white: #f4f4f6;
-      --muted: #b8b8c2;
+      --gold-strong: #f0cc75;
+      --gold-soft: rgba(214, 179, 94, 0.18);
+      --white: #f5f5f7;
+      --muted: #b2b4c0;
       --red: #e10616;
-      --shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+      --shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
       --radius: 18px;
-      --glass: rgba(15, 16, 21, 0.7);
+      --glass: rgba(11, 12, 17, 0.72);
       --border: rgba(255, 255, 255, 0.08);
     }
 
@@ -32,11 +34,16 @@
     }
 
     body {
-      font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+      font-family: "Segoe UI", "Helvetica Neue", "Arial", system-ui, sans-serif;
       background: var(--bg);
       color: var(--white);
-      line-height: 1.6;
+      line-height: 1.65;
       overflow-x: hidden;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
     }
 
     a {
@@ -44,9 +51,8 @@
       text-decoration: none;
     }
 
-    img {
-      max-width: 100%;
-      display: block;
+    button {
+      font-family: inherit;
     }
 
     .container {
@@ -55,20 +61,20 @@
     }
 
     .section {
-      padding: 90px 0;
+      padding: 100px 0;
       position: relative;
     }
 
     .section-title {
-      font-size: clamp(2rem, 4vw, 3.2rem);
-      margin-bottom: 18px;
+      font-size: clamp(2.1rem, 4vw, 3.4rem);
+      margin-bottom: 16px;
       letter-spacing: 0.5px;
     }
 
     .section-subtitle {
       color: var(--muted);
       max-width: 720px;
-      margin-bottom: 40px;
+      margin-bottom: 36px;
     }
 
     .badge {
@@ -79,10 +85,10 @@
       border-radius: 999px;
       background: var(--gold-soft);
       color: var(--gold);
-      font-size: 0.85rem;
-      letter-spacing: 0.8px;
+      font-size: 0.82rem;
+      letter-spacing: 1.2px;
       text-transform: uppercase;
-      border: 1px solid rgba(214, 179, 94, 0.3);
+      border: 1px solid rgba(214, 179, 94, 0.35);
     }
 
     .btn {
@@ -92,21 +98,21 @@
       gap: 10px;
       padding: 14px 22px;
       border-radius: 999px;
-      font-weight: 600;
+      font-weight: 700;
       border: 1px solid transparent;
       transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
       cursor: pointer;
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #f1d287, #c9a24f);
-      color: #141118;
+      background: linear-gradient(135deg, #f2d48a, #c89b42);
+      color: #1a1410;
       box-shadow: 0 15px 30px rgba(214, 179, 94, 0.35);
     }
 
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 18px 40px rgba(214, 179, 94, 0.45);
+      box-shadow: 0 18px 40px rgba(214, 179, 94, 0.5);
     }
 
     .btn-outline {
@@ -117,7 +123,11 @@
 
     .btn-outline:hover {
       background: var(--gold);
-      color: #141118;
+      color: #1a1410;
+    }
+
+    .btn-impact {
+      transform: scale(0.97);
     }
 
     header {
@@ -134,43 +144,38 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 18px 0;
+      padding: 16px 0;
+      gap: 14px;
     }
 
     .logo {
       display: flex;
       align-items: center;
       gap: 12px;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: 1px;
     }
 
-    .logo-mark {
-      width: 38px;
-      height: 38px;
+    .logo img {
+      width: 44px;
+      height: 44px;
       border-radius: 12px;
-      background: linear-gradient(135deg, #f1d287, #c99b48, #6b4b1b);
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.4);
-      position: relative;
+      object-fit: cover;
+      box-shadow: 0 0 0 2px rgba(214, 179, 94, 0.4);
     }
 
-    .logo-mark::after {
-      content: "AB";
-      position: absolute;
-      inset: 0;
-      display: grid;
-      place-items: center;
-      color: #0e0b10;
-      font-weight: 800;
-      font-size: 0.85rem;
+    .logo small {
+      display: block;
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
     }
-
-    /* TODO: Substitua o logo acima pelo logo real da academia */
 
     .nav-links {
       display: none;
-      gap: 22px;
-      font-size: 0.95rem;
+      gap: 20px;
+      font-size: 0.92rem;
     }
 
     .nav-links a {
@@ -211,7 +216,10 @@
       cursor: pointer;
     }
 
-    .menu-toggle span {
+    .menu-toggle span,
+    .menu-toggle span::before,
+    .menu-toggle span::after {
+      display: block;
       width: 22px;
       height: 2px;
       background: var(--white);
@@ -222,9 +230,6 @@
     .menu-toggle span::after {
       content: "";
       position: absolute;
-      width: 100%;
-      height: 2px;
-      background: var(--white);
       left: 0;
     }
 
@@ -259,35 +264,55 @@
       padding-top: 120px;
       display: grid;
       align-items: center;
-      background: radial-gradient(circle at top, rgba(214, 179, 94, 0.15), transparent 50%),
-        linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(0,0,0,0.7));
       position: relative;
       overflow: hidden;
+    }
+
+    .hero video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(0.9) contrast(1.1);
+      z-index: 0;
     }
 
     .hero::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 20% 20%, rgba(225, 6, 22, 0.2), transparent 40%),
-        radial-gradient(circle at 80% 40%, rgba(214, 179, 94, 0.2), transparent 45%);
-      opacity: 0.8;
+      background: radial-gradient(circle at top, rgba(214, 179, 94, 0.25), transparent 50%),
+        radial-gradient(circle at 20% 20%, rgba(225, 6, 22, 0.2), transparent 40%),
+        rgba(5, 6, 10, 0.75);
+      z-index: 1;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 60%, transparent 50%, rgba(0,0,0,0.85) 100%);
+      z-index: 1;
+    }
+
+    .hero.fallback {
+      background: linear-gradient(135deg, rgba(214, 179, 94, 0.18), rgba(0,0,0,0.8));
     }
 
     .hero-content {
       position: relative;
       z-index: 2;
       display: grid;
-      gap: 28px;
-      max-width: 720px;
+      gap: 32px;
     }
 
-    .hero h1 {
-      font-size: clamp(2.6rem, 5vw, 4.2rem);
-      line-height: 1.1;
+    .hero-text h1 {
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      line-height: 1.05;
     }
 
-    .hero p {
+    .hero-text p {
       color: var(--muted);
       font-size: 1.05rem;
     }
@@ -296,25 +321,26 @@
       display: flex;
       flex-wrap: wrap;
       gap: 14px;
+      margin-top: 10px;
     }
 
     .hero-metrics {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       gap: 18px;
-      margin-top: 10px;
+      margin-top: 20px;
     }
 
     .metric-card {
       padding: 18px;
       border-radius: 16px;
-      background: rgba(20, 22, 27, 0.85);
+      background: rgba(13, 14, 18, 0.75);
       border: 1px solid var(--border);
       box-shadow: var(--shadow);
     }
 
     .metric-value {
-      font-size: 1.8rem;
+      font-size: 1.9rem;
       color: var(--gold);
       font-weight: 700;
     }
@@ -324,39 +350,26 @@
       font-size: 0.85rem;
     }
 
-    .hero-media {
-      position: absolute;
-      right: -10%;
-      bottom: -10%;
-      width: 70%;
-      height: 70%;
-      background: linear-gradient(135deg, rgba(214, 179, 94, 0.25), rgba(0, 0, 0, 0.1));
-      border-radius: 40px;
-      filter: blur(0.5px);
-      opacity: 0.7;
-      transform: rotate(-6deg);
-    }
-
-    .hero-video {
+    .hero-panel {
       position: relative;
-      margin-top: 30px;
+      padding: 26px;
       border-radius: var(--radius);
-      padding: 30px;
-      background: rgba(15, 16, 21, 0.8);
+      background: rgba(15, 16, 21, 0.78);
       border: 1px solid var(--border);
       box-shadow: var(--shadow);
       overflow: hidden;
-      min-height: 220px;
+      min-height: 280px;
     }
 
-    .hero-video canvas {
+    .hero-panel canvas {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
+      opacity: 0.6;
     }
 
-    .hero-video .video-overlay {
+    .hero-panel-content {
       position: relative;
       z-index: 2;
       display: grid;
@@ -369,10 +382,65 @@
       min-height: 24px;
     }
 
-    .glow-line {
-      height: 3px;
-      width: 120px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    .glove-wrapper {
+      position: absolute;
+      right: -40px;
+      bottom: -40px;
+      width: 240px;
+      height: 240px;
+      perspective: 900px;
+      z-index: 2;
+    }
+
+    .glove {
+      width: 100%;
+      height: 100%;
+      border-radius: 60% 60% 50% 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.35), transparent 60%),
+        linear-gradient(140deg, #b78b40, #4d2d16 55%, #1a0f0a);
+      box-shadow: inset -20px -30px 40px rgba(0,0,0,0.6),
+        inset 15px 20px 35px rgba(255,255,255,0.12),
+        0 25px 50px rgba(0,0,0,0.65);
+      position: relative;
+      transform-style: preserve-3d;
+      transform: rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
+      transition: transform 0.15s ease;
+    }
+
+    .glove::before {
+      content: "";
+      position: absolute;
+      width: 70%;
+      height: 55%;
+      right: 12%;
+      top: 6%;
+      border-radius: 55% 55% 45% 45%;
+      background: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.35), transparent 60%),
+        linear-gradient(150deg, #f0cc75, #8d5a24);
+      box-shadow: inset -10px -20px 30px rgba(0,0,0,0.4);
+      transform: translateZ(20px);
+    }
+
+    .glove::after {
+      content: "";
+      position: absolute;
+      width: 60%;
+      height: 22%;
+      left: 18%;
+      bottom: 8%;
+      border-radius: 40px;
+      background: linear-gradient(120deg, #e10616, #7c0d14);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+      transform: translateZ(16px);
+    }
+
+    .glove-shine {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at var(--shine-x, 40%) var(--shine-y, 40%), rgba(255,255,255,0.4), transparent 55%);
+      mix-blend-mode: screen;
+      border-radius: inherit;
+      pointer-events: none;
     }
 
     .grid {
@@ -396,7 +464,7 @@
 
     .card:hover {
       transform: translateY(-6px);
-      border-color: rgba(214, 179, 94, 0.4);
+      border-color: rgba(214, 179, 94, 0.45);
     }
 
     .card-icon {
@@ -411,85 +479,84 @@
       font-weight: 700;
     }
 
-    .treinos-filter {
-      display: flex;
-      flex-wrap: wrap;
+    .highlight-text {
+      color: var(--gold-strong);
+      font-weight: 700;
+    }
+
+    .schedule-box {
+      display: grid;
       gap: 12px;
-      margin-bottom: 28px;
-    }
-
-    .filter-btn {
-      padding: 10px 18px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: transparent;
+      padding: 20px;
+      border-radius: 16px;
+      border: 1px dashed rgba(214, 179, 94, 0.4);
+      background: rgba(214, 179, 94, 0.05);
       color: var(--muted);
-      cursor: pointer;
-      transition: all 0.2s ease;
     }
 
-    .filter-btn.active,
-    .filter-btn:hover {
-      border-color: var(--gold);
-      color: var(--white);
-      background: rgba(214, 179, 94, 0.15);
-    }
-
-    .timeline {
-      display: grid;
-      gap: 24px;
-      position: relative;
-    }
-
-    .timeline::before {
-      content: "";
-      position: absolute;
-      left: 10px;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: linear-gradient(var(--gold), transparent);
-    }
-
-    .timeline-item {
-      display: grid;
-      grid-template-columns: 24px 1fr;
-      gap: 16px;
-      align-items: start;
-    }
-
-    .timeline-dot {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: var(--gold);
-      box-shadow: 0 0 12px rgba(214, 179, 94, 0.5);
-      margin-top: 4px;
-    }
-
-    .team-grid {
+    .classes-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 20px;
     }
 
-    .team-card {
-      text-align: center;
-      padding: 22px;
-      border-radius: var(--radius);
-      background: var(--card);
-      border: 1px solid var(--border);
+    .class-card {
+      position: relative;
+      overflow: hidden;
     }
 
-    .team-avatar {
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      margin: 0 auto 14px;
-      background: linear-gradient(135deg, rgba(214,179,94,0.4), rgba(225,6,22,0.3));
+    .class-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent, rgba(214,179,94,0.15));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .class-card:hover::after {
+      opacity: 1;
+    }
+
+    .timer-widget {
       display: grid;
-      place-items: center;
-      font-weight: 700;
+      gap: 16px;
+      padding: 24px;
+      border-radius: var(--radius);
+      background: rgba(10, 11, 16, 0.85);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .timer-display {
+      font-size: 2.6rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: var(--gold);
+    }
+
+    .timer-status {
+      color: var(--muted);
+    }
+
+    .timer-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .timer-pill {
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .timer-pill.active {
+      border-color: var(--gold);
+      color: var(--white);
+      background: rgba(214, 179, 94, 0.15);
     }
 
     .gallery {
@@ -525,6 +592,8 @@
       background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(0,0,0,0.6));
       color: var(--muted);
       font-size: 0.9rem;
+      padding: 18px;
+      text-align: center;
     }
 
     .carousel {
@@ -564,16 +633,6 @@
       color: var(--gold);
     }
 
-    .map-placeholder {
-      min-height: 260px;
-      border-radius: var(--radius);
-      background: linear-gradient(135deg, rgba(214,179,94,0.2), rgba(0,0,0,0.7));
-      display: grid;
-      place-items: center;
-      color: var(--muted);
-      border: 1px solid var(--border);
-    }
-
     .faq-item {
       border-bottom: 1px solid var(--border);
       padding: 18px 0;
@@ -585,6 +644,7 @@
       align-items: center;
       cursor: pointer;
       font-weight: 600;
+      gap: 12px;
     }
 
     .faq-answer {
@@ -595,8 +655,20 @@
     }
 
     .faq-item.active .faq-answer {
-      max-height: 200px;
+      max-height: 220px;
       margin-top: 10px;
+    }
+
+    .map-placeholder {
+      min-height: 260px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(214,179,94,0.2), rgba(0,0,0,0.7));
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      text-align: center;
+      padding: 18px;
     }
 
     .contact-form {
@@ -604,7 +676,8 @@
       gap: 14px;
     }
 
-    input, textarea {
+    input,
+    textarea {
       width: 100%;
       padding: 14px;
       border-radius: 12px;
@@ -614,7 +687,8 @@
       font-size: 0.95rem;
     }
 
-    input:focus, textarea:focus {
+    input:focus,
+    textarea:focus {
       outline: none;
       border-color: var(--gold);
     }
@@ -653,6 +727,7 @@
     .floating-btn.whatsapp {
       background: linear-gradient(135deg, #25d366, #128c7e);
       color: #0b0b0d;
+      font-weight: 700;
     }
 
     .floating-btn:hover {
@@ -665,13 +740,21 @@
       color: var(--muted);
     }
 
-    .parallax-bg {
-      position: absolute;
-      inset: 0;
-      background: url('') center/cover;
-      opacity: 0.1;
-      pointer-events: none;
-      transform: translateY(0px);
+    .footer-grid {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     @media (min-width: 720px) {
@@ -687,17 +770,9 @@
         display: none;
       }
 
-      .hero {
-        padding-top: 140px;
-      }
-
       .hero-content {
-        grid-template-columns: 1.2fr 0.8fr;
+        grid-template-columns: 1.1fr 0.9fr;
         align-items: center;
-      }
-
-      .hero-media {
-        display: block;
       }
 
       .gallery {
@@ -710,23 +785,35 @@
         column-count: 3;
       }
     }
+
+    @media (max-width: 640px) {
+      .glove-wrapper {
+        position: relative;
+        right: auto;
+        bottom: auto;
+        width: 180px;
+        height: 180px;
+        margin-top: 12px;
+      }
+    }
   </style>
 </head>
 <body>
   <header>
     <div class="container nav">
       <div class="logo">
-        <div class="logo-mark" aria-hidden="true"></div>
+        <img src="Fotos/Logo.jpeg" alt="Logo Aurum Boxe" />
         <div>
           <div>Aurum Boxe</div>
-          <small style="color: var(--muted); font-size: 0.75rem;">Boxe Olímpico</small>
+          <small>Boxe Olímpico</small>
         </div>
       </div>
       <nav class="nav-links">
         <a href="#hero" class="active">Início</a>
         <a href="#sobre">Sobre</a>
-        <a href="#treinos">Treinos</a>
+        <a href="#olimpico">Boxe Olímpico</a>
         <a href="#metodologia">Metodologia</a>
+        <a href="#turmas">Turmas</a>
         <a href="#galeria">Galeria</a>
         <a href="#contato">Contato</a>
       </nav>
@@ -738,130 +825,123 @@
     <div class="mobile-nav" id="mobileNav">
       <a href="#hero" class="active">Início</a>
       <a href="#sobre">Sobre</a>
-      <a href="#treinos">Treinos</a>
+      <a href="#olimpico">Boxe Olímpico</a>
       <a href="#metodologia">Metodologia</a>
-      <a href="#equipe">Equipe</a>
+      <a href="#turmas">Turmas</a>
       <a href="#galeria">Galeria</a>
+      <a href="#faq">FAQ</a>
       <a href="#contato">Contato</a>
     </div>
   </header>
 
   <main>
     <section class="hero" id="hero">
-      <div class="parallax-bg" aria-hidden="true"></div>
+      <video id="heroVideo" autoplay muted loop playsinline poster="Fotos/Logo.jpeg">
+        <source src="Videos/IMG_4536.MOV" type="video/quicktime" />
+      </video>
       <div class="container hero-content">
-        <div>
+        <div class="hero-text reveal" data-reveal>
           <span class="badge">Arena Premium em Araguaína-TO</span>
           <h1>Treine Boxe Olímpico com alma de campeão.</h1>
-          <p>Disciplina. Técnica. Respeito. Uma experiência premium para quem quer evolução real com treinamentos inteligentes e acompanhamento de perto.</p>
+          <p>Disciplina, técnica e respeito em um ambiente premium de arena. Evolução real com acompanhamento próximo e metodologia olímpica.</p>
           <div class="hero-cta">
             <a class="btn btn-primary" href="#contato">Agendar aula experimental</a>
-            <a class="btn btn-outline" href="#treinos">Ver horários</a>
+            <a class="btn btn-outline" href="#turmas">Ver horários</a>
           </div>
           <div class="hero-metrics">
-            <div class="metric-card">
-              <div class="metric-value" data-counter="120">0</div>
+            <div class="metric-card" data-reveal>
+              <div class="metric-value" data-counter="180">0</div>
               <div class="metric-label">Alunos ativos</div>
             </div>
-            <div class="metric-card">
-              <div class="metric-value" data-counter="18">0</div>
+            <div class="metric-card" data-reveal>
+              <div class="metric-value" data-counter="24">0</div>
               <div class="metric-label">Treinos semanais</div>
             </div>
-            <div class="metric-card">
-              <div class="metric-value" data-counter="60">0</div>
-              <div class="metric-label">Minutos por aula</div>
+            <div class="metric-card" data-reveal>
+              <div class="metric-value" data-counter="6">0</div>
+              <div class="metric-label">Anos de história</div>
             </div>
           </div>
         </div>
-        <div class="hero-video">
+        <div class="hero-panel reveal" data-reveal>
           <canvas id="heroParticles" aria-hidden="true"></canvas>
-          <div class="video-overlay">
+          <div class="hero-panel-content">
             <div class="badge">Experiência Imersiva</div>
-            <h3>Vídeo Arena 360º (visual dinâmico)</h3>
+            <h3>Atmosfera de ringue com luzes e poeira de arena.</h3>
             <div class="typing" id="typingText"></div>
-            <div class="glow-line"></div>
-            <p style="color: var(--muted);">Efeito visual simulando vídeo com partículas e luzes de arena.</p>
+            <p style="color: var(--muted);">Um visual premium para treinar mente e corpo no mesmo ritmo.</p>
+            <div class="schedule-box">
+              <strong>Horários principais</strong>
+              <span><!-- TODO: Atualizar horários -->
+                Seg a Sex: 06h, 12h, 18h, 20h<br />
+                Sáb: 09h
+              </span>
+            </div>
+          </div>
+          <div class="glove-wrapper" aria-hidden="true">
+            <div class="glove" id="glove">
+              <div class="glove-shine" id="gloveShine"></div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="hero-media" aria-hidden="true"></div>
     </section>
 
     <section class="section" id="sobre">
       <div class="container">
-        <div class="badge">Sobre o Boxe Olímpico</div>
-        <h2 class="section-title">Técnica, estratégia e explosão em cada round.</h2>
-        <p class="section-subtitle">O boxe olímpico é um esporte de alta performance que combina foco, agilidade e controle emocional. É para quem busca evolução física e mental.</p>
+        <div class="badge">Sobre a Aurum Boxe</div>
+        <h2 class="section-title">Uma academia criada para formar atletas e transformar vidas.</h2>
+        <p class="section-subtitle">Em Araguaína-TO, a Aurum Boxe é referência em boxe olímpico com espaço premium, equipe técnica dedicada e metodologia vencedora.</p>
         <div class="grid two-col">
-          <div class="card">
-            <div class="card-icon">R</div>
-            <h3>Rounds e Pontuação</h3>
-            <p>Combates de 3 rounds com foco em precisão, velocidade e defesa ativa. Cada ponto vem de golpes limpos e estratégia.</p>
+          <div class="card reveal" data-reveal>
+            <div class="card-icon">01</div>
+            <h3>Experiência de arena</h3>
+            <p>Iluminação, layout e estrutura pensados para trazer a energia de um ringue profissional.</p>
           </div>
-          <div class="card">
-            <div class="card-icon">C</div>
-            <h3>Categorias Oficiais</h3>
-            <p>Divisão por peso e idade para garantir segurança e competitividade. Planejamento inteligente para sua evolução.</p>
+          <div class="card reveal" data-reveal>
+            <div class="card-icon">02</div>
+            <h3>Acompanhamento real</h3>
+            <p>Treinadores presentes em todas as fases com foco técnico, físico e mental.</p>
           </div>
-          <div class="card">
-            <div class="card-icon">E</div>
-            <h3>Equipamentos</h3>
-            <p>Luvas, protetores bucais e bandagens são essenciais. Aqui, o cuidado com a segurança vem em primeiro lugar.</p>
+          <div class="card reveal" data-reveal>
+            <div class="card-icon">03</div>
+            <h3>Resultados consistentes</h3>
+            <p>Programas que evoluem do iniciante ao atleta competitivo com metas claras.</p>
           </div>
-          <div class="card">
-            <div class="card-icon">B</div>
-            <h3>Benefícios Premium</h3>
-            <p>Condicionamento, disciplina e autoconfiança. O boxe olímpico trabalha corpo e mente em alta intensidade.</p>
+          <div class="card reveal" data-reveal>
+            <div class="card-icon">04</div>
+            <h3>Comunidade Aurum</h3>
+            <p>Ambiente de respeito e apoio para todos os perfis, do hobby à alta performance.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section" id="treinos">
+    <section class="section" id="olimpico">
       <div class="container">
-        <div class="badge">Treinos Inteligentes</div>
-        <h2 class="section-title">Programas sob medida para sua evolução.</h2>
-        <p class="section-subtitle">Escolha a categoria ideal e sinta o impacto de uma metodologia sólida, moderna e humana.</p>
-
-        <div class="treinos-filter">
-          <button class="filter-btn active" data-filter="all">Todos</button>
-          <button class="filter-btn" data-filter="iniciante">Iniciante</button>
-          <button class="filter-btn" data-filter="intermediario">Intermediário</button>
-          <button class="filter-btn" data-filter="avancado">Avançado</button>
-          <button class="filter-btn" data-filter="kids">Kids</button>
-          <button class="filter-btn" data-filter="feminino">Feminino</button>
-        </div>
-
-        <div class="grid two-col" id="treinoCards">
-          <div class="card treino-card" data-category="iniciante">
-            <div class="card-icon">01</div>
-            <h3>Boxe Start</h3>
-            <p>Ideal para quem está começando, com foco em postura, coordenação e fundamentos.</p>
+        <div class="badge">Boxe Olímpico</div>
+        <h2 class="section-title">Regras, pontuação e a ciência por trás do combate.</h2>
+        <p class="section-subtitle">O boxe olímpico valoriza precisão, estratégia e velocidade. Aqui você treina com os mesmos princípios das competições oficiais.</p>
+        <div class="grid two-col">
+          <div class="card reveal" data-reveal>
+            <div class="card-icon">R</div>
+            <h3>Rounds e ritmo</h3>
+            <p>Combates oficiais têm 3 rounds de 2 minutos com 1 minuto de descanso. Cada round exige leitura de jogo e explosão.</p>
           </div>
-          <div class="card treino-card" data-category="intermediario">
-            <div class="card-icon">02</div>
-            <h3>Performance</h3>
-            <p>Treinos com maior intensidade e foco em resistência, sparring técnico e tática.</p>
+          <div class="card reveal" data-reveal>
+            <div class="card-icon">P</div>
+            <h3>Pontuação objetiva</h3>
+            <p>Pontos são computados por golpes limpos na área válida. Defesa ativa e controle do ringue fazem diferença.</p>
           </div>
-          <div class="card treino-card" data-category="avancado">
-            <div class="card-icon">03</div>
-            <h3>Alta Competição</h3>
-            <p>Preparação avançada para atletas com acompanhamento e análise de performance.</p>
+          <div class="card reveal" data-reveal>
+            <div class="card-icon">S</div>
+            <h3>Segurança sempre</h3>
+            <p>Capacetes, bandagens e luvas adequadas mantêm o treino seguro e eficiente, sem perder intensidade.</p>
           </div>
-          <div class="card treino-card" data-category="kids">
-            <div class="card-icon">04</div>
-            <h3>Kids Fighters</h3>
-            <p>Aulas lúdicas com disciplina e coordenação para crianças a partir de 7 anos.</p>
-          </div>
-          <div class="card treino-card" data-category="feminino">
-            <div class="card-icon">05</div>
-            <h3>Boxe Feminino</h3>
-            <p>Ambiente de apoio e empoderamento com foco em técnica e condicionamento.</p>
-          </div>
-          <div class="card treino-card" data-category="intermediario">
-            <div class="card-icon">06</div>
-            <h3>Condicionamento</h3>
-            <p>Treinos intensos para aprimorar explosão, velocidade e resistência geral.</p>
+          <div class="card reveal" data-reveal>
+            <div class="card-icon">T</div>
+            <h3>Treino científico</h3>
+            <p>Periodização de força, resistência e tática para entregar performance progressiva.</p>
           </div>
         </div>
       </div>
@@ -870,65 +950,93 @@
     <section class="section" id="metodologia">
       <div class="container">
         <div class="badge">Metodologia Aurum</div>
-        <h2 class="section-title">Treinamento com visão olímpica e mentalidade vencedora.</h2>
-        <p class="section-subtitle">Nossa metodologia é focada em evolução contínua e acompanhamento de cada atleta.</p>
-        <div class="timeline">
-          <div class="timeline-item">
-            <div class="timeline-dot"></div>
-            <div>
-              <h3>Diagnóstico inicial</h3>
-              <p>Mapeamos seus objetivos e níveis de condicionamento para criar um plano personalizado.</p>
-            </div>
+        <h2 class="section-title">Treinamento olímpico com mentalidade vencedora.</h2>
+        <p class="section-subtitle">Da avaliação inicial ao alto rendimento, cada atleta recebe acompanhamento personalizado e evolução registrada.</p>
+        <div class="grid two-col">
+          <div class="card reveal" data-reveal>
+            <h3>Diagnóstico inicial</h3>
+            <p>Mapeamos metas, histórico e condicionamento para criar um plano eficiente.</p>
           </div>
-          <div class="timeline-item">
-            <div class="timeline-dot"></div>
-            <div>
-              <h3>Fundamentos técnicos</h3>
-              <p>Base sólida com postura, guarda, deslocamento e golpes essenciais.</p>
-            </div>
+          <div class="card reveal" data-reveal>
+            <h3>Fundamentos técnicos</h3>
+            <p>Guarda, base, deslocamento e golpes essenciais com correção constante.</p>
           </div>
-          <div class="timeline-item">
-            <div class="timeline-dot"></div>
-            <div>
-              <h3>Performance e estratégia</h3>
-              <p>Treinos específicos de ritmo, sparring controlado e tomada de decisão.</p>
-            </div>
+          <div class="card reveal" data-reveal>
+            <h3>Performance e estratégia</h3>
+            <p>Treinos de ritmo, sparring técnico e tomada de decisão em combate.</p>
           </div>
-          <div class="timeline-item">
-            <div class="timeline-dot"></div>
-            <div>
-              <h3>Acompanhamento contínuo</h3>
-              <p>Análise de evolução e ajustes para elevar seu nível a cada ciclo.</p>
+          <div class="card reveal" data-reveal>
+            <h3>Acompanhamento contínuo</h3>
+            <p>Feedbacks semanais, metas por ciclo e evolução mensurável.</p>
+          </div>
+        </div>
+        <div style="margin-top: 32px;" class="grid two-col">
+          <div class="card reveal" data-reveal>
+            <h3>Vídeo da arena</h3>
+            <p>Veja uma amostra da energia da Aurum Boxe.</p>
+            <video controls muted style="width: 100%; border-radius: 12px; margin-top: 12px;">
+              <source src="Videos/IMG_4538.MOV" type="video/quicktime" />
+            </video>
+          </div>
+          <div class="timer-widget reveal" data-reveal>
+            <div class="badge">Treino Olímpico</div>
+            <div class="timer-display" id="timerDisplay">02:00</div>
+            <div class="timer-status" id="timerStatus">Round 1 / 3</div>
+            <div class="timer-pill-group">
+              <span class="timer-pill active" data-round="1">Round 1</span>
+              <span class="timer-pill" data-round="2">Round 2</span>
+              <span class="timer-pill" data-round="3">Round 3</span>
+              <span class="timer-pill" data-round="rest">Descanso</span>
             </div>
+            <div class="timer-controls">
+              <button class="btn btn-primary" id="timerStart">Iniciar</button>
+              <button class="btn btn-outline" id="timerPause">Pausar</button>
+              <button class="btn btn-outline" id="timerReset">Resetar</button>
+            </div>
+            <p style="color: var(--muted);">Modo oficial: 3 rounds de 2:00 com 1:00 de descanso.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section" id="equipe">
+    <section class="section" id="turmas">
       <div class="container">
-        <div class="badge">Equipe Técnica</div>
-        <h2 class="section-title">Treinadores experientes e apaixonados.</h2>
-        <p class="section-subtitle">Profissionais focados em sua evolução e segurança durante todo o processo.</p>
-        <div class="team-grid">
-          <div class="team-card">
-            <div class="team-avatar">CT</div>
-            <h3>Coach 01</h3>
-            <p>Especialista em boxe olímpico e preparação física.</p>
+        <div class="badge">Turmas</div>
+        <h2 class="section-title">Programas sob medida para cada fase.</h2>
+        <p class="section-subtitle">Treinos com intensidade, segurança e acompanhamento. Escolha sua categoria.</p>
+        <div class="classes-grid">
+          <div class="card class-card reveal" data-reveal>
+            <div class="card-icon">01</div>
+            <h3>Iniciante</h3>
+            <p>Postura, coordenação e base técnica para iniciar com confiança.</p>
           </div>
-          <div class="team-card">
-            <div class="team-avatar">PT</div>
-            <h3>Coach 02</h3>
-            <p>Treinadora de performance e estratégia.</p>
+          <div class="card class-card reveal" data-reveal>
+            <div class="card-icon">02</div>
+            <h3>Intermediário</h3>
+            <p>Treinos de ritmo, resistência e combos avançados.</p>
           </div>
-          <div class="team-card">
-            <div class="team-avatar">FT</div>
-            <h3>Coach 03</h3>
-            <p>Foco em boxe feminino e condicionamento.</p>
+          <div class="card class-card reveal" data-reveal>
+            <div class="card-icon">03</div>
+            <h3>Avançado</h3>
+            <p>Alta performance, sparring controlado e preparação para competição.</p>
+          </div>
+          <div class="card class-card reveal" data-reveal>
+            <div class="card-icon">04</div>
+            <h3>Kids</h3>
+            <p>Aulas lúdicas para crianças com disciplina e coordenação.</p>
+          </div>
+          <div class="card class-card reveal" data-reveal>
+            <div class="card-icon">05</div>
+            <h3>Feminino</h3>
+            <p>Ambiente acolhedor com foco em técnica, força e autoconfiança.</p>
           </div>
         </div>
-        <div style="margin-top: 26px;">
-          <a class="btn btn-primary" href="#contato">Quero uma aula experimental</a>
+        <div class="schedule-box" style="margin-top: 24px;">
+          <strong>Horários completos</strong>
+          <span><!-- TODO: Atualizar horários completos -->
+            Segunda a Sexta: 06h às 22h<br />
+            Sábado: 08h às 12h
+          </span>
         </div>
       </div>
     </section>
@@ -937,7 +1045,7 @@
       <div class="container">
         <div class="badge">Galeria</div>
         <h2 class="section-title">Momentos que fazem história.</h2>
-        <p class="section-subtitle">Fotos reais dos treinos e eventos. As imagens são carregadas da pasta <strong>/Fotos</strong>.</p>
+        <p class="section-subtitle">Imagens reais da Aurum Boxe. Se houver mais fotos na pasta <strong>/Fotos</strong>, elas podem ser adicionadas na lista abaixo.</p>
         <div class="gallery" id="galleryGrid"></div>
       </div>
     </section>
@@ -956,7 +1064,7 @@
             </div>
             <div class="carousel-card">
               <div class="card">
-                <p>"Equipe top, ambiente premium. Cada aula é um desafio e uma evolução."</p>
+                <p>"Equipe top e estrutura premium. Cada aula é um desafio e uma evolução."</p>
                 <strong>- Aluno Rafael</strong>
               </div>
             </div>
@@ -971,38 +1079,6 @@
         <div class="carousel-controls">
           <button class="control-btn" id="prevTestimonial" aria-label="Anterior">&#10094;</button>
           <button class="control-btn" id="nextTestimonial" aria-label="Próximo">&#10095;</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="localizacao">
-      <div class="container">
-        <div class="badge">Localização</div>
-        <h2 class="section-title">No coração de Araguaína-TO.</h2>
-        <p class="section-subtitle">Treine em um espaço pensado para performance e conforto.</p>
-        <div class="grid two-col">
-          <div class="map-placeholder">
-            <div>
-              <strong>Mapa Interativo (placeholder)</strong>
-              <p>Substitua pelo embed real do Google Maps.</p>
-              <!-- TODO: Substituir pelo iframe oficial do Google Maps -->
-            </div>
-          </div>
-          <div class="card">
-            <h3>Endereço</h3>
-            <p><!-- TODO: Atualizar endereço completo -->
-              Av. Exemplo, 1234 - Araguaína-TO
-            </p>
-            <h3 style="margin-top: 16px;">Horários</h3>
-            <p><!-- TODO: Atualizar horários -->
-              Segunda a Sexta: 06h às 22h<br />
-              Sábado: 08h às 12h
-            </p>
-            <h3 style="margin-top: 16px;">Planos</h3>
-            <p><!-- TODO: Atualizar planos -->
-              Mensal, Trimestral e Plano Performance
-            </p>
-          </div>
         </div>
       </div>
     </section>
@@ -1026,7 +1102,47 @@
         <div class="faq-item">
           <div class="faq-question">Existe aula experimental? <span>+</span></div>
           <div class="faq-answer">
-            <p>Sim! Você pode agendar uma aula experimental gratuita para conhecer o espaço.</p>
+            <p>Sim! Você pode agendar uma aula experimental para conhecer o espaço.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Como são os planos? <span>+</span></div>
+          <div class="faq-answer">
+            <p><!-- TODO: Atualizar planos -->
+              Oferecemos planos mensal, trimestral e performance com benefícios exclusivos.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="localizacao">
+      <div class="container">
+        <div class="badge">Localização</div>
+        <h2 class="section-title">No coração de Araguaína-TO.</h2>
+        <p class="section-subtitle">Treine em um espaço pensado para performance e conforto.</p>
+        <div class="grid two-col">
+          <div class="map-placeholder reveal" data-reveal>
+            <div>
+              <strong>Mapa Interativo (placeholder)</strong>
+              <p>Substitua pelo embed real do Google Maps.</p>
+              <!-- TODO: Substituir pelo iframe oficial do Google Maps -->
+            </div>
+          </div>
+          <div class="card reveal" data-reveal>
+            <h3>Endereço</h3>
+            <p><!-- TODO: Atualizar endereço completo -->
+              Av. Exemplo, 1234 - Araguaína-TO
+            </p>
+            <h3 style="margin-top: 16px;">Horários</h3>
+            <p><!-- TODO: Atualizar horários -->
+              Segunda a Sexta: 06h às 22h<br />
+              Sábado: 08h às 12h
+            </p>
+            <h3 style="margin-top: 16px;">Planos</h3>
+            <p><!-- TODO: Atualizar planos -->
+              Mensal, Trimestral e Plano Performance
+            </p>
           </div>
         </div>
       </div>
@@ -1038,14 +1154,17 @@
         <h2 class="section-title">Vamos treinar juntos?</h2>
         <p class="section-subtitle">Preencha o formulário e nossa equipe entrará em contato com você.</p>
         <div class="grid two-col">
-          <div class="card">
+          <div class="card reveal" data-reveal>
             <h3>WhatsApp direto</h3>
             <p>Resposta rápida para tirar dúvidas e agendar treinos.</p>
             <!-- TODO: Atualizar link do WhatsApp -->
             <a class="btn btn-primary" href="https://wa.me/5599999999999" target="_blank" rel="noopener">Chamar no WhatsApp</a>
             <p style="margin-top: 18px; color: var(--muted);">Cidade: Araguaína-TO</p>
+            <p style="color: var(--muted);"><!-- TODO: Atualizar Instagram -->
+              Instagram: @aurumboxe
+            </p>
           </div>
-          <form class="card contact-form" id="contactForm">
+          <form class="card contact-form reveal" data-reveal id="contactForm">
             <input type="text" name="nome" placeholder="Seu nome" required />
             <input type="email" name="email" placeholder="Seu e-mail" required />
             <input type="tel" name="telefone" placeholder="WhatsApp" required />
@@ -1065,8 +1184,24 @@
   </div>
 
   <footer>
-    <div class="container">
-      <p>Aurum Boxe © 2024 - Boxe Olímpico em Araguaína-TO.</p>
+    <div class="container footer-grid">
+      <div>
+        <strong>Aurum Boxe</strong>
+        <p>Boxe Olímpico em Araguaína-TO com estrutura premium e metodologia vencedora.</p>
+      </div>
+      <div>
+        <strong>Contato rápido</strong>
+        <p><!-- TODO: Atualizar telefone e e-mail -->
+          (63) 99999-9999<br />
+          contato@aurumboxe.com.br
+        </p>
+      </div>
+      <div>
+        <strong>Endereço</strong>
+        <p><!-- TODO: Atualizar endereço -->
+          Av. Exemplo, 1234 - Araguaína-TO
+        </p>
+      </div>
     </div>
   </footer>
 
@@ -1087,8 +1222,22 @@
           });
         }
       });
-    }, { threshold: 0.5 });
+    }, { threshold: 0.55 });
     sections.forEach(section => observer.observe(section));
+
+    const reveals = document.querySelectorAll('[data-reveal]');
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    reveals.forEach(el => {
+      el.classList.add('reveal');
+      revealObserver.observe(el);
+    });
 
     const counters = document.querySelectorAll('[data-counter]');
     const counterObserver = new IntersectionObserver(entries => {
@@ -1097,7 +1246,7 @@
           const el = entry.target;
           const target = parseInt(el.dataset.counter, 10);
           let current = 0;
-          const step = Math.ceil(target / 60);
+          const step = Math.ceil(target / 70);
           const interval = setInterval(() => {
             current += step;
             if (current >= target) {
@@ -1115,8 +1264,8 @@
 
     const typingPhrases = [
       'Disciplina. Técnica. Respeito.',
-      'Treine como atleta.',
-      'Força e estratégia em cada round.'
+      'Treine como atleta olímpico.',
+      'Força, estratégia e foco em cada round.'
     ];
     const typingEl = document.getElementById('typingText');
     let phraseIndex = 0;
@@ -1141,30 +1290,187 @@
           phraseIndex = (phraseIndex + 1) % typingPhrases.length;
         }
       }
-      setTimeout(typeLoop, isDeleting ? 50 : 90);
+      setTimeout(typeLoop, isDeleting ? 55 : 90);
     }
     typeLoop();
 
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const treinoCards = document.querySelectorAll('.treino-card');
-    filterButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        filterButtons.forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-        const filter = button.dataset.filter;
-        treinoCards.forEach(card => {
-          const match = filter === 'all' || card.dataset.category === filter;
-          card.style.display = match ? 'block' : 'none';
-        });
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.addEventListener('mousedown', () => {
+        btn.classList.add('btn-impact');
+      });
+      btn.addEventListener('mouseup', () => {
+        btn.classList.remove('btn-impact');
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.classList.remove('btn-impact');
       });
     });
 
-    const faqItems = document.querySelectorAll('.faq-item');
-    faqItems.forEach(item => {
-      item.querySelector('.faq-question').addEventListener('click', () => {
-        item.classList.toggle('active');
+    const heroCanvas = document.getElementById('heroParticles');
+    const ctx = heroCanvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      const scale = window.devicePixelRatio || 1;
+      heroCanvas.width = heroCanvas.offsetWidth * scale;
+      heroCanvas.height = heroCanvas.offsetHeight * scale;
+      ctx.setTransform(scale, 0, 0, scale, 0, 0);
+    }
+
+    function createParticles() {
+      const count = 35;
+      particles = Array.from({ length: count }, () => ({
+        x: Math.random() * heroCanvas.offsetWidth,
+        y: Math.random() * heroCanvas.offsetHeight,
+        radius: Math.random() * 2 + 1,
+        speed: Math.random() * 0.5 + 0.2,
+        alpha: Math.random() * 0.5 + 0.3
+      }));
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, heroCanvas.offsetWidth, heroCanvas.offsetHeight);
+      particles.forEach(p => {
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(214, 179, 94, ${p.alpha})`;
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+        p.y -= p.speed;
+        if (p.y < 0) {
+          p.y = heroCanvas.offsetHeight;
+          p.x = Math.random() * heroCanvas.offsetWidth;
+        }
+      });
+      requestAnimationFrame(animateParticles);
+    }
+
+    resizeCanvas();
+    createParticles();
+    animateParticles();
+
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      createParticles();
+    });
+
+    const glove = document.getElementById('glove');
+    const gloveShine = document.getElementById('gloveShine');
+    const hero = document.querySelector('.hero');
+    let scrollRotation = 0;
+
+    function updateGlove(xPercent, yPercent) {
+      const rotateY = (xPercent - 0.5) * 20;
+      const rotateX = (0.5 - yPercent) * 20;
+      glove.style.setProperty('--rotate-x', `${rotateX}deg`);
+      glove.style.setProperty('--rotate-y', `${rotateY}deg`);
+      gloveShine.style.setProperty('--shine-x', `${xPercent * 100}%`);
+      gloveShine.style.setProperty('--shine-y', `${yPercent * 100}%`);
+    }
+
+    hero.addEventListener('mousemove', (event) => {
+      const rect = hero.getBoundingClientRect();
+      const xPercent = (event.clientX - rect.left) / rect.width;
+      const yPercent = (event.clientY - rect.top) / rect.height;
+      updateGlove(xPercent, yPercent);
+    });
+
+    window.addEventListener('scroll', () => {
+      scrollRotation += 0.5;
+      const scrollPercent = (scrollRotation % 100) / 100;
+      updateGlove(0.5 + Math.sin(scrollPercent * Math.PI * 2) * 0.1, 0.5);
+    }, { passive: true });
+
+    const heroVideo = document.getElementById('heroVideo');
+    heroVideo.addEventListener('error', () => {
+      hero.classList.add('fallback');
+      heroVideo.style.display = 'none';
+    });
+
+    heroVideo.addEventListener('loadeddata', () => {
+      heroVideo.play().catch(() => {
+        hero.classList.add('fallback');
+        heroVideo.style.display = 'none';
       });
     });
+
+    const timerDisplay = document.getElementById('timerDisplay');
+    const timerStatus = document.getElementById('timerStatus');
+    const timerStart = document.getElementById('timerStart');
+    const timerPause = document.getElementById('timerPause');
+    const timerReset = document.getElementById('timerReset');
+    const timerPills = document.querySelectorAll('.timer-pill');
+
+    const rounds = [
+      { label: 'Round 1', seconds: 120 },
+      { label: 'Descanso', seconds: 60 },
+      { label: 'Round 2', seconds: 120 },
+      { label: 'Descanso', seconds: 60 },
+      { label: 'Round 3', seconds: 120 }
+    ];
+
+    let currentStage = 0;
+    let remaining = rounds[currentStage].seconds;
+    let timerInterval = null;
+
+    function updateTimerDisplay() {
+      const minutes = String(Math.floor(remaining / 60)).padStart(2, '0');
+      const seconds = String(remaining % 60).padStart(2, '0');
+      const label = rounds[currentStage].label;
+      timerDisplay.textContent = `${minutes}:${seconds}`;
+      timerStatus.textContent = label.includes('Round') ? `${label} / 3` : label;
+      timerPills.forEach(pill => pill.classList.remove('active'));
+      if (label.includes('Round')) {
+        const roundNumber = label.split(' ')[1];
+        const activePill = document.querySelector(`.timer-pill[data-round="${roundNumber}"]`);
+        if (activePill) activePill.classList.add('active');
+      } else {
+        const restPill = document.querySelector('.timer-pill[data-round="rest"]');
+        if (restPill) restPill.classList.add('active');
+      }
+    }
+
+    function nextStage() {
+      if (currentStage < rounds.length - 1) {
+        currentStage += 1;
+        remaining = rounds[currentStage].seconds;
+      } else {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+      updateTimerDisplay();
+    }
+
+    function tick() {
+      if (remaining > 0) {
+        remaining -= 1;
+      } else {
+        nextStage();
+      }
+      updateTimerDisplay();
+    }
+
+    timerStart.addEventListener('click', () => {
+      if (!timerInterval) {
+        timerInterval = setInterval(tick, 1000);
+      }
+    });
+
+    timerPause.addEventListener('click', () => {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+    });
+
+    timerReset.addEventListener('click', () => {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      currentStage = 0;
+      remaining = rounds[currentStage].seconds;
+      updateTimerDisplay();
+    });
+
+    updateTimerDisplay();
 
     const carouselTrack = document.querySelector('.carousel-track');
     const carouselCards = document.querySelectorAll('.carousel-card');
@@ -1186,18 +1492,18 @@
     setInterval(() => {
       carouselIndex = (carouselIndex + 1) % carouselCards.length;
       updateCarousel();
-    }, 6000);
+    }, 6500);
+
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+      item.querySelector('.faq-question').addEventListener('click', () => {
+        item.classList.toggle('active');
+      });
+    });
 
     const galleryImages = [
-      'Fotos/foto1.jpg',
-      'Fotos/foto2.jpg',
-      'Fotos/foto3.jpg',
-      'Fotos/foto4.jpg',
-      'Fotos/foto5.jpg',
-      'Fotos/foto6.jpg',
-      'Fotos/foto7.jpg',
-      'Fotos/foto8.jpg',
-      'Fotos/foto9.jpg'
+      'Fotos/Logo.jpeg'
+      // TODO: Adicione aqui outras imagens da pasta Fotos, ex: 'Fotos/treino1.jpg'
     ];
 
     const galleryGrid = document.getElementById('galleryGrid');
@@ -1229,58 +1535,6 @@
       }
       formSuccess.style.display = 'block';
       contactForm.reset();
-    });
-
-    const heroCanvas = document.getElementById('heroParticles');
-    const ctx = heroCanvas.getContext('2d');
-    let particles = [];
-
-    function resizeCanvas() {
-      const scale = window.devicePixelRatio || 1;
-      heroCanvas.width = heroCanvas.offsetWidth * scale;
-      heroCanvas.height = heroCanvas.offsetHeight * scale;
-      ctx.setTransform(scale, 0, 0, scale, 0, 0);
-    }
-
-    function createParticles() {
-      const count = 40;
-      particles = Array.from({ length: count }, () => ({
-        x: Math.random() * heroCanvas.offsetWidth,
-        y: Math.random() * heroCanvas.offsetHeight,
-        radius: Math.random() * 2 + 1,
-        speed: Math.random() * 0.6 + 0.2
-      }));
-    }
-
-    function animateParticles() {
-      ctx.clearRect(0, 0, heroCanvas.offsetWidth, heroCanvas.offsetHeight);
-      particles.forEach(p => {
-        ctx.beginPath();
-        ctx.fillStyle = 'rgba(214, 179, 94, 0.7)';
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fill();
-        p.y -= p.speed;
-        if (p.y < 0) {
-          p.y = heroCanvas.offsetHeight;
-          p.x = Math.random() * heroCanvas.offsetWidth;
-        }
-      });
-      requestAnimationFrame(animateParticles);
-    }
-
-    resizeCanvas();
-    createParticles();
-    animateParticles();
-
-    window.addEventListener('resize', () => {
-      resizeCanvas();
-      createParticles();
-    });
-
-    const parallax = document.querySelector('.parallax-bg');
-    window.addEventListener('scroll', () => {
-      const offset = window.scrollY * 0.2;
-      parallax.style.transform = `translateY(${offset}px)`;
     });
   </script>
 </body>
