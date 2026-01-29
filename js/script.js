@@ -1,0 +1,400 @@
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileNav = document.getElementById('mobileNav');
+    menuToggle.addEventListener('click', () => {
+      mobileNav.style.display = mobileNav.style.display === 'flex' ? 'none' : 'flex';
+    });
+
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-links a, .mobile-nav a');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`);
+          });
+        }
+      });
+    }, { threshold: 0.55 });
+    sections.forEach(section => observer.observe(section));
+
+    const reveals = document.querySelectorAll('[data-reveal]');
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    reveals.forEach(el => {
+      el.classList.add('reveal');
+      revealObserver.observe(el);
+    });
+
+    const counters = document.querySelectorAll('[data-counter]');
+    const counterObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.dataset.counter, 10);
+          let current = 0;
+          const step = Math.ceil(target / 70);
+          const interval = setInterval(() => {
+            current += step;
+            if (current >= target) {
+              el.textContent = target;
+              clearInterval(interval);
+            } else {
+              el.textContent = current;
+            }
+          }, 20);
+          counterObserver.unobserve(el);
+        }
+      });
+    }, { threshold: 0.6 });
+    counters.forEach(counter => counterObserver.observe(counter));
+
+    const typingPhrases = [
+      'Disciplina. Técnica. Respeito.',
+      'Treine como atleta olímpico.',
+      'Força, estratégia e foco em cada round.'
+    ];
+    const typingEl = document.getElementById('typingText');
+    let phraseIndex = 0;
+    let letterIndex = 0;
+    let isDeleting = false;
+
+    function typeLoop() {
+      const current = typingPhrases[phraseIndex];
+      if (!isDeleting) {
+        letterIndex++;
+        typingEl.textContent = current.slice(0, letterIndex);
+        if (letterIndex === current.length) {
+          isDeleting = true;
+          setTimeout(typeLoop, 1500);
+          return;
+        }
+      } else {
+        letterIndex--;
+        typingEl.textContent = current.slice(0, letterIndex);
+        if (letterIndex === 0) {
+          isDeleting = false;
+          phraseIndex = (phraseIndex + 1) % typingPhrases.length;
+        }
+      }
+      setTimeout(typeLoop, isDeleting ? 55 : 90);
+    }
+    typeLoop();
+
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.addEventListener('mousedown', () => {
+        btn.classList.add('btn-impact');
+      });
+      btn.addEventListener('mouseup', () => {
+        btn.classList.remove('btn-impact');
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.classList.remove('btn-impact');
+      });
+    });
+
+    const heroCanvas = document.getElementById('heroParticles');
+    const ctx = heroCanvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      const scale = window.devicePixelRatio || 1;
+      heroCanvas.width = heroCanvas.offsetWidth * scale;
+      heroCanvas.height = heroCanvas.offsetHeight * scale;
+      ctx.setTransform(scale, 0, 0, scale, 0, 0);
+    }
+
+    function createParticles() {
+      const count = 35;
+      particles = Array.from({ length: count }, () => ({
+        x: Math.random() * heroCanvas.offsetWidth,
+        y: Math.random() * heroCanvas.offsetHeight,
+        radius: Math.random() * 2 + 1,
+        speed: Math.random() * 0.5 + 0.2,
+        alpha: Math.random() * 0.5 + 0.3
+      }));
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, heroCanvas.offsetWidth, heroCanvas.offsetHeight);
+      particles.forEach(p => {
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(214, 179, 94, ${p.alpha})`;
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+        p.y -= p.speed;
+        if (p.y < 0) {
+          p.y = heroCanvas.offsetHeight;
+          p.x = Math.random() * heroCanvas.offsetWidth;
+        }
+      });
+      requestAnimationFrame(animateParticles);
+    }
+
+    resizeCanvas();
+    createParticles();
+    animateParticles();
+
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      createParticles();
+    });
+
+    const glove = document.getElementById('glove');
+    const gloveShine = document.getElementById('gloveShine');
+    const hero = document.querySelector('.hero');
+    let scrollRotation = 0;
+
+    function updateGlove(xPercent, yPercent) {
+      const rotateY = (xPercent - 0.5) * 20;
+      const rotateX = (0.5 - yPercent) * 20;
+      glove.style.setProperty('--rotate-x', `${rotateX}deg`);
+      glove.style.setProperty('--rotate-y', `${rotateY}deg`);
+      gloveShine.style.setProperty('--shine-x', `${xPercent * 100}%`);
+      gloveShine.style.setProperty('--shine-y', `${yPercent * 100}%`);
+    }
+
+    hero.addEventListener('mousemove', (event) => {
+      const rect = hero.getBoundingClientRect();
+      const xPercent = (event.clientX - rect.left) / rect.width;
+      const yPercent = (event.clientY - rect.top) / rect.height;
+      updateGlove(xPercent, yPercent);
+    });
+
+    window.addEventListener('scroll', () => {
+      scrollRotation += 0.5;
+      const scrollPercent = (scrollRotation % 100) / 100;
+      updateGlove(0.5 + Math.sin(scrollPercent * Math.PI * 2) * 0.1, 0.5);
+    }, { passive: true });
+
+    const heroVideo = document.getElementById('heroVideo');
+    heroVideo.addEventListener('error', () => {
+      hero.classList.add('fallback');
+      heroVideo.style.display = 'none';
+    });
+
+    heroVideo.addEventListener('loadeddata', () => {
+      heroVideo.play().catch(() => {
+        hero.classList.add('fallback');
+        heroVideo.style.display = 'none';
+      });
+    });
+
+    const timerDisplay = document.getElementById('timerDisplay');
+    const timerStatus = document.getElementById('timerStatus');
+    const timerStart = document.getElementById('timerStart');
+    const timerPause = document.getElementById('timerPause');
+    const timerReset = document.getElementById('timerReset');
+    const timerPills = document.querySelectorAll('.timer-pill');
+
+    const rounds = [
+      { label: 'Round 1', seconds: 120 },
+      { label: 'Descanso', seconds: 60 },
+      { label: 'Round 2', seconds: 120 },
+      { label: 'Descanso', seconds: 60 },
+      { label: 'Round 3', seconds: 120 }
+    ];
+
+    let currentStage = 0;
+    let remaining = rounds[currentStage].seconds;
+    let timerInterval = null;
+
+    function updateTimerDisplay() {
+      const minutes = String(Math.floor(remaining / 60)).padStart(2, '0');
+      const seconds = String(remaining % 60).padStart(2, '0');
+      const label = rounds[currentStage].label;
+      timerDisplay.textContent = `${minutes}:${seconds}`;
+      timerStatus.textContent = label.includes('Round') ? `${label} / 3` : label;
+      timerPills.forEach(pill => pill.classList.remove('active'));
+      if (label.includes('Round')) {
+        const roundNumber = label.split(' ')[1];
+        const activePill = document.querySelector(`.timer-pill[data-round="${roundNumber}"]`);
+        if (activePill) activePill.classList.add('active');
+      } else {
+        const restPill = document.querySelector('.timer-pill[data-round="rest"]');
+        if (restPill) restPill.classList.add('active');
+      }
+    }
+
+    function nextStage() {
+      if (currentStage < rounds.length - 1) {
+        currentStage += 1;
+        remaining = rounds[currentStage].seconds;
+      } else {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+      updateTimerDisplay();
+    }
+
+    function tick() {
+      if (remaining > 0) {
+        remaining -= 1;
+      } else {
+        nextStage();
+      }
+      updateTimerDisplay();
+    }
+
+    timerStart.addEventListener('click', () => {
+      if (!timerInterval) {
+        timerInterval = setInterval(tick, 1000);
+      }
+    });
+
+    timerPause.addEventListener('click', () => {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+    });
+
+    timerReset.addEventListener('click', () => {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      currentStage = 0;
+      remaining = rounds[currentStage].seconds;
+      updateTimerDisplay();
+    });
+
+    updateTimerDisplay();
+
+    const carouselTrack = document.querySelector('.carousel-track');
+    const carouselCards = document.querySelectorAll('.carousel-card');
+    let carouselIndex = 0;
+
+    function updateCarousel() {
+      carouselTrack.style.transform = `translateX(-${carouselIndex * 100}%)`;
+    }
+
+    document.getElementById('prevTestimonial').addEventListener('click', () => {
+      carouselIndex = (carouselIndex - 1 + carouselCards.length) % carouselCards.length;
+      updateCarousel();
+    });
+    document.getElementById('nextTestimonial').addEventListener('click', () => {
+      carouselIndex = (carouselIndex + 1) % carouselCards.length;
+      updateCarousel();
+    });
+
+    setInterval(() => {
+      carouselIndex = (carouselIndex + 1) % carouselCards.length;
+      updateCarousel();
+    }, 6500);
+
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+      item.querySelector('.faq-question').addEventListener('click', () => {
+        item.classList.toggle('active');
+      });
+    });
+
+    const galleryImages = [
+      'Fotos/Logo.jpeg',
+      'Fotos/WhatsApp Image 2026-01-28 at 10.39.21 (1).jpeg',
+      'Fotos/WhatsApp Image 2026-01-28 at 10.39.21.jpeg',
+      'Fotos/WhatsApp Image 2026-01-28 at 13.00.18.jpeg'
+    ];
+
+    const galleryGrid = document.getElementById('galleryGrid');
+    galleryImages.forEach((src, index) => {
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'gallery-item';
+      item.setAttribute('aria-label', `Abrir foto ${index + 1}`);
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = 'Galeria Aurum Boxe';
+      img.onerror = () => {
+        item.innerHTML = '<div class="gallery-placeholder">Foto em breve</div>';
+      };
+      item.appendChild(img);
+      item.addEventListener('click', () => openLightbox(index));
+      galleryGrid.appendChild(item);
+    });
+
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightboxImage');
+    const lightboxCaption = document.getElementById('lightboxCaption');
+    const lightboxClose = document.getElementById('lightboxClose');
+    const lightboxPrev = document.getElementById('lightboxPrev');
+    const lightboxNext = document.getElementById('lightboxNext');
+    let lightboxIndex = 0;
+
+    function openLightbox(index) {
+      lightboxIndex = index;
+      updateLightbox();
+      lightbox.classList.add('open');
+      lightbox.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    function updateLightbox() {
+      const src = galleryImages[lightboxIndex];
+      lightboxImage.src = src;
+      lightboxCaption.textContent = `Foto ${lightboxIndex + 1} de ${galleryImages.length}`;
+    }
+
+    function showPrev() {
+      lightboxIndex = (lightboxIndex - 1 + galleryImages.length) % galleryImages.length;
+      updateLightbox();
+    }
+
+    function showNext() {
+      lightboxIndex = (lightboxIndex + 1) % galleryImages.length;
+      updateLightbox();
+    }
+
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightboxPrev.addEventListener('click', showPrev);
+    lightboxNext.addEventListener('click', showNext);
+    lightbox.addEventListener('click', (event) => {
+      if (event.target === lightbox) {
+        closeLightbox();
+      }
+    });
+    window.addEventListener('keydown', (event) => {
+      if (!lightbox.classList.contains('open')) return;
+      if (event.key === 'Escape') closeLightbox();
+      if (event.key === 'ArrowLeft') showPrev();
+      if (event.key === 'ArrowRight') showNext();
+    });
+
+    document.querySelectorAll('[data-video-wrapper]').forEach(wrapper => {
+      const video = wrapper.querySelector('video');
+      if (!video) return;
+      video.addEventListener('error', () => {
+        wrapper.classList.add('fallback');
+      });
+      video.addEventListener('loadeddata', () => {
+        wrapper.classList.remove('fallback');
+      });
+    });
+
+    const backToTop = document.getElementById('backToTop');
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    const contactForm = document.getElementById('contactForm');
+    const formSuccess = document.getElementById('formSuccess');
+    contactForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (!contactForm.checkValidity()) {
+        contactForm.reportValidity();
+        return;
+      }
+      formSuccess.style.display = 'block';
+      contactForm.reset();
+    });
+  
