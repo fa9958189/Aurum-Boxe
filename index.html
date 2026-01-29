@@ -156,12 +156,24 @@
       letter-spacing: 1px;
     }
 
+    .logo-mark {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: #0f1116;
+      border: 1px solid rgba(214, 179, 94, 0.6);
+      box-shadow: 0 0 0 2px rgba(214, 179, 94, 0.2), inset 0 0 18px rgba(0, 0, 0, 0.6);
+      display: grid;
+      place-items: center;
+      padding: 6px;
+    }
+
     .logo img {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      object-fit: cover;
-      box-shadow: 0 0 0 2px rgba(214, 179, 94, 0.4);
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      object-fit: contain;
+      background: transparent;
     }
 
     .logo small {
@@ -322,6 +334,24 @@
 
     .hero.fallback {
       background: linear-gradient(135deg, rgba(214, 179, 94, 0.18), rgba(0,0,0,0.8));
+    }
+
+    .hero .video-fallback-message {
+      position: absolute;
+      bottom: 30px;
+      right: 24px;
+      z-index: 2;
+      background: rgba(8, 9, 11, 0.7);
+      border: 1px solid rgba(214, 179, 94, 0.4);
+      color: var(--muted);
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      display: none;
+    }
+
+    .hero.fallback .video-fallback-message {
+      display: inline-flex;
     }
 
     .hero-content {
@@ -597,6 +627,9 @@
       border: 1px solid var(--border);
       position: relative;
       min-height: 180px;
+      padding: 0;
+      cursor: pointer;
+      text-align: left;
     }
 
     .gallery-item img {
@@ -618,6 +651,114 @@
       font-size: 0.9rem;
       padding: 18px;
       text-align: center;
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 6, 10, 0.92);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 2000;
+      padding: 24px;
+    }
+
+    .lightbox.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .lightbox-content {
+      max-width: min(960px, 92vw);
+      max-height: 80vh;
+      position: relative;
+      display: grid;
+      gap: 12px;
+      justify-items: center;
+    }
+
+    .lightbox img {
+      max-width: 100%;
+      max-height: 70vh;
+      border-radius: 18px;
+      border: 1px solid rgba(214, 179, 94, 0.45);
+      box-shadow: var(--shadow);
+    }
+
+    .lightbox-caption {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .lightbox-close,
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: rgba(14, 16, 21, 0.8);
+      color: var(--white);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: all 0.2s ease;
+    }
+
+    .lightbox-close {
+      top: -10px;
+      right: -10px;
+      transform: none;
+      width: 40px;
+      height: 40px;
+    }
+
+    .lightbox-nav:hover,
+    .lightbox-close:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .lightbox-prev {
+      left: -54px;
+    }
+
+    .lightbox-next {
+      right: -54px;
+    }
+
+    .video-wrapper {
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.35);
+    }
+
+    .video-wrapper video {
+      width: 100%;
+      border-radius: 0;
+      display: block;
+    }
+
+    .video-fallback-message {
+      display: none;
+      padding: 12px 16px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+      background: rgba(10, 11, 16, 0.85);
+      border-top: 1px solid var(--border);
+    }
+
+    .video-wrapper.fallback .video-fallback-message {
+      display: block;
     }
 
     .carousel {
@@ -835,15 +976,17 @@
 <body>
   <header>
     <div class="container nav">
-      <div class="logo">
-        <img src="Fotos/Logo.jpeg" alt="Logo Aurum Boxe" />
+      <a class="logo" href="#inicio" aria-label="Ir para o topo">
+        <div class="logo-mark">
+          <img src="Fotos/Logo.jpeg" alt="Logo Aurum Boxe" />
+        </div>
         <div>
           <div>Aurum Boxe</div>
           <small>Boxe Olímpico</small>
         </div>
-      </div>
+      </a>
       <nav class="nav-links">
-        <a href="#hero" class="active">Início</a>
+        <a href="#inicio" class="active">Início</a>
         <a href="#sobre">Sobre</a>
         <a href="#olimpico">Boxe Olímpico</a>
         <a href="#metodologia">Metodologia</a>
@@ -864,7 +1007,7 @@
       </div>
     </div>
     <div class="mobile-nav" id="mobileNav">
-      <a href="#hero" class="active">Início</a>
+      <a href="#inicio" class="active">Início</a>
       <a href="#sobre">Sobre</a>
       <a href="#olimpico">Boxe Olímpico</a>
       <a href="#metodologia">Metodologia</a>
@@ -876,10 +1019,11 @@
   </header>
 
   <main>
-    <section class="hero" id="hero">
+    <section class="hero" id="inicio">
       <video id="heroVideo" autoplay muted loop playsinline poster="Fotos/Logo.jpeg">
         <source src="Videos/IMG_4536.MOV" type="video/quicktime" />
       </video>
+      <div class="video-fallback-message" id="heroFallbackMessage">Vídeo disponível em breve</div>
       <div class="container hero-content">
         <div class="hero-text reveal" data-reveal>
           <span class="badge">Arena Premium em Araguaína-TO</span>
@@ -1015,9 +1159,12 @@
           <div class="card reveal" data-reveal>
             <h3>Vídeo da arena</h3>
             <p>Veja uma amostra da energia da Aurum Boxe.</p>
-            <video controls muted style="width: 100%; border-radius: 12px; margin-top: 12px;">
-              <source src="Videos/IMG_4538.MOV" type="video/quicktime" />
-            </video>
+            <div class="video-wrapper" data-video-wrapper>
+              <video controls muted preload="metadata">
+                <source src="Videos/IMG_4538.MOV" type="video/quicktime" />
+              </video>
+              <p class="video-fallback-message">Vídeo disponível em breve</p>
+            </div>
           </div>
           <div class="timer-widget reveal" data-reveal>
             <div class="badge">Treino Olímpico</div>
@@ -1035,6 +1182,22 @@
               <button class="btn btn-outline" id="timerReset">Resetar</button>
             </div>
             <p style="color: var(--muted);">Modo oficial: 3 rounds de 2:00 com 1:00 de descanso.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="videos">
+      <div class="container">
+        <div class="badge">Vídeos / Treinos / Ambiente</div>
+        <h2 class="section-title">Sinta a energia da arena em movimento.</h2>
+        <p class="section-subtitle">Um mergulho no treino, na vibração e no ambiente premium da Aurum Boxe.</p>
+        <div class="card reveal" data-reveal>
+          <div class="video-wrapper" data-video-wrapper>
+            <video controls muted preload="metadata">
+              <source src="Videos/IMG_4538.MOV" type="video/quicktime" />
+            </video>
+            <p class="video-fallback-message">Vídeo disponível em breve</p>
           </div>
         </div>
       </div>
@@ -1173,7 +1336,7 @@
           <div class="card reveal" data-reveal>
             <h3>Endereço</h3>
             <p><!-- TODO: Atualizar endereço completo -->
-              Av. Exemplo, 1234 - Araguaína-TO
+              Rua Dom Bosco, Bairro Senador, Araguaína - TO
             </p>
             <h3 style="margin-top: 16px;">Horários</h3>
             <p><!-- TODO: Atualizar horários -->
@@ -1245,11 +1408,21 @@
       <div>
         <strong>Endereço</strong>
         <p><!-- TODO: Atualizar endereço -->
-          Av. Exemplo, 1234 - Araguaína-TO
+          Rua Dom Bosco, Bairro Senador, Araguaína - TO
         </p>
       </div>
     </div>
   </footer>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <div class="lightbox-content">
+      <button class="lightbox-close" id="lightboxClose" aria-label="Fechar">✕</button>
+      <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Anterior">❮</button>
+      <img id="lightboxImage" src="" alt="Foto ampliada da galeria" />
+      <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Próxima">❯</button>
+      <div class="lightbox-caption" id="lightboxCaption"></div>
+    </div>
+  </div>
 
   <script>
     const menuToggle = document.getElementById('menuToggle');
@@ -1548,14 +1721,18 @@
     });
 
     const galleryImages = [
-      'Fotos/Logo.jpeg'
-      // TODO: Adicione aqui outras imagens da pasta Fotos, ex: 'Fotos/treino1.jpg'
+      'Fotos/Logo.jpeg',
+      'Fotos/WhatsApp Image 2026-01-28 at 10.39.21 (1).jpeg',
+      'Fotos/WhatsApp Image 2026-01-28 at 10.39.21.jpeg',
+      'Fotos/WhatsApp Image 2026-01-28 at 13.00.18.jpeg'
     ];
 
     const galleryGrid = document.getElementById('galleryGrid');
-    galleryImages.forEach(src => {
-      const item = document.createElement('div');
+    galleryImages.forEach((src, index) => {
+      const item = document.createElement('button');
+      item.type = 'button';
       item.className = 'gallery-item';
+      item.setAttribute('aria-label', `Abrir foto ${index + 1}`);
       const img = document.createElement('img');
       img.src = src;
       img.alt = 'Galeria Aurum Boxe';
@@ -1563,7 +1740,72 @@
         item.innerHTML = '<div class="gallery-placeholder">Foto em breve</div>';
       };
       item.appendChild(img);
+      item.addEventListener('click', () => openLightbox(index));
       galleryGrid.appendChild(item);
+    });
+
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightboxImage');
+    const lightboxCaption = document.getElementById('lightboxCaption');
+    const lightboxClose = document.getElementById('lightboxClose');
+    const lightboxPrev = document.getElementById('lightboxPrev');
+    const lightboxNext = document.getElementById('lightboxNext');
+    let lightboxIndex = 0;
+
+    function openLightbox(index) {
+      lightboxIndex = index;
+      updateLightbox();
+      lightbox.classList.add('open');
+      lightbox.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    function updateLightbox() {
+      const src = galleryImages[lightboxIndex];
+      lightboxImage.src = src;
+      lightboxCaption.textContent = `Foto ${lightboxIndex + 1} de ${galleryImages.length}`;
+    }
+
+    function showPrev() {
+      lightboxIndex = (lightboxIndex - 1 + galleryImages.length) % galleryImages.length;
+      updateLightbox();
+    }
+
+    function showNext() {
+      lightboxIndex = (lightboxIndex + 1) % galleryImages.length;
+      updateLightbox();
+    }
+
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightboxPrev.addEventListener('click', showPrev);
+    lightboxNext.addEventListener('click', showNext);
+    lightbox.addEventListener('click', (event) => {
+      if (event.target === lightbox) {
+        closeLightbox();
+      }
+    });
+    window.addEventListener('keydown', (event) => {
+      if (!lightbox.classList.contains('open')) return;
+      if (event.key === 'Escape') closeLightbox();
+      if (event.key === 'ArrowLeft') showPrev();
+      if (event.key === 'ArrowRight') showNext();
+    });
+
+    document.querySelectorAll('[data-video-wrapper]').forEach(wrapper => {
+      const video = wrapper.querySelector('video');
+      if (!video) return;
+      video.addEventListener('error', () => {
+        wrapper.classList.add('fallback');
+      });
+      video.addEventListener('loadeddata', () => {
+        wrapper.classList.remove('fallback');
+      });
     });
 
     const backToTop = document.getElementById('backToTop');
