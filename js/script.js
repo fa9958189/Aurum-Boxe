@@ -259,13 +259,6 @@
       updateCarousel();
     }, 6500);
 
-    const faqItems = document.querySelectorAll('.faq-item');
-    faqItems.forEach(item => {
-      item.querySelector('.faq-question').addEventListener('click', () => {
-        item.classList.toggle('active');
-      });
-    });
-
     const photoCarousel = document.getElementById('photoCarousel');
     if (photoCarousel) {
       let isDragging = false;
@@ -426,43 +419,35 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-document.addEventListener('DOMContentLoaded', () => {
+(function initFAQ(){
   const items = document.querySelectorAll('.faq-item');
-  if(!items.length) return;
+  if (!items.length) return;
 
-  items.forEach(item => {
+  items.forEach((item) => {
     const btn = item.querySelector('.faq-question');
+    const ans = item.querySelector('.faq-answer');
     const icon = item.querySelector('.faq-icon');
-    const answer = item.querySelector('.faq-answer');
-    if(!btn || !answer) return;
 
-    // estado inicial
-    item.classList.remove('is-open');
-    btn.setAttribute('aria-expanded','false');
-    if(icon) icon.textContent = '+';
-    answer.hidden = true;
+    if (!btn || !ans) return;
 
     btn.addEventListener('click', () => {
-      const willOpen = !item.classList.contains('is-open');
+      const isOpen = item.classList.contains('open');
 
       // fecha todos
       items.forEach(i => {
-        const b = i.querySelector('.faq-question');
+        i.classList.remove('open');
+        const a = i.querySelector('.faq-answer');
         const ic = i.querySelector('.faq-icon');
-        const an = i.querySelector('.faq-answer');
-        i.classList.remove('is-open');
-        if(b) b.setAttribute('aria-expanded','false');
-        if(ic) ic.textContent = '+';
-        if(an) an.hidden = true;
+        if (a) a.style.maxHeight = '0px';
+        if (ic) ic.textContent = '+';
       });
 
       // abre o clicado
-      if(willOpen){
-        item.classList.add('is-open');
-        btn.setAttribute('aria-expanded','true');
-        if(icon) icon.textContent = '–';
-        answer.hidden = false;
+      if (!isOpen) {
+        item.classList.add('open');
+        ans.style.maxHeight = ans.scrollHeight + 'px';
+        if (icon) icon.textContent = '−';
       }
     });
   });
-});
+})();
