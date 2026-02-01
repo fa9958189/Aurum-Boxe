@@ -432,7 +432,7 @@
     if (btnWhatsapp) {
       btnWhatsapp.addEventListener('click', () => {
         const phone = '5563991196482';
-        const text = encodeURIComponent('Olá! Quero agendar uma aula/treino na Aurum Boxe.');
+        const text = encodeURIComponent('Olá! Quero agendar um treino na Aurum Boxe.');
         const url = `https://wa.me/${phone}?text=${text}`;
 
         if (whatsOverlay) {
