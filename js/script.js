@@ -461,23 +461,91 @@ document.addEventListener('DOMContentLoaded', () => {
   })();
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-  const btn = document.getElementById('musicToggle');
-  const iframe = document.getElementById('ytMusic');
-  if (!btn || !iframe) return;
-
+(() => {
   const videoId = 'eVTXPUF4Oz4';
-  let playing = false;
+  let player = null;
+  let isReady = false;
+  let isPlaying = false;
 
-  const makeSrc = (mute) =>
-    `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=${mute}&loop=1&playlist=${videoId}&controls=0&modestbranding=1&rel=0`;
+  function ensurePlayer() {
+    // cria container invisível se não existir
+    let wrap = document.getElementById('ytMusicWrap');
+    if (!wrap) {
+      wrap = document.createElement('div');
+      wrap.id = 'ytMusicWrap';
+      wrap.style.position = 'fixed';
+      wrap.style.left = '-9999px';
+      wrap.style.top = '-9999px';
+      wrap.style.width = '1px';
+      wrap.style.height = '1px';
+      wrap.style.overflow = 'hidden';
 
-  // inicia mutado
-  iframe.src = makeSrc(1);
+      const div = document.createElement('div');
+      div.id = 'ytPlayer';
+      wrap.appendChild(div);
 
-  btn.addEventListener('click', () => {
-    playing = !playing;
-    iframe.src = playing ? makeSrc(0) : makeSrc(1);
-    btn.textContent = playing ? '🔇 Música' : '🔊 Música';
+      document.body.appendChild(wrap);
+    }
+
+    if (player) return;
+
+    // cria player via API
+    player = new YT.Player('ytPlayer', {
+      height: '1',
+      width: '1',
+      videoId,
+      playerVars: {
+        autoplay: 0,
+        controls: 0,
+        rel: 0,
+        modestbranding: 1,
+        playsinline: 1,
+        loop: 1,
+        playlist: videoId
+      },
+      events: {
+        onReady: () => {
+          isReady = true;
+        }
+      }
+    });
+  }
+
+  function setButton(btn) {
+    if (!btn) return;
+    btn.textContent = isPlaying ? '🎵 Desativar música' : '🎵 Ativar música';
+    btn.setAttribute('aria-label', isPlaying ? 'Desativar música' : 'Ativar música');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('musicToggle');
+    if (!btn) return;
+
+    // texto inicial
+    setButton(btn);
+
+    btn.addEventListener('click', () => {
+      // o clique do usuário é a chave no celular
+      if (!player) ensurePlayer();
+
+      // se ainda não ficou ready, tenta de novo rapidinho
+      const tryToggle = () => {
+        if (!player || !isReady || !player.playVideo) {
+          setTimeout(tryToggle, 120);
+          return;
+        }
+
+        if (!isPlaying) {
+          player.playVideo();
+          isPlaying = true;
+        } else {
+          player.pauseVideo();
+          isPlaying = false;
+        }
+        setButton(btn);
+      };
+
+      tryToggle();
+    });
   });
-});
+})();
