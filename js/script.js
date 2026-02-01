@@ -145,6 +145,7 @@
       createParticles();
     });
 
+    const hero = document.querySelector('.hero');
     const heroVideo = document.getElementById('heroVideo');
     heroVideo.addEventListener('error', () => {
       hero.classList.add('fallback');
@@ -239,25 +240,31 @@
 
     const carouselTrack = document.querySelector('.carousel-track');
     const carouselCards = document.querySelectorAll('.carousel-card');
+    const prevTestimonialBtn = document.getElementById('prevTestimonial');
+    const nextTestimonialBtn = document.getElementById('nextTestimonial');
     let carouselIndex = 0;
 
     function updateCarousel() {
+      if (!carouselTrack) return;
       carouselTrack.style.transform = `translateX(-${carouselIndex * 100}%)`;
     }
 
-    document.getElementById('prevTestimonial').addEventListener('click', () => {
-      carouselIndex = (carouselIndex - 1 + carouselCards.length) % carouselCards.length;
-      updateCarousel();
-    });
-    document.getElementById('nextTestimonial').addEventListener('click', () => {
-      carouselIndex = (carouselIndex + 1) % carouselCards.length;
-      updateCarousel();
-    });
+    if (carouselTrack && carouselCards.length && prevTestimonialBtn && nextTestimonialBtn) {
+      prevTestimonialBtn.addEventListener('click', () => {
+        carouselIndex = (carouselIndex - 1 + carouselCards.length) % carouselCards.length;
+        updateCarousel();
+      });
 
-    setInterval(() => {
-      carouselIndex = (carouselIndex + 1) % carouselCards.length;
-      updateCarousel();
-    }, 6500);
+      nextTestimonialBtn.addEventListener('click', () => {
+        carouselIndex = (carouselIndex + 1) % carouselCards.length;
+        updateCarousel();
+      });
+
+      setInterval(() => {
+        carouselIndex = (carouselIndex + 1) % carouselCards.length;
+        updateCarousel();
+      }, 6500);
+    }
 
     const photoCarousel = document.getElementById('photoCarousel');
     if (photoCarousel) {
@@ -419,35 +426,37 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-(function initFAQ(){
-  const items = document.querySelectorAll('.faq-item');
-  if (!items.length) return;
+document.addEventListener('DOMContentLoaded', () => {
+  (function initFAQ(){
+    const items = document.querySelectorAll('.faq-item');
+    if (!items.length) return;
 
-  items.forEach((item) => {
-    const btn = item.querySelector('.faq-question');
-    const ans = item.querySelector('.faq-answer');
-    const icon = item.querySelector('.faq-icon');
+    items.forEach((item) => {
+      const btn = item.querySelector('.faq-question');
+      const ans = item.querySelector('.faq-answer');
+      const icon = item.querySelector('.faq-icon');
 
-    if (!btn || !ans) return;
+      if (!btn || !ans) return;
 
-    btn.addEventListener('click', () => {
-      const isOpen = item.classList.contains('open');
+      btn.addEventListener('click', () => {
+        const isOpen = item.classList.contains('open');
 
-      // fecha todos
-      items.forEach(i => {
-        i.classList.remove('open');
-        const a = i.querySelector('.faq-answer');
-        const ic = i.querySelector('.faq-icon');
-        if (a) a.style.maxHeight = '0px';
-        if (ic) ic.textContent = '+';
+        // fecha todos
+        items.forEach(i => {
+          i.classList.remove('open');
+          const a = i.querySelector('.faq-answer');
+          const ic = i.querySelector('.faq-icon');
+          if (a) a.style.maxHeight = '0px';
+          if (ic) ic.textContent = '+';
+        });
+
+        // abre o clicado
+        if (!isOpen) {
+          item.classList.add('open');
+          ans.style.maxHeight = ans.scrollHeight + 'px';
+          if (icon) icon.textContent = '−';
+        }
       });
-
-      // abre o clicado
-      if (!isOpen) {
-        item.classList.add('open');
-        ans.style.maxHeight = ans.scrollHeight + 'px';
-        if (icon) icon.textContent = '−';
-      }
     });
-  });
-})();
+  })();
+});
