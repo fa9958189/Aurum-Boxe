@@ -460,3 +460,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   })();
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('musicToggle');
+  const iframe = document.getElementById('ytMusic');
+  if (!btn || !iframe) return;
+
+  const videoId = 'eVTXPUF4Oz4';
+  let playing = false;
+
+  const makeSrc = (mute) =>
+    `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=${mute}&loop=1&playlist=${videoId}&controls=0&modestbranding=1&rel=0`;
+
+  // inicia mutado
+  iframe.src = makeSrc(1);
+
+  btn.addEventListener('click', () => {
+    playing = !playing;
+    iframe.src = playing ? makeSrc(0) : makeSrc(1);
+    btn.textContent = playing ? '🔇 Música' : '🔊 Música';
+  });
+});
