@@ -426,7 +426,7 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-(function initFAQ(){
+document.addEventListener('DOMContentLoaded', () => {
   const items = document.querySelectorAll('.faq-item');
   if(!items.length) return;
 
@@ -440,12 +440,12 @@
     item.classList.remove('is-open');
     btn.setAttribute('aria-expanded','false');
     if(icon) icon.textContent = '+';
-    answer.style.maxHeight = '0px';
+    answer.hidden = true;
 
     btn.addEventListener('click', () => {
-      const isOpen = item.classList.contains('is-open');
+      const willOpen = !item.classList.contains('is-open');
 
-      // fecha todos (deixa só 1 aberto)
+      // fecha todos
       items.forEach(i => {
         const b = i.querySelector('.faq-question');
         const ic = i.querySelector('.faq-icon');
@@ -453,21 +453,16 @@
         i.classList.remove('is-open');
         if(b) b.setAttribute('aria-expanded','false');
         if(ic) ic.textContent = '+';
-        if(an) an.style.maxHeight = '0px';
+        if(an) an.hidden = true;
       });
 
-      if(!isOpen){
+      // abre o clicado
+      if(willOpen){
         item.classList.add('is-open');
         btn.setAttribute('aria-expanded','true');
         if(icon) icon.textContent = '–';
-        answer.style.maxHeight = answer.scrollHeight + 'px';
+        answer.hidden = false;
       }
     });
   });
-
-  window.addEventListener('resize', () => {
-    document.querySelectorAll('.faq-item.is-open .faq-answer').forEach(answer => {
-      answer.style.maxHeight = answer.scrollHeight + 'px';
-    });
-  });
-})();
+});

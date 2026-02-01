@@ -1322,3 +1322,38 @@
   color:rgba(255,255,255,.78);
   line-height:1.6;
 }
+
+.faq-question{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  background:transparent;
+  border:0;
+  color:inherit;
+  cursor:pointer;
+  padding:22px 0;
+  text-align:left;
+}
+
+.faq-icon{
+  width:44px;
+  height:44px;
+  display:grid;
+  place-items:center;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.18);
+  transition:transform .25s ease, border-color .25s ease;
+}
+
+.faq-answer-inner{
+  padding:0 0 18px 0;
+  color:rgba(255,255,255,.78);
+  line-height:1.65;
+}
+
+.faq-item.is-open .faq-icon{
+  transform:rotate(180deg);
+  border-color:rgba(255,255,255,.3);
+}
