@@ -426,15 +426,27 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    const contactForm = document.getElementById('contactForm');
-    const formSuccess = document.getElementById('formSuccess');
-    contactForm.addEventListener('submit', (event) => {
-      event.preventDefault();
-      if (!contactForm.checkValidity()) {
-        contactForm.reportValidity();
-        return;
-      }
-      formSuccess.style.display = 'block';
-      contactForm.reset();
-    });
+    const btnWhatsapp = document.getElementById('btnWhatsapp');
+    const whatsOverlay = document.getElementById('whatsOverlay');
+
+    if (btnWhatsapp) {
+      btnWhatsapp.addEventListener('click', () => {
+        const phone = '5563991196482';
+        const text = encodeURIComponent('Olá! Quero agendar uma aula/treino na Aurum Boxe.');
+        const url = `https://wa.me/${phone}?text=${text}`;
+
+        if (whatsOverlay) {
+          whatsOverlay.classList.add('is-open');
+          whatsOverlay.setAttribute('aria-hidden', 'false');
+        }
+
+        setTimeout(() => {
+          window.open(url, '_blank');
+          if (whatsOverlay) {
+            whatsOverlay.classList.remove('is-open');
+            whatsOverlay.setAttribute('aria-hidden', 'true');
+          }
+        }, 900);
+      });
+    }
   
