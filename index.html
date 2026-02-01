@@ -364,29 +364,20 @@
       <div class="container">
         <div class="badge">Contato</div>
         <h2 class="section-title">Vamos treinar juntos?</h2>
-        <p class="section-subtitle">Preencha o formulário e nossa equipe entrará em contato com você.</p>
-        <div class="grid two-col">
-          <div class="card reveal" data-reveal>
-            <h3>WhatsApp direto</h3>
-            <p>Resposta rápida para tirar dúvidas e agendar treinos.</p>
-            <a class="btn btn-primary" href="https://wa.me/5563991196482?text=Ol%C3%A1%21%20Quero%20agendar%20uma%20aula%20experimental%20na%20Aurum%20Boxe%20%28Aragua%C3%ADna-TO%29." target="_blank" rel="noopener">Chamar no WhatsApp</a>
-            <p style="margin-top: 18px; color: var(--muted);">Cidade: Araguaína-TO</p>
-            <p style="color: var(--muted);"><!-- TODO: Atualizar Instagram -->
-              Instagram: <a href="https://www.instagram.com/aurumboxe/" target="_blank" rel="noopener">@aurumboxe</a>
-            </p>
-          </div>
-          <form class="card contact-form reveal" data-reveal id="contactForm">
-            <input type="text" name="nome" placeholder="Seu nome" required />
-            <input type="email" name="email" placeholder="Seu e-mail" required />
-            <input type="tel" name="telefone" placeholder="WhatsApp" required />
-            <textarea name="mensagem" rows="4" placeholder="Sua mensagem" required></textarea>
-            <button class="btn btn-primary" type="submit">Enviar mensagem</button>
-            <div class="form-success" id="formSuccess">Mensagem enviada! Em breve entraremos em contato.</div>
-          </form>
+        <p class="section-subtitle">Clique e fale direto com a equipe no WhatsApp.</p>
+        <div class="contact-actions">
+          <button class="btn-whats" id="btnWhatsapp" type="button">Chamar no WhatsApp</button>
         </div>
       </div>
     </section>
   </main>
+
+  <div id="whatsOverlay" class="whats-overlay" aria-hidden="true">
+    <div class="whats-overlay__card">
+      <div class="whats-glove" aria-hidden="true">🥊</div>
+      <div class="whats-overlay__text">Indo pro WhatsApp...</div>
+    </div>
+  </div>
 
   <div class="floating-actions">
     <a class="floating-btn whatsapp" href="https://wa.me/5563991196482?text=Ol%C3%A1%21%20Quero%20agendar%20uma%20aula%20experimental%20na%20Aurum%20Boxe%20%28Aragua%C3%ADna-TO%29." target="_blank" rel="noopener" aria-label="WhatsApp">WA</a>
