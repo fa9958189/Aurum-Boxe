@@ -1274,4 +1274,11 @@
         right: 12px;
       }
     }
+
+#musicToggle {
+  position: fixed;
+  right: 18px;
+  bottom: 90px; /* acima do botão WA */
+  z-index: 999;
+}
   
