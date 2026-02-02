@@ -10,7 +10,9 @@
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           navLinks.forEach(link => {
-            link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`);
+            const href = link.getAttribute('href');
+            if (!href || !href.startsWith('#')) return;
+            link.classList.toggle('active', href === `#${entry.target.id}`);
           });
         }
       });
