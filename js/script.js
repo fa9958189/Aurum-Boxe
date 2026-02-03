@@ -149,17 +149,19 @@
 
     const hero = document.querySelector('.hero');
     const heroVideo = document.getElementById('heroVideo');
-    heroVideo.addEventListener('error', () => {
-      hero.classList.add('fallback');
-      heroVideo.style.display = 'none';
-    });
-
-    heroVideo.addEventListener('loadeddata', () => {
-      heroVideo.play().catch(() => {
+    if (heroVideo && hero) {
+      heroVideo.addEventListener('error', () => {
         hero.classList.add('fallback');
         heroVideo.style.display = 'none';
       });
-    });
+
+      heroVideo.addEventListener('loadeddata', () => {
+        heroVideo.play().catch(() => {
+          hero.classList.add('fallback');
+          heroVideo.style.display = 'none';
+        });
+      });
+    }
 
     const timerDisplay = document.getElementById('timerDisplay');
     const timerStatus = document.getElementById('timerStatus');
@@ -368,7 +370,10 @@
       arenaVideo.src = src;
       arenaVideo.load();
 
-      const canPlay = !!arenaVideo.canPlayType('video/quicktime');
+      const isMp4 = (src || '').toLowerCase().endsWith('.mp4');
+      const canPlay = isMp4
+        ? !!arenaVideo.canPlayType('video/mp4')
+        : !!arenaVideo.canPlayType('video/quicktime');
       if (!canPlay) {
         videoFallback.classList.add('active');
         arenaVideo.style.display = 'none';
@@ -464,54 +469,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 (() => {
-  const videoId = 'eVTXPUF4Oz4';
-  let player = null;
-  let isReady = false;
   let isPlaying = false;
-
-  function ensurePlayer() {
-    // cria container invisível se não existir
-    let wrap = document.getElementById('ytMusicWrap');
-    if (!wrap) {
-      wrap = document.createElement('div');
-      wrap.id = 'ytMusicWrap';
-      wrap.style.position = 'fixed';
-      wrap.style.left = '-9999px';
-      wrap.style.top = '-9999px';
-      wrap.style.width = '1px';
-      wrap.style.height = '1px';
-      wrap.style.overflow = 'hidden';
-
-      const div = document.createElement('div');
-      div.id = 'ytPlayer';
-      wrap.appendChild(div);
-
-      document.body.appendChild(wrap);
-    }
-
-    if (player) return;
-
-    // cria player via API
-    player = new YT.Player('ytPlayer', {
-      height: '1',
-      width: '1',
-      videoId,
-      playerVars: {
-        autoplay: 0,
-        controls: 0,
-        rel: 0,
-        modestbranding: 1,
-        playsinline: 1,
-        loop: 1,
-        playlist: videoId
-      },
-      events: {
-        onReady: () => {
-          isReady = true;
-        }
-      }
-    });
-  }
 
   function setButton(btn) {
     if (!btn) return;
@@ -520,34 +478,39 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    const btn = document.getElementById('musicToggle');
-    if (!btn) return;
+    let btn = document.getElementById('musicToggleBtn');
+    if (!btn) {
+      btn = document.createElement('button');
+      btn.id = 'musicToggleBtn';
+      btn.className = 'floating-btn';
+      btn.style.borderRadius = '999px';
+      btn.style.width = 'auto';
+      btn.style.padding = '0 16px';
+      btn.style.fontWeight = '700';
+      document.body.appendChild(btn);
+    }
 
-    // texto inicial
     setButton(btn);
 
+    let bgMusic = null;
+
     btn.addEventListener('click', () => {
-      // o clique do usuário é a chave no celular
-      if (!player) ensurePlayer();
+      if (!bgMusic) {
+        bgMusic = new Audio('Videos/Video Principal.mp4');
+        bgMusic.loop = true;
+        bgMusic.volume = 0.6;
+      }
 
-      // se ainda não ficou ready, tenta de novo rapidinho
-      const tryToggle = () => {
-        if (!player || !isReady || !player.playVideo) {
-          setTimeout(tryToggle, 120);
-          return;
-        }
-
-        if (!isPlaying) {
-          player.playVideo();
+      if (bgMusic.paused) {
+        bgMusic.play().then(() => {
           isPlaying = true;
-        } else {
-          player.pauseVideo();
-          isPlaying = false;
-        }
+          setButton(btn);
+        }).catch(() => {});
+      } else {
+        bgMusic.pause();
+        isPlaying = false;
         setButton(btn);
-      };
-
-      tryToggle();
+      }
     });
   });
 })();
