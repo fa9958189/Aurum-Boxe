@@ -48,7 +48,7 @@
   <main>
     <section class="hero" id="inicio">
       <video id="heroVideo" autoplay muted loop playsinline poster="Fotos/Logo.jpeg">
-        <source src="Videos/Video Principal.mp4" type="video/mp4" />
+        <source src="Videos/VideoPrincipal.mp4" type="video/mp4" />
       </video>
       <div class="video-fallback-message" id="heroFallbackMessage">Vídeo disponível em breve</div>
       <div class="container hero-content">
@@ -74,16 +74,6 @@
                 Seg a Sex: 06h, 12h, 18h, 20h<br />
                 Sáb: 09h
               </span>
-            </div>
-            <div class="glove-wrapper" aria-hidden="true">
-              <div class="glove-3d-container">
-                <iframe
-                  src="https://sketchfab.com/models/9d244a5bfaf84ea398cff99154e99eab/embed?ui_theme=dark&autostart=1&ui_infos=0&ui_controls=0&ui_stop=0"
-                  title="Boxing Glove 3D"
-                  frameborder="0"
-                  allow="autoplay; fullscreen; xr-spatial-tracking">
-                </iframe>
-              </div>
             </div>
           </div>
         </div>
@@ -123,16 +113,29 @@
             <p>Veja a energia em movimento, direto do ringue.</p>
           </div>
           <div class="media-video-grid">
-            <article class="video-card" data-video-src="Videos/Video Principal.mp4" data-video-poster="Fotos/Logo.jpeg">
+
+            <article class="video-card" data-video-src="Videos/VideoPrincipal.mp4" data-video-poster="Fotos/Logo.jpeg">
               <div class="video-thumb">
-                <img src="Fotos/Logo.jpeg" alt="Thumb do vídeo da arena Aurum Boxe" />
-                <span class="video-play" aria-hidden="true">▶</span>
+                <img src="Fotos/Logo.jpeg" alt="Vídeo principal da arena" />
+                <span class="video-play">▶</span>
               </div>
               <div class="video-meta">
-                <h4>Arena em ação</h4>
-                <p>Clima real do treino.</p>
+                <h4>Vídeo Principal</h4>
+                <p>Treino em destaque</p>
               </div>
             </article>
+
+            <article class="video-card" data-video-src="Videos/Video2.mp4" data-video-poster="Fotos/Logo.jpeg">
+              <div class="video-thumb">
+                <img src="Fotos/Logo.jpeg" alt="Vídeo secundário" />
+                <span class="video-play">▶</span>
+              </div>
+              <div class="video-meta">
+                <h4>Treino Extra</h4>
+                <p>Outro ângulo da arena</p>
+              </div>
+            </article>
+
           </div>
         </div>
       </div>
