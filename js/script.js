@@ -362,29 +362,38 @@
     const videoFallback = document.getElementById('videoFallback');
     const videoCards = document.querySelectorAll('.video-card');
 
-    function openVideoModal(card) {
-      const src = card.dataset.videoSrc;
+    function openVideoModal(src, poster) {
       videoModal.classList.add('open');
       videoModal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
-      arenaVideo.setAttribute('poster', card.dataset.videoPoster || '');
-      arenaVideo.src = src;
-      arenaVideo.load();
-      arenaVideo.play().catch(() => {});
 
-      const ext = (src || '').toLowerCase();
-      const isMp4 = ext.endsWith('.mp4');
-      const mime = isMp4 ? 'video/mp4' : 'video/quicktime';
-      const canPlay = !!arenaVideo.canPlayType(mime);
-      if (!canPlay) {
-        videoFallback.classList.add('active');
-        arenaVideo.style.display = 'none';
-        return;
-      }
       videoFallback.classList.remove('active');
       arenaVideo.style.display = 'block';
+
+      arenaVideo.pause();
+      arenaVideo.currentTime = 0;
+      arenaVideo.setAttribute('poster', poster || '');
+      arenaVideo.src = src;
+      arenaVideo.load();
+
       arenaVideo.muted = true;
+      const p = arenaVideo.play();
+      if (p && typeof p.catch === 'function') {
+        p.catch(() => {
+          // se autoplay bloquear, tudo bem: controls já deixam o usuário dar play
+        });
+      }
     }
+
+    arenaVideo.addEventListener('error', () => {
+      videoFallback.classList.add('active');
+      arenaVideo.style.display = 'none';
+    });
+
+    arenaVideo.addEventListener('loadeddata', () => {
+      videoFallback.classList.remove('active');
+      arenaVideo.style.display = 'block';
+    });
 
     function closeVideoModal() {
       videoModal.classList.remove('open');
@@ -398,7 +407,7 @@
 
     videoCards.forEach(card => {
       card.addEventListener('click', () => {
-        openVideoModal(card);
+        openVideoModal(card.dataset.videoSrc, card.dataset.videoPoster);
       });
     });
 
