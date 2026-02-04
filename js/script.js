@@ -367,8 +367,17 @@
       videoModal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
 
-      videoFallback.classList.remove('active');
+      const isMp4 = /\.mp4(\?|$)/i.test(src);
+      const mime = isMp4 ? 'video/mp4' : 'video/quicktime';
+      const canPlay = !!arenaVideo.canPlayType(mime);
+      if (!canPlay) {
+        videoFallback.classList.add('active');
+        arenaVideo.style.display = 'none';
+        return;
+      }
+
       arenaVideo.style.display = 'block';
+      videoFallback.classList.remove('active');
 
       arenaVideo.pause();
       arenaVideo.currentTime = 0;
