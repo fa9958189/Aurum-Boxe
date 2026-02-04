@@ -48,7 +48,7 @@
   <main>
     <section class="hero" id="inicio">
       <video id="heroVideo" autoplay muted loop playsinline poster="Fotos/Logo.jpeg">
-        <source src="Videos/IMG_4536.MOV" type="video/quicktime" />
+        <source src="Videos/Video Principal.mp4" type="video/mp4" />
       </video>
       <div class="video-fallback-message" id="heroFallbackMessage">Vídeo disponível em breve</div>
       <div class="container hero-content">
@@ -123,7 +123,7 @@
             <p>Veja a energia em movimento, direto do ringue.</p>
           </div>
           <div class="media-video-grid">
-            <article class="video-card" data-video-src="Videos/IMG_4536.MOV" data-video-poster="Fotos/Logo.jpeg">
+            <article class="video-card" data-video-src="Videos/Video Principal.mp4" data-video-poster="Fotos/Logo.jpeg">
               <div class="video-thumb">
                 <img src="Fotos/Logo.jpeg" alt="Thumb do vídeo da arena Aurum Boxe" />
                 <span class="video-play" aria-hidden="true">▶</span>
@@ -332,12 +332,12 @@
     <div class="media-modal-content media-modal-video">
       <button class="modal-close" id="videoModalClose" aria-label="Fechar">✕</button>
       <video id="arenaVideo" controls playsinline preload="metadata"></video>
-      <p class="video-fallback" id="videoFallback">Seu navegador não suporta MOV. Em breve em MP4.</p>
+      <p class="video-fallback" id="videoFallback">Seu navegador não conseguiu reproduzir o vídeo. Tente novamente.</p>
     </div>
   </div>
 
   <!-- Botão música -->
-  <button id="musicToggle" class="floating-btn" aria-label="Ativar música"
+  <button id="musicToggleBtn" class="floating-btn" aria-label="Ativar música"
     style="border-radius:999px; width:auto; padding:0 16px; font-weight:700;">
     🎵 Ativar música
   </button>
