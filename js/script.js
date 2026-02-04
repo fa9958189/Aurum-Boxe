@@ -362,17 +362,16 @@
     const videoFallback = document.getElementById('videoFallback');
     const videoCards = document.querySelectorAll('.video-card');
 
-    function openVideoModal(src, poster) {
+    function openVideoModal(card) {
       videoModal.classList.add('open');
       videoModal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
-      arenaVideo.setAttribute('poster', poster || '');
-      arenaVideo.src = src;
+      arenaVideo.setAttribute('poster', card.dataset.videoPoster || '');
+      arenaVideo.src = card.dataset.videoSrc;
       arenaVideo.load();
+      arenaVideo.play().catch(() => {});
 
-      const canPlay = !!(
-        arenaVideo.canPlayType('video/mp4') || arenaVideo.canPlayType('video/quicktime')
-      );
+      const canPlay = !!arenaVideo.canPlayType('video/mp4');
       if (!canPlay) {
         videoFallback.classList.add('active');
         arenaVideo.style.display = 'none';
@@ -381,7 +380,6 @@
       videoFallback.classList.remove('active');
       arenaVideo.style.display = 'block';
       arenaVideo.muted = true;
-      arenaVideo.play().catch(() => {});
     }
 
     function closeVideoModal() {
@@ -396,7 +394,7 @@
 
     videoCards.forEach(card => {
       card.addEventListener('click', () => {
-        openVideoModal(card.dataset.videoSrc, card.dataset.videoPoster);
+        openVideoModal(card);
       });
     });
 
