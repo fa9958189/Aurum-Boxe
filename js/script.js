@@ -367,31 +367,23 @@
       videoModal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
 
-      const isMp4 = /\.mp4(\?|$)/i.test(src);
-      const mime = isMp4 ? 'video/mp4' : 'video/quicktime';
-      const canPlay = !!arenaVideo.canPlayType(mime);
-      if (!canPlay) {
+      arenaVideo.setAttribute('poster', poster || '');
+      arenaVideo.src = src;
+      arenaVideo.load();
+
+      const canPlayMp4 = !!arenaVideo.canPlayType('video/mp4');
+      if (!canPlayMp4) {
         videoFallback.classList.add('active');
         arenaVideo.style.display = 'none';
         return;
       }
 
-      arenaVideo.style.display = 'block';
       videoFallback.classList.remove('active');
+      arenaVideo.style.display = 'block';
 
-      arenaVideo.pause();
-      arenaVideo.currentTime = 0;
-      arenaVideo.setAttribute('poster', poster || '');
-      arenaVideo.src = src;
-      arenaVideo.load();
-
-      arenaVideo.muted = true;
-      const p = arenaVideo.play();
-      if (p && typeof p.catch === 'function') {
-        p.catch(() => {
-          // se autoplay bloquear, tudo bem: controls já deixam o usuário dar play
-        });
-      }
+      // mobile exige interação do usuário (o clique no card já conta)
+      arenaVideo.muted = false;
+      arenaVideo.play().catch(() => {});
     }
 
     arenaVideo.addEventListener('error', () => {
