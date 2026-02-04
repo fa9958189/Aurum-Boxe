@@ -367,23 +367,44 @@
       videoModal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
 
+      // poster opcional
       arenaVideo.setAttribute('poster', poster || '');
-      arenaVideo.src = src;
-      arenaVideo.load();
 
-      const canPlayMp4 = !!arenaVideo.canPlayType('video/mp4');
-      if (!canPlayMp4) {
+      // limpa fontes antigas e seta a nova com MIME correto
+      arenaVideo.pause();
+      arenaVideo.removeAttribute('src');
+      arenaVideo.innerHTML = '';
+
+      const cleanSrc = (src || '').trim();
+      const ext = cleanSrc.split('.').pop().toLowerCase();
+
+      let mime = '';
+      if (ext === 'mp4') mime = 'video/mp4';
+      else if (ext === 'mov') mime = 'video/quicktime';
+
+      // se não souber o mime, tenta mesmo assim
+      const canPlay = mime ? arenaVideo.canPlayType(mime) : 'maybe';
+
+      if (mime && !canPlay) {
         videoFallback.classList.add('active');
         arenaVideo.style.display = 'none';
         return;
       }
 
+      const sourceEl = document.createElement('source');
+      sourceEl.src = cleanSrc;
+      if (mime) sourceEl.type = mime;
+
+      arenaVideo.appendChild(sourceEl);
+      arenaVideo.load();
+
       videoFallback.classList.remove('active');
       arenaVideo.style.display = 'block';
 
-      // mobile exige interação do usuário (o clique no card já conta)
-      arenaVideo.muted = false;
-      arenaVideo.play().catch(() => {});
+      // em mobile, autoplay pode falhar; mas o modal abriu por clique, então tentamos
+      arenaVideo.play().catch(() => {
+        // se não tocar sozinho, usuário clica no play do controls
+      });
     }
 
     arenaVideo.addEventListener('error', () => {
@@ -403,6 +424,7 @@
       arenaVideo.pause();
       arenaVideo.currentTime = 0;
       arenaVideo.removeAttribute('src');
+      arenaVideo.innerHTML = '';
       arenaVideo.load();
     }
 
