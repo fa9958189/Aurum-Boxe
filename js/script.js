@@ -363,69 +363,54 @@
     const videoCards = document.querySelectorAll('.video-card');
 
     function openVideoModal(src, poster) {
+      if (!videoModal || !arenaVideo) return;
+
       videoModal.classList.add('open');
       videoModal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
 
-      // poster opcional
-      arenaVideo.setAttribute('poster', poster || '');
-
-      // limpa fontes antigas e seta a nova com MIME correto
+      // reset seguro
       arenaVideo.pause();
       arenaVideo.removeAttribute('src');
-      arenaVideo.innerHTML = '';
-
-      const cleanSrc = (src || '').trim();
-      const ext = cleanSrc.split('.').pop().toLowerCase();
-
-      let mime = '';
-      if (ext === 'mp4') mime = 'video/mp4';
-      else if (ext === 'mov') mime = 'video/quicktime';
-
-      // se não souber o mime, tenta mesmo assim
-      const canPlay = mime ? arenaVideo.canPlayType(mime) : 'maybe';
-
-      if (mime && !canPlay) {
-        videoFallback.classList.add('active');
-        arenaVideo.style.display = 'none';
-        return;
-      }
-
-      const sourceEl = document.createElement('source');
-      sourceEl.src = cleanSrc;
-      if (mime) sourceEl.type = mime;
-
-      arenaVideo.appendChild(sourceEl);
       arenaVideo.load();
 
-      videoFallback.classList.remove('active');
+      if (poster) arenaVideo.setAttribute('poster', poster);
+
+      // mostrar player e esconder fallback
+      if (videoFallback) videoFallback.classList.remove('active');
       arenaVideo.style.display = 'block';
 
-      // em mobile, autoplay pode falhar; mas o modal abriu por clique, então tentamos
-      arenaVideo.play().catch(() => {
-        // se não tocar sozinho, usuário clica no play do controls
-      });
+      // set src e tentar tocar
+      arenaVideo.src = src;
+      arenaVideo.load();
+
+      const playPromise = arenaVideo.play();
+      if (playPromise && typeof playPromise.catch === 'function') {
+        playPromise.catch(() => {
+          // se falhar, ainda deixa o usuário apertar play manualmente
+        });
+      }
     }
 
-    arenaVideo.addEventListener('error', () => {
-      videoFallback.classList.add('active');
-      arenaVideo.style.display = 'none';
-    });
-
-    arenaVideo.addEventListener('loadeddata', () => {
-      videoFallback.classList.remove('active');
-      arenaVideo.style.display = 'block';
-    });
-
     function closeVideoModal() {
+      if (!videoModal || !arenaVideo) return;
+
       videoModal.classList.remove('open');
       videoModal.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
+
       arenaVideo.pause();
       arenaVideo.currentTime = 0;
       arenaVideo.removeAttribute('src');
-      arenaVideo.innerHTML = '';
       arenaVideo.load();
+    }
+
+    // Se der erro ao carregar, mostra fallback
+    if (arenaVideo) {
+      arenaVideo.addEventListener('error', () => {
+        if (videoFallback) videoFallback.classList.add('active');
+        arenaVideo.style.display = 'none';
+      });
     }
 
     videoCards.forEach(card => {
@@ -434,10 +419,12 @@
       });
     });
 
-    videoModalClose.addEventListener('click', closeVideoModal);
-    videoModal.addEventListener('click', (event) => {
-      if (event.target === videoModal) closeVideoModal();
-    });
+    if (videoModalClose) videoModalClose.addEventListener('click', closeVideoModal);
+    if (videoModal) {
+      videoModal.addEventListener('click', (event) => {
+        if (event.target === videoModal) closeVideoModal();
+      });
+    }
 
     window.addEventListener('keydown', (event) => {
       if (photoModal.classList.contains('open')) {
@@ -445,7 +432,7 @@
         if (event.key === 'ArrowLeft') showPhotoPrev();
         if (event.key === 'ArrowRight') showPhotoNext();
       }
-      if (videoModal.classList.contains('open') && event.key === 'Escape') {
+      if (videoModal && videoModal.classList.contains('open') && event.key === 'Escape') {
         closeVideoModal();
       }
     });
