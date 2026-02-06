@@ -1,8 +1,10 @@
     const menuToggle = document.getElementById('menuToggle');
     const mobileNav = document.getElementById('mobileNav');
-    menuToggle.addEventListener('click', () => {
-      mobileNav.style.display = mobileNav.style.display === 'flex' ? 'none' : 'flex';
-    });
+    if (menuToggle && mobileNav) {
+      menuToggle.addEventListener('click', () => {
+        mobileNav.style.display = mobileNav.style.display === 'flex' ? 'none' : 'flex';
+      });
+    }
 
     const sections = document.querySelectorAll('section');
     const navLinks = document.querySelectorAll('.nav-links a, .mobile-nav a');
@@ -101,63 +103,67 @@
     });
 
     const heroCanvas = document.getElementById('heroParticles');
-    const ctx = heroCanvas.getContext('2d');
-    let particles = [];
+    if (heroCanvas) {
+      const ctx = heroCanvas.getContext('2d');
+      if (ctx) {
+        let particles = [];
 
-    function resizeCanvas() {
-      const scale = window.devicePixelRatio || 1;
-      heroCanvas.width = heroCanvas.offsetWidth * scale;
-      heroCanvas.height = heroCanvas.offsetHeight * scale;
-      ctx.setTransform(scale, 0, 0, scale, 0, 0);
-    }
-
-    function createParticles() {
-      const count = 35;
-      particles = Array.from({ length: count }, () => ({
-        x: Math.random() * heroCanvas.offsetWidth,
-        y: Math.random() * heroCanvas.offsetHeight,
-        radius: Math.random() * 2 + 1,
-        speed: Math.random() * 0.5 + 0.2,
-        alpha: Math.random() * 0.5 + 0.3
-      }));
-    }
-
-    function animateParticles() {
-      ctx.clearRect(0, 0, heroCanvas.offsetWidth, heroCanvas.offsetHeight);
-      particles.forEach(p => {
-        ctx.beginPath();
-        ctx.fillStyle = `rgba(214, 179, 94, ${p.alpha})`;
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fill();
-        p.y -= p.speed;
-        if (p.y < 0) {
-          p.y = heroCanvas.offsetHeight;
-          p.x = Math.random() * heroCanvas.offsetWidth;
+        function resizeCanvas() {
+          const scale = window.devicePixelRatio || 1;
+          heroCanvas.width = heroCanvas.offsetWidth * scale;
+          heroCanvas.height = heroCanvas.offsetHeight * scale;
+          ctx.setTransform(scale, 0, 0, scale, 0, 0);
         }
-      });
-      requestAnimationFrame(animateParticles);
+
+        function createParticles() {
+          const count = 35;
+          particles = Array.from({ length: count }, () => ({
+            x: Math.random() * heroCanvas.offsetWidth,
+            y: Math.random() * heroCanvas.offsetHeight,
+            radius: Math.random() * 2 + 1,
+            speed: Math.random() * 0.5 + 0.2,
+            alpha: Math.random() * 0.5 + 0.3
+          }));
+        }
+
+        function animateParticles() {
+          ctx.clearRect(0, 0, heroCanvas.offsetWidth, heroCanvas.offsetHeight);
+          particles.forEach(p => {
+            ctx.beginPath();
+            ctx.fillStyle = `rgba(214, 179, 94, ${p.alpha})`;
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fill();
+            p.y -= p.speed;
+            if (p.y < 0) {
+              p.y = heroCanvas.offsetHeight;
+              p.x = Math.random() * heroCanvas.offsetWidth;
+            }
+          });
+          requestAnimationFrame(animateParticles);
+        }
+
+        resizeCanvas();
+        createParticles();
+        animateParticles();
+
+        window.addEventListener('resize', () => {
+          resizeCanvas();
+          createParticles();
+        });
+      }
     }
-
-    resizeCanvas();
-    createParticles();
-    animateParticles();
-
-    window.addEventListener('resize', () => {
-      resizeCanvas();
-      createParticles();
-    });
 
     const hero = document.querySelector('.hero');
     const heroVideo = document.getElementById('heroVideo');
-    if (heroVideo && hero) {
+    if (heroVideo) {
       heroVideo.addEventListener('error', () => {
-        hero.classList.add('fallback');
+        if (hero) hero.classList.add('fallback');
         heroVideo.style.display = 'none';
       });
 
       heroVideo.addEventListener('loadeddata', () => {
         heroVideo.play().catch(() => {
-          hero.classList.add('fallback');
+          if (hero) hero.classList.add('fallback');
           heroVideo.style.display = 'none';
         });
       });
@@ -168,84 +174,86 @@
     const timerStart = document.getElementById('timerStart');
     const timerPause = document.getElementById('timerPause');
     const timerReset = document.getElementById('timerReset');
-    const timerPills = document.querySelectorAll('.timer-pill');
+    if (timerDisplay && timerStatus && timerStart && timerPause && timerReset) {
+      const timerPills = document.querySelectorAll('.timer-pill');
 
-    const rounds = [
-      { label: 'Round 1', seconds: 120 },
-      { label: 'Descanso', seconds: 60 },
-      { label: 'Round 2', seconds: 120 },
-      { label: 'Descanso', seconds: 60 },
-      { label: 'Round 3', seconds: 120 }
-    ];
+      const rounds = [
+        { label: 'Round 1', seconds: 120 },
+        { label: 'Descanso', seconds: 60 },
+        { label: 'Round 2', seconds: 120 },
+        { label: 'Descanso', seconds: 60 },
+        { label: 'Round 3', seconds: 120 }
+      ];
 
-    let currentStage = 0;
-    let remaining = rounds[currentStage].seconds;
-    let timerInterval = null;
+      let currentStage = 0;
+      let remaining = rounds[currentStage].seconds;
+      let timerInterval = null;
 
-    function updateTimerDisplay() {
-      const minutes = String(Math.floor(remaining / 60)).padStart(2, '0');
-      const seconds = String(remaining % 60).padStart(2, '0');
-      const label = rounds[currentStage].label;
-      timerDisplay.textContent = `${minutes}:${seconds}`;
-      timerStatus.textContent = label.includes('Round') ? `${label} / 3` : label;
-      timerPills.forEach(pill => pill.classList.remove('active'));
-      if (label.includes('Round')) {
-        const roundNumber = label.split(' ')[1];
-        const activePill = document.querySelector(`.timer-pill[data-round="${roundNumber}"]`);
-        if (activePill) activePill.classList.add('active');
-      } else {
-        const restPill = document.querySelector('.timer-pill[data-round="rest"]');
-        if (restPill) restPill.classList.add('active');
+      function updateTimerDisplay() {
+        const minutes = String(Math.floor(remaining / 60)).padStart(2, '0');
+        const seconds = String(remaining % 60).padStart(2, '0');
+        const label = rounds[currentStage].label;
+        timerDisplay.textContent = `${minutes}:${seconds}`;
+        timerStatus.textContent = label.includes('Round') ? `${label} / 3` : label;
+        timerPills.forEach(pill => pill.classList.remove('active'));
+        if (label.includes('Round')) {
+          const roundNumber = label.split(' ')[1];
+          const activePill = document.querySelector(`.timer-pill[data-round="${roundNumber}"]`);
+          if (activePill) activePill.classList.add('active');
+        } else {
+          const restPill = document.querySelector('.timer-pill[data-round="rest"]');
+          if (restPill) restPill.classList.add('active');
+        }
       }
-    }
 
-    function nextStage() {
-      if (currentStage < rounds.length - 1) {
-        currentStage += 1;
+      function nextStage() {
+        if (currentStage < rounds.length - 1) {
+          currentStage += 1;
+          remaining = rounds[currentStage].seconds;
+        } else {
+          clearInterval(timerInterval);
+          timerInterval = null;
+        }
+        updateTimerDisplay();
+      }
+
+      function tick() {
+        if (remaining > 0) {
+          remaining -= 1;
+        } else {
+          nextStage();
+        }
+        updateTimerDisplay();
+      }
+
+      timerStart.addEventListener('click', () => {
+        if (!timerInterval) {
+          timerInterval = setInterval(tick, 1000);
+        }
+      });
+
+      timerPause.addEventListener('click', () => {
+        if (timerInterval) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+        }
+      });
+
+      timerReset.addEventListener('click', () => {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        currentStage = 0;
         remaining = rounds[currentStage].seconds;
-      } else {
-        clearInterval(timerInterval);
-        timerInterval = null;
-      }
+        updateTimerDisplay();
+      });
+
       updateTimerDisplay();
     }
-
-    function tick() {
-      if (remaining > 0) {
-        remaining -= 1;
-      } else {
-        nextStage();
-      }
-      updateTimerDisplay();
-    }
-
-    timerStart.addEventListener('click', () => {
-      if (!timerInterval) {
-        timerInterval = setInterval(tick, 1000);
-      }
-    });
-
-    timerPause.addEventListener('click', () => {
-      if (timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-      }
-    });
-
-    timerReset.addEventListener('click', () => {
-      clearInterval(timerInterval);
-      timerInterval = null;
-      currentStage = 0;
-      remaining = rounds[currentStage].seconds;
-      updateTimerDisplay();
-    });
-
-    updateTimerDisplay();
 
     const carouselTrack = document.querySelector('.carousel-track');
     const carouselCards = document.querySelectorAll('.carousel-card');
-    const prevTestimonialBtn = document.getElementById('prevTestimonial');
-    const nextTestimonialBtn = document.getElementById('nextTestimonial');
+    const prevBtn = document.getElementById('prevTestimonial');
+    const nextBtn = document.getElementById('nextTestimonial');
     let carouselIndex = 0;
 
     function updateCarousel() {
@@ -253,16 +261,20 @@
       carouselTrack.style.transform = `translateX(-${carouselIndex * 100}%)`;
     }
 
-    if (carouselTrack && carouselCards.length && prevTestimonialBtn && nextTestimonialBtn) {
-      prevTestimonialBtn.addEventListener('click', () => {
-        carouselIndex = (carouselIndex - 1 + carouselCards.length) % carouselCards.length;
-        updateCarousel();
-      });
+    if (carouselTrack && carouselCards.length) {
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+          carouselIndex = (carouselIndex - 1 + carouselCards.length) % carouselCards.length;
+          updateCarousel();
+        });
+      }
 
-      nextTestimonialBtn.addEventListener('click', () => {
-        carouselIndex = (carouselIndex + 1) % carouselCards.length;
-        updateCarousel();
-      });
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+          carouselIndex = (carouselIndex + 1) % carouselCards.length;
+          updateCarousel();
+        });
+      }
 
       setInterval(() => {
         carouselIndex = (carouselIndex + 1) % carouselCards.length;
@@ -320,119 +332,118 @@
     const photoModalNext = document.getElementById('photoModalNext');
     const photoCards = Array.from(document.querySelectorAll('.media-card'));
     let photoModalIndex = 0;
+    let closePhotoModal = null;
+    let showPhotoPrev = null;
+    let showPhotoNext = null;
 
-    function openPhotoModal(index) {
-      photoModalIndex = index;
-      photoModalImage.src = photoCards[photoModalIndex].querySelector('img').src;
-      photoModal.classList.add('open');
-      photoModal.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
+    if (photoModal && photoModalImage) {
+      function openPhotoModal(index) {
+        photoModalIndex = index;
+        photoModalImage.src = photoCards[photoModalIndex].querySelector('img').src;
+        photoModal.classList.add('open');
+        photoModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
+      closePhotoModal = () => {
+        photoModal.classList.remove('open');
+        photoModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      };
+
+      showPhotoPrev = () => {
+        photoModalIndex = (photoModalIndex - 1 + photoCards.length) % photoCards.length;
+        openPhotoModal(photoModalIndex);
+      };
+
+      showPhotoNext = () => {
+        photoModalIndex = (photoModalIndex + 1) % photoCards.length;
+        openPhotoModal(photoModalIndex);
+      };
+
+      photoCards.forEach((card, index) => {
+        card.addEventListener('click', () => openPhotoModal(index));
+      });
+
+      if (photoModalClose) photoModalClose.addEventListener('click', closePhotoModal);
+      if (photoModalPrev) photoModalPrev.addEventListener('click', showPhotoPrev);
+      if (photoModalNext) photoModalNext.addEventListener('click', showPhotoNext);
+      photoModal.addEventListener('click', (event) => {
+        if (event.target === photoModal) closePhotoModal();
+      });
     }
-
-    function closePhotoModal() {
-      photoModal.classList.remove('open');
-      photoModal.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
-    }
-
-    function showPhotoPrev() {
-      photoModalIndex = (photoModalIndex - 1 + photoCards.length) % photoCards.length;
-      openPhotoModal(photoModalIndex);
-    }
-
-    function showPhotoNext() {
-      photoModalIndex = (photoModalIndex + 1) % photoCards.length;
-      openPhotoModal(photoModalIndex);
-    }
-
-    photoCards.forEach((card, index) => {
-      card.addEventListener('click', () => openPhotoModal(index));
-    });
-
-    photoModalClose.addEventListener('click', closePhotoModal);
-    photoModalPrev.addEventListener('click', showPhotoPrev);
-    photoModalNext.addEventListener('click', showPhotoNext);
-    photoModal.addEventListener('click', (event) => {
-      if (event.target === photoModal) closePhotoModal();
-    });
 
     const videoModal = document.getElementById('videoModal');
     const videoModalClose = document.getElementById('videoModalClose');
     const arenaVideo = document.getElementById('arenaVideo');
     const videoFallback = document.getElementById('videoFallback');
     const videoCards = document.querySelectorAll('.video-card');
+    let closeVideoModal = null;
+    if (videoModal && arenaVideo) {
+      function openVideoModal(src, poster) {
+        videoModal.classList.add('open');
+        videoModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
 
-    function openVideoModal(src, poster) {
-      if (!videoModal || !arenaVideo) return;
+        // reset seguro
+        arenaVideo.pause();
+        arenaVideo.removeAttribute('src');
+        arenaVideo.load();
 
-      videoModal.classList.add('open');
-      videoModal.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
+        if (poster) arenaVideo.setAttribute('poster', poster);
 
-      // reset seguro
-      arenaVideo.pause();
-      arenaVideo.removeAttribute('src');
-      arenaVideo.load();
+        // mostrar player e esconder fallback
+        if (videoFallback) videoFallback.classList.remove('active');
+        arenaVideo.style.display = 'block';
 
-      if (poster) arenaVideo.setAttribute('poster', poster);
+        // set src e tentar tocar
+        arenaVideo.src = src;
+        arenaVideo.load();
 
-      // mostrar player e esconder fallback
-      if (videoFallback) videoFallback.classList.remove('active');
-      arenaVideo.style.display = 'block';
-
-      // set src e tentar tocar
-      arenaVideo.src = src;
-      arenaVideo.load();
-
-      const playPromise = arenaVideo.play();
-      if (playPromise && typeof playPromise.catch === 'function') {
-        playPromise.catch(() => {
-          // se falhar, ainda deixa o usuário apertar play manualmente
-        });
+        const playPromise = arenaVideo.play();
+        if (playPromise && typeof playPromise.catch === 'function') {
+          playPromise.catch(() => {
+            // se falhar, ainda deixa o usuário apertar play manualmente
+          });
+        }
       }
-    }
 
-    function closeVideoModal() {
-      if (!videoModal || !arenaVideo) return;
+      closeVideoModal = () => {
+        videoModal.classList.remove('open');
+        videoModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
 
-      videoModal.classList.remove('open');
-      videoModal.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
+        arenaVideo.pause();
+        arenaVideo.currentTime = 0;
+        arenaVideo.removeAttribute('src');
+        arenaVideo.load();
+      };
 
-      arenaVideo.pause();
-      arenaVideo.currentTime = 0;
-      arenaVideo.removeAttribute('src');
-      arenaVideo.load();
-    }
-
-    // Se der erro ao carregar, mostra fallback
-    if (arenaVideo) {
+      // Se der erro ao carregar, mostra fallback
       arenaVideo.addEventListener('error', () => {
         if (videoFallback) videoFallback.classList.add('active');
         arenaVideo.style.display = 'none';
       });
-    }
 
-    videoCards.forEach(card => {
-      card.addEventListener('click', () => {
-        openVideoModal(card.dataset.videoSrc, card.dataset.videoPoster);
+      videoCards.forEach(card => {
+        card.addEventListener('click', () => {
+          openVideoModal(card.dataset.videoSrc, card.dataset.videoPoster);
+        });
       });
-    });
 
-    if (videoModalClose) videoModalClose.addEventListener('click', closeVideoModal);
-    if (videoModal) {
+      if (videoModalClose) videoModalClose.addEventListener('click', closeVideoModal);
       videoModal.addEventListener('click', (event) => {
         if (event.target === videoModal) closeVideoModal();
       });
     }
 
     window.addEventListener('keydown', (event) => {
-      if (photoModal.classList.contains('open')) {
-        if (event.key === 'Escape') closePhotoModal();
-        if (event.key === 'ArrowLeft') showPhotoPrev();
-        if (event.key === 'ArrowRight') showPhotoNext();
+      if (photoModal && photoModal.classList.contains('open')) {
+        if (event.key === 'Escape' && typeof closePhotoModal === 'function') closePhotoModal();
+        if (event.key === 'ArrowLeft' && typeof showPhotoPrev === 'function') showPhotoPrev();
+        if (event.key === 'ArrowRight' && typeof showPhotoNext === 'function') showPhotoNext();
       }
-      if (videoModal && videoModal.classList.contains('open') && event.key === 'Escape') {
+      if (videoModal && videoModal.classList.contains('open') && event.key === 'Escape' && typeof closeVideoModal === 'function') {
         closeVideoModal();
       }
     });
@@ -449,9 +460,11 @@
     });
 
     const backToTop = document.getElementById('backToTop');
-    backToTop.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+    if (backToTop) {
+      backToTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
 
 document.addEventListener('DOMContentLoaded', () => {
   (function initFAQ(){
