@@ -252,6 +252,213 @@
   window.addEventListener('scroll', requestScrollUpdate, { passive: true });
   window.addEventListener('resize', requestScrollUpdate, { passive: true });
 
+  // Ringue interativo da experiência Aurum
+  const experiencePoints = [
+    {
+      id: 1,
+      title: 'Metodologia Olímpica',
+      description: 'Fundamentos consistentes, progressão técnica e leitura estratégica do boxe.',
+      tag: 'Base · Técnica · Tática',
+      symbol: '✦'
+    },
+    {
+      id: 2,
+      title: 'Treino técnico',
+      description: 'Movimentos treinados com intenção, correção e qualidade em cada repetição.',
+      tag: '',
+      symbol: '◎'
+    },
+    {
+      id: 3,
+      title: 'Estratégia e disciplina',
+      description: 'Foco para tomar decisões melhores dentro e fora do ringue.',
+      tag: '',
+      symbol: '◇'
+    },
+    {
+      id: 4,
+      title: 'Alto condicionamento',
+      description: 'Resistência, coordenação e potência construídas com progressão segura.',
+      tag: '',
+      symbol: '↗'
+    },
+    {
+      id: 5,
+      title: 'Ambiente premium',
+      description: 'Uma atmosfera que eleva o foco e transforma o treino em ritual.',
+      tag: '',
+      symbol: 'A'
+    },
+    {
+      id: 6,
+      title: 'Acompanhamento próximo',
+      description: 'Orientação atenta para evoluir no seu ritmo e com segurança.',
+      tag: '',
+      symbol: '＋'
+    }
+  ];
+
+  const experienceRing = document.querySelector('[data-experience-ring]');
+  const interactiveRing = experienceRing?.querySelector('[data-interactive-ring]');
+  const ringScene = experienceRing?.querySelector('[data-ring-scene]');
+  const experiencePanel = experienceRing?.querySelector('.experience-panel');
+  const experienceHotspots = [...(experienceRing?.querySelectorAll('[data-experience-point]') || [])];
+  const experienceIndexButtons = [...(experienceRing?.querySelectorAll('[data-experience-index]') || [])];
+
+  if (experienceRing && interactiveRing && ringScene && experiencePanel && experienceHotspots.length === experiencePoints.length) {
+    const panelNumber = experiencePanel.querySelector('[data-panel-number]');
+    const panelSymbol = experiencePanel.querySelector('[data-panel-symbol]');
+    const panelTitle = experiencePanel.querySelector('[data-panel-title]');
+    const panelDescription = experiencePanel.querySelector('[data-panel-description]');
+    const panelTag = experiencePanel.querySelector('[data-panel-tag]');
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+    let pinnedExperienceIndex = 0;
+    let displayedExperienceIndex = -1;
+    let panelTransitionTimer = 0;
+    let ringPointerFrame = 0;
+
+    const updateExperiencePanel = (index, animate = true) => {
+      const point = experiencePoints[index];
+      if (!point) return;
+
+      experienceHotspots.forEach((hotspot, hotspotIndex) => {
+        const selected = hotspotIndex === index;
+        hotspot.classList.toggle('is-active', selected);
+        hotspot.setAttribute('aria-selected', String(selected));
+        hotspot.setAttribute('tabindex', selected ? '0' : '-1');
+      });
+
+      experienceIndexButtons.forEach((button, buttonIndex) => {
+        const selected = buttonIndex === index;
+        button.classList.toggle('is-active', selected);
+        button.setAttribute('aria-selected', String(selected));
+        button.setAttribute('tabindex', selected ? '0' : '-1');
+      });
+
+      if (index === displayedExperienceIndex) return;
+      displayedExperienceIndex = index;
+      window.clearTimeout(panelTransitionTimer);
+      if (animate && !reducedMotion) experiencePanel.classList.add('is-changing');
+
+      panelTransitionTimer = window.setTimeout(() => {
+        if (panelNumber) panelNumber.textContent = String(point.id).padStart(2, '0');
+        if (panelSymbol) panelSymbol.textContent = point.symbol;
+        if (panelTitle) panelTitle.textContent = point.title;
+        if (panelDescription) panelDescription.textContent = point.description;
+        if (panelTag) panelTag.textContent = point.tag;
+        experiencePanel.style.setProperty('--panel-progress', `${((index + 1) / experiencePoints.length) * 100}%`);
+        experiencePanel.setAttribute('aria-label', `${String(point.id).padStart(2, '0')} — ${point.title}`);
+        experiencePanel.classList.remove('is-changing');
+      }, animate && !reducedMotion ? 120 : 0);
+    };
+
+    const pinExperiencePoint = (index, focusTarget = false) => {
+      pinnedExperienceIndex = index;
+      updateExperiencePanel(index);
+      if (focusTarget) experienceHotspots[index]?.focus();
+    };
+
+    const handleExperienceKeys = (event, index) => {
+      const keys = ['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp', 'Home', 'End'];
+      if (!keys.includes(event.key)) return;
+      event.preventDefault();
+
+      let nextIndex = index;
+      if (event.key === 'ArrowRight' || event.key === 'ArrowDown') nextIndex = (index + 1) % experiencePoints.length;
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') nextIndex = (index - 1 + experiencePoints.length) % experiencePoints.length;
+      if (event.key === 'Home') nextIndex = 0;
+      if (event.key === 'End') nextIndex = experiencePoints.length - 1;
+      pinExperiencePoint(nextIndex, true);
+    };
+
+    experienceHotspots.forEach((hotspot, index) => {
+      const point = experiencePoints[index];
+      hotspot.setAttribute('aria-label', `${String(point.id).padStart(2, '0')} — ${point.title}`);
+      hotspot.addEventListener('mouseenter', () => updateExperiencePanel(index));
+      hotspot.addEventListener('mouseleave', () => updateExperiencePanel(pinnedExperienceIndex));
+      hotspot.addEventListener('focus', () => updateExperiencePanel(index));
+      hotspot.addEventListener('blur', () => updateExperiencePanel(pinnedExperienceIndex));
+      hotspot.addEventListener('click', () => pinExperiencePoint(index));
+      hotspot.addEventListener('keydown', (event) => handleExperienceKeys(event, index));
+    });
+
+    experienceIndexButtons.forEach((button, index) => {
+      const point = experiencePoints[index];
+      button.setAttribute('aria-label', `${String(point.id).padStart(2, '0')} — ${point.title}`);
+      button.setAttribute('aria-controls', 'experiencePanel');
+      button.addEventListener('click', () => pinExperiencePoint(index));
+      button.addEventListener('keydown', (event) => handleExperienceKeys(event, index));
+    });
+
+    updateExperiencePanel(0, false);
+
+    const gsap = window.gsap;
+    const rotateRingX = gsap ? gsap.quickTo(ringScene, 'rotationX', { duration: 0.75, ease: 'power3.out' }) : null;
+    const rotateRingY = gsap ? gsap.quickTo(ringScene, 'rotationY', { duration: 0.75, ease: 'power3.out' }) : null;
+    const moveRingX = gsap ? gsap.quickTo(ringScene, 'x', { duration: 0.8, ease: 'power3.out' }) : null;
+    const moveRingY = gsap ? gsap.quickTo(ringScene, 'y', { duration: 0.8, ease: 'power3.out' }) : null;
+
+    if (gsap) gsap.set(ringScene, { transformPerspective: 1100, transformOrigin: '50% 55%' });
+
+    interactiveRing.addEventListener('pointermove', (event) => {
+      if (reducedMotion || !finePointer.matches) return;
+      if (ringPointerFrame) window.cancelAnimationFrame(ringPointerFrame);
+      ringPointerFrame = window.requestAnimationFrame(() => {
+        const rect = interactiveRing.getBoundingClientRect();
+        const pointerX = clamp((event.clientX - rect.left) / rect.width);
+        const pointerY = clamp((event.clientY - rect.top) / rect.height);
+        const normalizedX = (pointerX - 0.5) * 2;
+        const normalizedY = (pointerY - 0.5) * 2;
+
+        interactiveRing.style.setProperty('--spotlight-x', `${(pointerX * 100).toFixed(2)}%`);
+        interactiveRing.style.setProperty('--spotlight-y', `${(pointerY * 100).toFixed(2)}%`);
+
+        if (rotateRingX && rotateRingY && moveRingX && moveRingY) {
+          rotateRingX(normalizedY * -1.4);
+          rotateRingY(normalizedX * 1.8);
+          moveRingX(normalizedX * 4);
+          moveRingY(normalizedY * 3);
+        } else {
+          ringScene.style.transform = `rotateX(${normalizedY * -1.4}deg) rotateY(${normalizedX * 1.8}deg) translate3d(${normalizedX * 4}px, ${normalizedY * 3}px, 0)`;
+        }
+      });
+    });
+
+    interactiveRing.addEventListener('pointerleave', () => {
+      interactiveRing.style.setProperty('--spotlight-x', '50%');
+      interactiveRing.style.setProperty('--spotlight-y', '42%');
+      updateExperiencePanel(pinnedExperienceIndex);
+      if (rotateRingX && rotateRingY && moveRingX && moveRingY) {
+        rotateRingX(0);
+        rotateRingY(0);
+        moveRingX(0);
+        moveRingY(0);
+      } else {
+        ringScene.style.transform = '';
+      }
+    });
+
+    if (!reducedMotion && gsap && window.ScrollTrigger) {
+      gsap.registerPlugin(window.ScrollTrigger);
+      const experienceIntro = document.querySelector('[data-experience-intro]');
+      const ringRopes = experienceRing.querySelectorAll('.ring-rope');
+      const entranceTimeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: experienceRing,
+          start: 'top 78%',
+          once: true
+        }
+      });
+
+      entranceTimeline
+        .from(experienceIntro, { autoAlpha: 0, y: 32, duration: 0.55, ease: 'power3.out' })
+        .from(interactiveRing, { autoAlpha: 0, y: 42, scale: 0.965, duration: 0.68, ease: 'power3.out' }, '-=0.2')
+        .fromTo(ringRopes, { strokeDasharray: 900, strokeDashoffset: 900, autoAlpha: 0.12 }, { strokeDashoffset: 0, autoAlpha: 0.74, duration: 0.72, stagger: 0.08, ease: 'power2.out' }, '-=0.34')
+        .from(experienceHotspots, { autoAlpha: 0, scale: 0.25, duration: 0.42, stagger: 0.07, ease: 'back.out(1.5)' }, '-=0.38')
+        .from(experiencePanel, { autoAlpha: 0, x: 24, duration: 0.48, ease: 'power3.out' }, '-=0.25');
+    }
+  }
+
   // FAQ acessível
   const faqItems = [...document.querySelectorAll('.faq-item')];
   faqItems.forEach((item) => {
