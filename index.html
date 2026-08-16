@@ -7,8 +7,8 @@
   <meta name="description" content="Aurum Boxe: boxe olímpico, metodologia técnica e experiência premium de alto rendimento em Araguaína-TO." />
   <title>Aurum Boxe | Boxe Olímpico em Araguaína-TO</title>
   <link rel="icon" href="Fotos/Logo.jpeg" type="image/jpeg" />
-  <link rel="preload" href="media/aurum/hero-boxers.jpg" as="image" media="(min-width: 601px)" />
-  <link rel="preload" href="media/aurum/hero-boxers-mobile.jpg" as="image" media="(max-width: 600px)" />
+  <link rel="preload" href="media/aurum/hero/scene-03-dodge.jpg" as="image" media="(min-width: 601px)" />
+  <link rel="preload" href="media/aurum/hero/hero-mobile.jpg" as="image" media="(max-width: 600px)" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -47,10 +47,10 @@
 
   <main id="conteudo">
     <section class="hero" id="inicio" aria-labelledby="heroTitle">
-      <!-- Vídeo futuro: media/aurum/hero-boxers.mp4. Instruções em media/aurum/README.md. -->
+      <!-- Vídeo futuro: media/aurum/hero/hero-scene.mp4. Instruções em media/aurum/README.md. -->
       <picture class="hero-scene" aria-hidden="true">
-        <source media="(max-width: 600px)" srcset="media/aurum/hero-boxers-mobile.jpg" />
-        <img src="media/aurum/hero-boxers.jpg" alt="" width="1672" height="941" fetchpriority="high" decoding="async" />
+        <source media="(max-width: 600px)" srcset="media/aurum/hero/hero-mobile.jpg" />
+        <img src="media/aurum/hero/scene-03-dodge.jpg" alt="" width="1672" height="941" fetchpriority="high" decoding="async" />
       </picture>
       <div class="hero-shade" aria-hidden="true"></div>
       <div class="grid-overlay" aria-hidden="true"></div>
@@ -74,19 +74,21 @@
 
     <section class="scroll-story" id="imersao" aria-label="Narrativa da experiência Aurum">
       <div class="story-sticky">
-        <picture class="story-arena" aria-hidden="true">
-          <source media="(max-width: 600px)" srcset="media/aurum/hero-boxers-mobile.jpg" />
-          <img src="media/aurum/hero-boxers.jpg" alt="" width="1672" height="941" loading="lazy" decoding="async" />
-        </picture>
+        <div class="story-stage" aria-hidden="true">
+          <img class="story-frame active" data-story-frame="0" src="media/aurum/hero/scene-01-guard.jpg" alt="" width="1672" height="941" loading="eager" decoding="async" />
+          <img class="story-frame" data-story-frame="1" src="media/aurum/hero/scene-02-punch.jpg" alt="" width="1672" height="941" loading="lazy" decoding="async" />
+          <img class="story-frame" data-story-frame="2" src="media/aurum/hero/scene-03-dodge.jpg" alt="" width="1672" height="941" loading="lazy" decoding="async" />
+          <img class="story-frame" data-story-frame="3" src="media/aurum/hero/scene-04-impact.jpg" alt="" width="1672" height="941" loading="lazy" decoding="async" />
+        </div>
         <div class="story-vignette" aria-hidden="true"></div>
         <div class="story-impact-rings" aria-hidden="true"><i></i><i></i><i></i></div>
 
         <div class="shell story-shell">
-          <div class="story-label"><span>Imersão</span><b>04 cenas</b></div>
-          <div class="story-copy" data-story-scene="0"><span class="scene-number">01 / 04</span><p class="eyebrow">A entrada</p><h2>Entre na arena.</h2><p>O primeiro passo muda a atmosfera. Aqui, cada treino começa com presença, respeito e intenção.</p></div>
-          <div class="story-copy" data-story-scene="1"><span class="scene-number">02 / 04</span><p class="eyebrow">A base</p><h2>Domine seu corpo.</h2><p>Guarda, postura, distância e deslocamento. Técnica limpa para transformar energia em precisão.</p></div>
-          <div class="story-copy story-copy-right" data-story-scene="2"><span class="scene-number">03 / 04</span><p class="eyebrow">A leitura</p><h2>Veja antes de agir.</h2><p>Boxe é estratégia em movimento. Antecipar, decidir e executar no tempo certo.</p></div>
-          <div class="story-copy story-copy-right" data-story-scene="3"><span class="scene-number">04 / 04</span><p class="eyebrow">O impacto</p><h2>Treine para evoluir.</h2><p>O golpe é só o resultado. A verdadeira transformação acontece em cada repetição.</p></div>
+          <div class="story-label"><span>Ação em quatro tempos</span><b>Guarda · Golpe · Esquiva · Impacto</b></div>
+          <div class="story-copy" data-story-scene="0"><span class="scene-number">01 / 04</span><p class="eyebrow">A guarda</p><h2>Leia a distância.</h2><p>Dois atletas, uma linha de combate. Base firme, mãos altas e o ringue inteiro como território.</p></div>
+          <div class="story-copy" data-story-scene="1"><span class="scene-number">02 / 04</span><p class="eyebrow">O golpe</p><h2>Ação com técnica.</h2><p>Tronco, ombro, braço e luva avançam juntos. Potência nasce do movimento coordenado.</p></div>
+          <div class="story-copy" data-story-scene="2"><span class="scene-number">03 / 04</span><p class="eyebrow">A esquiva</p><h2>Saia da linha.</h2><p>O defensor lê o ataque, desloca cabeça e tronco e deixa o golpe atravessar o vazio.</p></div>
+          <div class="story-copy" data-story-scene="3"><span class="scene-number">04 / 04</span><p class="eyebrow">O impacto</p><h2>Veja. Reaja. Evolua.</h2><p>A câmera entra na ação, mas a técnica continua visível: luva em primeiro plano, esquiva e ringue em profundidade.</p></div>
           <ol class="story-progress" aria-label="Progresso da narrativa"><li class="active"><span>01</span></li><li><span>02</span></li><li><span>03</span></li><li><span>04</span></li></ol>
         </div>
       </div>
@@ -207,6 +209,8 @@
     <video id="arenaVideo" controls playsinline preload="none" poster="media/aurum/arena-cinematica.png"><source data-src="Videos/Video2.mp4" type="video/mp4" /></video>
   </dialog>
 
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
   <script src="js/script.js" defer></script>
 </body>
 </html>
