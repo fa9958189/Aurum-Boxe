@@ -459,6 +459,171 @@
     }
   }
 
+  // Os quatro rounds da transformação
+  const transformationRounds = [
+    {
+      id: 1,
+      slug: 'tecnica',
+      title: 'Técnica',
+      phrase: 'Precisão antes da força.',
+      description: 'Cada movimento é construído para ser mais limpo, eficiente e consciente.',
+      imageQuote: 'Antes do golpe, existe a decisão.'
+    },
+    {
+      id: 2,
+      slug: 'foco',
+      title: 'Foco',
+      phrase: 'Presença em cada decisão.',
+      description: 'Aprender a ler, reagir e manter a mente presente mesmo quando a intensidade aumenta.',
+      imageQuote: 'A luta começa antes do primeiro golpe.'
+    },
+    {
+      id: 3,
+      slug: 'constancia',
+      title: 'Constância',
+      phrase: 'Evolução construída no tempo.',
+      description: 'A repetição certa transforma técnica em instinto e esforço em progresso real.',
+      imageQuote: 'Campeões são construídos round após round.'
+    },
+    {
+      id: 4,
+      slug: 'performance',
+      title: 'Performance',
+      phrase: 'O resultado do processo.',
+      description: 'Potência, resistência, velocidade e decisão aparecem quando toda a preparação trabalha em conjunto.',
+      imageQuote: 'O resultado aparece quando o processo é respeitado.'
+    }
+  ];
+
+  const transformationSection = document.querySelector('[data-transformation]');
+  const transformationVisual = transformationSection?.querySelector('[data-transformation-visual]');
+  const transformationImage = transformationSection?.querySelector('[data-transformation-image]');
+  const transformationTabs = [...(transformationSection?.querySelectorAll('[data-transformation-round]') || [])];
+  const transformationPanel = transformationSection?.querySelector('.transformation-panel');
+
+  if (transformationSection && transformationVisual && transformationImage && transformationPanel && transformationTabs.length === transformationRounds.length) {
+    const roundProgress = transformationPanel.querySelector('[data-round-progress]');
+    const roundTitle = transformationPanel.querySelector('[data-round-title]');
+    const roundPhrase = transformationPanel.querySelector('[data-round-phrase]');
+    const roundDescription = transformationPanel.querySelector('[data-round-description]');
+    const photoRound = transformationVisual.querySelector('[data-photo-round]');
+    const photoLabel = transformationVisual.querySelector('[data-photo-label]');
+    const photoQuote = transformationVisual.querySelector('[data-photo-quote]');
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+    let pinnedRoundIndex = 0;
+    let displayedRoundIndex = -1;
+    let roundTransitionTimer = 0;
+    let photoPointerFrame = 0;
+
+    const updateTransformationRound = (index, animate = true) => {
+      const round = transformationRounds[index];
+      if (!round) return;
+
+      transformationSection.dataset.activeRound = round.slug;
+      transformationTabs.forEach((tab, tabIndex) => {
+        const selected = tabIndex === index;
+        tab.setAttribute('aria-selected', String(selected));
+        tab.setAttribute('tabindex', selected ? '0' : '-1');
+      });
+
+      if (index === displayedRoundIndex) return;
+      displayedRoundIndex = index;
+      window.clearTimeout(roundTransitionTimer);
+      if (animate && !reducedMotion) transformationPanel.classList.add('is-changing');
+
+      roundTransitionTimer = window.setTimeout(() => {
+        const number = String(round.id).padStart(2, '0');
+        if (roundProgress) roundProgress.textContent = `${number} / 04`;
+        if (roundTitle) roundTitle.textContent = round.title;
+        if (roundPhrase) roundPhrase.textContent = round.phrase;
+        if (roundDescription) roundDescription.textContent = round.description;
+        if (photoRound) photoRound.textContent = `Round ${number}`;
+        if (photoLabel) photoLabel.textContent = `${number} · ${round.title}`;
+        if (photoQuote) photoQuote.textContent = round.imageQuote;
+        transformationPanel.setAttribute('aria-labelledby', transformationTabs[index].id);
+        transformationPanel.setAttribute('aria-label', `${number} de 04 — ${round.title}`);
+        transformationPanel.classList.remove('is-changing');
+      }, animate && !reducedMotion ? 120 : 0);
+    };
+
+    const pinTransformationRound = (index, focusTarget = false) => {
+      pinnedRoundIndex = index;
+      updateTransformationRound(index);
+      if (focusTarget) transformationTabs[index]?.focus();
+    };
+
+    const handleTransformationKeys = (event, index) => {
+      const keys = ['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp', 'Home', 'End'];
+      if (!keys.includes(event.key)) return;
+      event.preventDefault();
+
+      let nextIndex = index;
+      if (event.key === 'ArrowRight' || event.key === 'ArrowDown') nextIndex = (index + 1) % transformationRounds.length;
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') nextIndex = (index - 1 + transformationRounds.length) % transformationRounds.length;
+      if (event.key === 'Home') nextIndex = 0;
+      if (event.key === 'End') nextIndex = transformationRounds.length - 1;
+      pinTransformationRound(nextIndex, true);
+    };
+
+    transformationTabs.forEach((tab, index) => {
+      const round = transformationRounds[index];
+      tab.setAttribute('aria-label', `Round ${String(round.id).padStart(2, '0')} — ${round.title}`);
+      tab.addEventListener('mouseenter', () => updateTransformationRound(index));
+      tab.addEventListener('mouseleave', () => updateTransformationRound(pinnedRoundIndex));
+      tab.addEventListener('focus', () => updateTransformationRound(index));
+      tab.addEventListener('blur', () => updateTransformationRound(pinnedRoundIndex));
+      tab.addEventListener('click', () => pinTransformationRound(index));
+      tab.addEventListener('keydown', (event) => handleTransformationKeys(event, index));
+    });
+
+    updateTransformationRound(0, false);
+
+    transformationVisual.addEventListener('pointermove', (event) => {
+      if (reducedMotion || !finePointer.matches) return;
+      if (photoPointerFrame) window.cancelAnimationFrame(photoPointerFrame);
+      photoPointerFrame = window.requestAnimationFrame(() => {
+        const rect = transformationVisual.getBoundingClientRect();
+        const pointerX = clamp((event.clientX - rect.left) / rect.width);
+        const pointerY = clamp((event.clientY - rect.top) / rect.height);
+        const normalizedX = (pointerX - 0.5) * 2;
+        const normalizedY = (pointerY - 0.5) * 2;
+
+        transformationVisual.style.setProperty('--photo-x', `${(pointerX * 100).toFixed(2)}%`);
+        transformationVisual.style.setProperty('--photo-y', `${(pointerY * 100).toFixed(2)}%`);
+        transformationVisual.style.setProperty('--photo-shift-x', `${(normalizedX * -4).toFixed(2)}px`);
+        transformationVisual.style.setProperty('--photo-shift-y', `${(normalizedY * -3).toFixed(2)}px`);
+        transformationVisual.classList.add('is-pointer-active');
+      });
+    });
+
+    transformationVisual.addEventListener('pointerleave', () => {
+      transformationVisual.style.setProperty('--photo-x', '50%');
+      transformationVisual.style.setProperty('--photo-y', '50%');
+      transformationVisual.style.setProperty('--photo-shift-x', '0px');
+      transformationVisual.style.setProperty('--photo-shift-y', '0px');
+      transformationVisual.classList.remove('is-pointer-active');
+    });
+
+    if (!reducedMotion && window.gsap && window.ScrollTrigger) {
+      const gsap = window.gsap;
+      gsap.registerPlugin(window.ScrollTrigger);
+      const transformationHeader = transformationSection.querySelector('.transformation-header');
+      const transformationEntryTabs = transformationSection.querySelectorAll('.transformation-tabs button');
+
+      gsap.timeline({
+        scrollTrigger: {
+          trigger: transformationSection,
+          start: 'top 78%',
+          once: true
+        }
+      })
+        .from(transformationVisual, { autoAlpha: 0, x: -28, duration: 0.62, ease: 'power3.out' })
+        .from(transformationHeader.children, { autoAlpha: 0, y: 22, duration: 0.46, stagger: 0.08, ease: 'power3.out' }, '-=0.32')
+        .from(transformationEntryTabs, { autoAlpha: 0, y: 12, duration: 0.34, stagger: 0.06, ease: 'power2.out' }, '-=0.18')
+        .from(transformationPanel, { autoAlpha: 0, x: 18, duration: 0.44, ease: 'power3.out' }, '-=0.2');
+    }
+  }
+
   // FAQ acessível
   const faqItems = [...document.querySelectorAll('.faq-item')];
   faqItems.forEach((item) => {

@@ -23,7 +23,7 @@
 
       <nav class="desktop-nav" aria-label="Navegação principal">
         <a href="#experiencia">Experiência</a>
-        <a href="#para-quem">Para quem</a>
+        <a href="#transformacao">Para quem</a>
         <a href="#turmas">Turmas</a>
         <a href="#estrutura">Estrutura</a>
       </nav>
@@ -36,7 +36,7 @@
     <nav class="mobile-menu" id="mobileMenu" aria-label="Navegação mobile" aria-hidden="true">
       <div class="mobile-menu-inner">
         <a href="#experiencia"><span>01</span> Experiência</a>
-        <a href="#para-quem"><span>02</span> Para quem</a>
+        <a href="#transformacao"><span>02</span> Para quem</a>
         <a href="#turmas"><span>03</span> Turmas</a>
         <a href="#estrutura"><span>04</span> Estrutura</a>
         <a href="#contato"><span>05</span> Contato</a>
@@ -203,28 +203,45 @@
       </div>
     </section>
 
-    <section class="section audience" id="para-quem">
-      <div class="shell audience-layout">
-        <div class="audience-copy" data-reveal><p class="eyebrow">Para quem é</p><h2>Seu objetivo muda.<br /><em>A base é a mesma.</em></h2><p>Você não precisa chegar pronto. Precisa apenas começar. A metodologia se adapta ao seu momento sem perder a essência técnica do boxe olímpico.</p><a class="text-link" href="#turmas">Encontre seu treino <span aria-hidden="true">↘</span></a></div>
-        <div class="audience-list">
-          <article data-reveal><span>01</span><div><h3>Começar do zero</h3><p>Aprenda postura, guarda e deslocamento com confiança.</p></div><i>→</i></article>
-          <article data-reveal><span>02</span><div><h3>Emagrecer com propósito</h3><p>Condicionamento intenso sem abrir mão da técnica.</p></div><i>→</i></article>
-          <article data-reveal><span>03</span><div><h3>Construir disciplina</h3><p>Rotina, foco e constância para levar além do treino.</p></div><i>→</i></article>
-          <article data-reveal><span>04</span><div><h3>Elevar a performance</h3><p>Mais potência, agilidade, resistência e decisão.</p></div><i>→</i></article>
-          <article data-reveal><span>05</span><div><h3>Refinar a técnica</h3><p>Detalhes de execução que mudam o resultado.</p></div><i>→</i></article>
-          <article data-reveal><span>06</span><div><h3>Competir</h3><p>Preparação consciente para quem busca o próximo nível.</p></div><i>→</i></article>
-        </div>
-      </div>
-    </section>
+    <section class="section transformation-section" id="transformacao" aria-labelledby="transformationTitle" data-transformation>
+      <span class="transformation-anchor" id="para-quem" aria-hidden="true"></span>
+      <div class="transformation-transition" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="transformation-orbit" aria-hidden="true"></div>
 
-    <section class="section champion" aria-labelledby="championTitle">
-      <div class="shell champion-grid">
-        <figure class="champion-visual" data-reveal>
-          <img src="Fotos/WhatsApp Image 2026-01-28 at 10.39.21.jpeg" alt="Treinador observando atentamente o ringue" loading="lazy" />
-          <figcaption><span>Presença</span><strong>Antes do golpe,<br />existe a decisão.</strong></figcaption><div class="visual-stamp" aria-hidden="true">Aurum · Boxe Olímpico ·</div>
+      <div class="shell transformation-grid">
+        <header class="transformation-header" data-transformation-entry>
+          <p class="eyebrow">Treine como um campeão</p>
+          <h2 id="transformationTitle">Transformação não acontece por acaso.</h2>
+          <p>Ela nasce quando técnica e constância encontram um propósito. Na Aurum, cada round é uma oportunidade de responder melhor, mover melhor e superar a versão de ontem.</p>
+        </header>
+
+        <figure class="transformation-visual" data-transformation-visual data-transformation-entry>
+          <img src="Fotos/WhatsApp Image 2026-01-28 at 10.39.21.jpeg" alt="Atleta concentrado no corner do ringue" loading="lazy" data-transformation-image />
+          <div class="transformation-image-tone" aria-hidden="true"></div>
+          <div class="transformation-photo-light" aria-hidden="true"></div>
+          <div class="transformation-motion-trace" aria-hidden="true"><i></i><i></i><i></i></div>
+          <span class="transformation-photo-round" data-photo-round aria-hidden="true">Round 01</span>
+          <div class="transformation-stamp" aria-hidden="true">Aurum · Boxe Olímpico ·</div>
+          <figcaption>
+            <span data-photo-label>01 · Técnica</span>
+            <strong data-photo-quote>Antes do golpe,<br />existe a decisão.</strong>
+          </figcaption>
         </figure>
-        <div class="champion-copy" data-reveal><p class="eyebrow">Treine como um campeão</p><h2 id="championTitle">Transformação não acontece por acaso.</h2><p>Ela nasce quando técnica e constância encontram um propósito. Na Aurum, cada round é uma oportunidade de responder melhor, mover melhor e superar a versão de ontem.</p>
-          <div class="principles"><div><span>01</span><strong>Técnica</strong><small>Precisão antes da força.</small></div><div><span>02</span><strong>Foco</strong><small>Presença em cada decisão.</small></div><div><span>03</span><strong>Constância</strong><small>Evolução construída no tempo.</small></div><div><span>04</span><strong>Performance</strong><small>O resultado do processo.</small></div></div>
+
+        <div class="transformation-explorer" data-transformation-entry>
+          <div class="transformation-tabs" role="tablist" aria-label="Os quatro rounds da transformação">
+            <button type="button" role="tab" id="transformationTab01" aria-selected="true" aria-controls="transformationPanel" tabindex="0" data-transformation-round="0"><span>01</span><strong>Técnica</strong><i aria-hidden="true"></i></button>
+            <button type="button" role="tab" id="transformationTab02" aria-selected="false" aria-controls="transformationPanel" tabindex="-1" data-transformation-round="1"><span>02</span><strong>Foco</strong><i aria-hidden="true"></i></button>
+            <button type="button" role="tab" id="transformationTab03" aria-selected="false" aria-controls="transformationPanel" tabindex="-1" data-transformation-round="2"><span>03</span><strong>Constância</strong><i aria-hidden="true"></i></button>
+            <button type="button" role="tab" id="transformationTab04" aria-selected="false" aria-controls="transformationPanel" tabindex="-1" data-transformation-round="3"><span>04</span><strong>Performance</strong><i aria-hidden="true"></i></button>
+          </div>
+
+          <article class="transformation-panel" id="transformationPanel" role="tabpanel" aria-live="polite" aria-labelledby="transformationTab01" tabindex="0">
+            <div class="transformation-panel-meta"><span data-round-progress>01 / 04</span><i aria-hidden="true"></i><small>Round ativo</small></div>
+            <h3 data-round-title>Técnica</h3>
+            <strong data-round-phrase>Precisão antes da força.</strong>
+            <p data-round-description>Cada movimento é construído para ser mais limpo, eficiente e consciente.</p>
+          </article>
         </div>
       </div>
     </section>
@@ -286,7 +303,7 @@
   <footer class="site-footer">
     <div class="shell footer-main">
       <div class="footer-brand"><a class="brand" href="#inicio"><span class="brand-image"><img src="Fotos/Logo.jpeg" alt="" /></span><span class="brand-meta"><strong>Aurum</strong><small>Boxe Olímpico</small></span></a><p>Disciplina. Técnica. Estratégia.<br />Evolução em cada round.</p></div>
-      <nav aria-label="Navegação do rodapé"><strong>Explore</strong><a href="#experiencia">Experiência</a><a href="#para-quem">Para quem</a><a href="#turmas">Turmas</a><a href="#faq">Dúvidas</a></nav>
+      <nav aria-label="Navegação do rodapé"><strong>Explore</strong><a href="#experiencia">Experiência</a><a href="#transformacao">Para quem</a><a href="#turmas">Turmas</a><a href="#faq">Dúvidas</a></nav>
       <div><strong>Contato</strong><a href="https://wa.me/5563991196482" target="_blank" rel="noopener">(63) 99119-6482</a><a href="mailto:contato@aurumboxe.com.br">contato@aurumboxe.com.br</a><a href="https://www.instagram.com/aurumboxe/" target="_blank" rel="noopener">Instagram ↗</a></div>
       <div><strong>Localização</strong><p>Rua Dom Bosco<br />Bairro Senador<br />Araguaína — TO</p></div>
     </div>
