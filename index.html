@@ -7,7 +7,8 @@
   <meta name="description" content="Aurum Boxe: boxe olímpico, metodologia técnica e experiência premium de alto rendimento em Araguaína-TO." />
   <title>Aurum Boxe | Boxe Olímpico em Araguaína-TO</title>
   <link rel="icon" href="Fotos/Logo.jpeg" type="image/jpeg" />
-  <link rel="preload" href="media/aurum/arena-cinematica.png" as="image" />
+  <link rel="preload" href="media/aurum/hero-boxers.jpg" as="image" media="(min-width: 601px)" />
+  <link rel="preload" href="media/aurum/hero-boxers-mobile.jpg" as="image" media="(max-width: 600px)" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -46,12 +47,14 @@
 
   <main id="conteudo">
     <section class="hero" id="inicio" aria-labelledby="heroTitle">
-      <video class="hero-video" id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="media/aurum/arena-cinematica.png"><source src="Videos/VideoPrincipal.mp4" type="video/mp4" /></video>
-      <div class="hero-poster" aria-hidden="true"></div>
+      <!-- Vídeo futuro: media/aurum/hero-boxers.mp4. Instruções em media/aurum/README.md. -->
+      <picture class="hero-scene" aria-hidden="true">
+        <source media="(max-width: 600px)" srcset="media/aurum/hero-boxers-mobile.jpg" />
+        <img src="media/aurum/hero-boxers.jpg" alt="" width="1672" height="941" fetchpriority="high" decoding="async" />
+      </picture>
       <div class="hero-shade" aria-hidden="true"></div>
       <div class="grid-overlay" aria-hidden="true"></div>
       <canvas class="particle-canvas" id="particleCanvas" aria-hidden="true"></canvas>
-      <img class="hero-glove" id="heroGlove" src="media/aurum/luva-impacto.png" alt="" aria-hidden="true" />
 
       <div class="shell hero-layout">
         <div class="hero-copy" data-reveal>
@@ -64,10 +67,6 @@
           </div>
           <div class="hero-chips" aria-label="Diferenciais da Aurum Boxe"><span>Metodologia olímpica</span><span>Alto rendimento</span><span>Treino estratégico</span></div>
         </div>
-
-        <aside class="hero-note" data-reveal aria-label="Manifesto Aurum">
-          <span class="note-number">01</span><i></i><p>Entre na arena.<br /><strong>Encontre sua melhor versão.</strong></p>
-        </aside>
       </div>
 
       <a class="scroll-cue" href="#imersao" aria-label="Continuar para a experiência Aurum"><span>Explore a experiência</span><i aria-hidden="true"></i></a>
@@ -75,10 +74,12 @@
 
     <section class="scroll-story" id="imersao" aria-label="Narrativa da experiência Aurum">
       <div class="story-sticky">
-        <div class="story-arena" aria-hidden="true"></div>
+        <picture class="story-arena" aria-hidden="true">
+          <source media="(max-width: 600px)" srcset="media/aurum/hero-boxers-mobile.jpg" />
+          <img src="media/aurum/hero-boxers.jpg" alt="" width="1672" height="941" loading="lazy" decoding="async" />
+        </picture>
         <div class="story-vignette" aria-hidden="true"></div>
         <div class="story-impact-rings" aria-hidden="true"><i></i><i></i><i></i></div>
-        <img class="story-glove" src="media/aurum/luva-impacto.png" alt="" aria-hidden="true" />
 
         <div class="shell story-shell">
           <div class="story-label"><span>Imersão</span><b>04 cenas</b></div>
