@@ -72,18 +72,7 @@
     navigationTargets.forEach((section) => navigationObserver.observe(section));
   }
 
-  // Vídeo principal com fallback estático
   const hero = document.getElementById('inicio');
-  const heroVideo = document.getElementById('heroVideo');
-
-  if (heroVideo && hero) {
-    const usePoster = () => hero.classList.add('video-failed');
-    heroVideo.addEventListener('error', usePoster);
-    heroVideo.addEventListener('loadeddata', () => {
-      hero.classList.remove('video-failed');
-      heroVideo.play().catch(usePoster);
-    }, { once: true });
-  }
 
   // Partículas leves da arena
   const particleCanvas = document.getElementById('particleCanvas');
@@ -159,7 +148,6 @@
   const story = document.querySelector('.scroll-story');
   const storyScenes = [...document.querySelectorAll('[data-story-scene]')];
   const storySteps = [...document.querySelectorAll('.story-progress li')];
-  const heroGlove = document.getElementById('heroGlove');
   let currentScene = -1;
   let scrollTicking = false;
 
@@ -174,8 +162,8 @@
     const scrollY = window.scrollY;
     siteHeader?.classList.toggle('is-scrolled', scrollY > 24);
 
-    if (heroGlove && !reducedMotion) {
-      heroGlove.style.setProperty('--hero-glove-y', `${Math.min(scrollY * 0.12, 110)}px`);
+    if (hero && !reducedMotion) {
+      hero.style.setProperty('--hero-scene-y', `${Math.min(scrollY * 0.035, 30)}px`);
     }
 
     if (story && !reducedMotion) {

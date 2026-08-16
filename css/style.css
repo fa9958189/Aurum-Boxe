@@ -472,6 +472,7 @@ ol {
 
 /* Hero */
 .hero {
+  --hero-scene-y: 0px;
   position: relative;
   display: grid;
   min-height: 100svh;
@@ -482,8 +483,7 @@ ol {
   background: var(--black);
 }
 
-.hero-video,
-.hero-poster,
+.hero-scene,
 .hero-shade,
 .grid-overlay,
 .particle-canvas {
@@ -493,36 +493,39 @@ ol {
   height: 100%;
 }
 
-.hero-poster {
-  z-index: -1;
-  background: url("../media/aurum/arena-cinematica.png") 64% center / cover no-repeat;
+.hero-scene {
+  z-index: 0;
+  display: block;
+  overflow: hidden;
+  pointer-events: none;
 }
 
-.hero-video {
-  z-index: 0;
+.hero-scene img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: center;
-  opacity: 0.66;
-  filter: grayscale(0.76) saturate(0.55) contrast(1.2) brightness(0.58);
-  transform: scale(1.03);
-}
-
-.hero.video-failed .hero-video {
-  display: none;
+  filter: saturate(0.72) contrast(1.08) brightness(0.72);
+  transform: translate3d(0, var(--hero-scene-y), 0) scale(1.035);
+  transform-origin: 58% 48%;
+  animation: heroSceneDrift 12s ease-in-out infinite alternate;
+  will-change: transform;
 }
 
 .hero-shade {
   z-index: 1;
   background:
-    linear-gradient(90deg, rgba(3, 3, 4, 0.96) 0%, rgba(3, 3, 4, 0.74) 43%, rgba(3, 3, 4, 0.2) 75%, rgba(3, 3, 4, 0.58) 100%),
-    linear-gradient(180deg, rgba(3, 3, 4, 0.52), transparent 42%, rgba(3, 3, 4, 0.94));
+    linear-gradient(90deg, rgba(3, 3, 4, 0.97) 0%, rgba(3, 3, 4, 0.82) 35%, rgba(3, 3, 4, 0.18) 64%, rgba(3, 3, 4, 0.28) 100%),
+    linear-gradient(180deg, rgba(3, 3, 4, 0.46), transparent 40%, rgba(3, 3, 4, 0.92));
 }
 
 .hero-shade::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 76% 24%, rgba(222, 175, 80, 0.24), transparent 25%);
+  background:
+    radial-gradient(circle at 57% 52%, rgba(244, 217, 143, 0.12), transparent 17%),
+    radial-gradient(circle at 80% 20%, rgba(222, 175, 80, 0.2), transparent 24%);
 }
 
 .grid-overlay {
@@ -541,31 +544,16 @@ ol {
   opacity: 0.64;
 }
 
-.hero-glove {
-  position: absolute;
-  right: -15vw;
-  bottom: -18vh;
-  z-index: 3;
-  width: min(67vw, 1040px);
-  pointer-events: none;
-  opacity: 0.45;
-  filter: saturate(0.75) contrast(1.08) drop-shadow(-44px 22px 66px rgba(0, 0, 0, 0.92));
-  transform: translate3d(0, var(--hero-glove-y, 0), 0) rotate(-7deg);
-  mask-image: linear-gradient(110deg, transparent 1%, #000 22%, #000 72%, transparent 100%);
-  will-change: transform;
-}
-
 .hero-layout {
   position: relative;
   z-index: 5;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(250px, 0.32fr);
-  gap: clamp(48px, 8vw, 118px);
-  align-items: end;
+  grid-template-columns: minmax(0, min(720px, 57vw)) 1fr;
+  align-items: center;
 }
 
 .hero-copy {
-  max-width: 790px;
+  max-width: 720px;
 }
 
 .hero-copy .eyebrow {
@@ -631,43 +619,6 @@ ol {
   backdrop-filter: blur(8px);
 }
 
-.hero-note {
-  position: relative;
-  min-height: 225px;
-  padding: 30px;
-  border: 1px solid var(--gold-line);
-  background: linear-gradient(145deg, rgba(20, 20, 22, 0.64), rgba(6, 6, 7, 0.36));
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(15px);
-}
-
-.note-number {
-  color: rgba(244, 217, 143, 0.42);
-  font-family: Georgia, serif;
-  font-size: 0.7rem;
-}
-
-.hero-note i {
-  display: block;
-  width: 44px;
-  height: 1px;
-  margin: 38px 0 25px;
-  background: var(--gold);
-  box-shadow: 0 0 14px rgba(216, 173, 85, 0.7);
-}
-
-.hero-note p {
-  color: rgba(244, 240, 232, 0.66);
-  font-family: Georgia, serif;
-  font-size: clamp(1.15rem, 1.8vw, 1.5rem);
-  line-height: 1.35;
-}
-
-.hero-note strong {
-  color: var(--ivory);
-  font-weight: 400;
-}
-
 .scroll-cue {
   position: absolute;
   right: 40px;
@@ -709,6 +660,11 @@ ol {
   100% { opacity: 0; transform: translate(-50%, 18px); }
 }
 
+@keyframes heroSceneDrift {
+  from { transform: translate3d(0, var(--hero-scene-y), 0) scale(1.035); }
+  to { transform: translate3d(-0.8%, calc(var(--hero-scene-y) - 0.6%), 0) scale(1.065); }
+}
+
 /* Scroll story */
 .scroll-story {
   position: relative;
@@ -734,18 +690,26 @@ ol {
 
 .story-arena {
   z-index: -2;
-  background: url("../media/aurum/arena-cinematica.png") center / cover no-repeat;
-  filter: grayscale(0.45) contrast(1.12) brightness(0.58);
-  transform: scale(calc(1 + var(--story-progress) * 0.18));
-  transform-origin: 63% 48%;
+  display: block;
+  overflow: hidden;
+}
+
+.story-arena img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(0.68) contrast(1.1) brightness(0.62);
+  transform: translate3d(calc(var(--story-progress) * -1.8%), 0, 0) scale(calc(1.02 + var(--story-progress) * 0.2));
+  transform-origin: 56% 52%;
   will-change: transform;
 }
 
 .story-vignette {
   z-index: -1;
   background:
-    linear-gradient(90deg, rgba(5, 5, 6, 0.94) 0%, rgba(5, 5, 6, 0.38) 48%, rgba(5, 5, 6, 0.74) 100%),
-    radial-gradient(circle at 65% 44%, rgba(216, 173, 85, 0.14), transparent 30%),
+    linear-gradient(90deg, rgba(5, 5, 6, 0.96) 0%, rgba(5, 5, 6, 0.68) 37%, rgba(5, 5, 6, 0.16) 64%, rgba(5, 5, 6, 0.34) 100%),
+    radial-gradient(circle at 54% 53%, rgba(216, 173, 85, 0.14), transparent 27%),
     linear-gradient(180deg, rgba(5, 5, 6, 0.72), transparent 35%, rgba(5, 5, 6, 0.92));
 }
 
@@ -754,31 +718,15 @@ ol {
   position: absolute;
   inset: 0;
   opacity: calc(var(--impact-progress) * 0.5);
-  background: radial-gradient(circle at 68% 48%, rgba(244, 217, 143, 0.48), transparent 11%);
-}
-
-.story-glove {
-  position: absolute;
-  top: 50%;
-  right: 0;
-  z-index: 1;
-  width: min(64vw, 1020px);
-  opacity: calc(0.12 + var(--story-progress) * 0.88);
-  filter: saturate(0.72) contrast(1.1) drop-shadow(-50px 30px 90px rgba(0, 0, 0, 0.9));
-  transform:
-    translate3d(calc(34vw - var(--story-progress) * 52vw), calc(-50% + 8vh - var(--story-progress) * 8vh), 0)
-    scale(calc(0.48 + var(--story-progress) * 1.55))
-    rotate(calc(-12deg + var(--story-progress) * 17deg));
-  transform-origin: 78% 58%;
-  will-change: transform, opacity;
+  background: radial-gradient(circle at 53% 54%, rgba(244, 217, 143, 0.44), transparent 10%);
 }
 
 .story-impact-rings {
   position: absolute;
-  top: 49%;
-  left: 66%;
+  top: 54%;
+  left: 53%;
   z-index: 0;
-  width: 30vw;
+  width: 24vw;
   aspect-ratio: 1;
   pointer-events: none;
   opacity: var(--impact-progress);
@@ -2079,7 +2027,7 @@ body.js-ready [data-reveal].visible {
   }
 
   .hero-layout {
-    grid-template-columns: 1fr 250px;
+    grid-template-columns: minmax(0, min(630px, 68vw)) 1fr;
   }
 
   .experience-grid {
@@ -2154,19 +2102,22 @@ body.js-ready [data-reveal].visible {
     grid-template-columns: 1fr;
   }
 
-  .hero-note {
-    display: none;
+  .hero-copy {
+    max-width: 640px;
   }
 
   .hero h1 {
     font-size: clamp(3.4rem, 11.8vw, 6rem);
   }
 
-  .hero-glove {
-    right: -34vw;
-    bottom: -6vh;
-    width: 102vw;
-    opacity: 0.32;
+  .hero-scene img {
+    object-fit: contain;
+    object-position: center top;
+  }
+
+  .story-arena img {
+    object-fit: contain;
+    object-position: center;
   }
 
   .scroll-story {
@@ -2180,13 +2131,9 @@ body.js-ready [data-reveal].visible {
     width: min(600px, 84vw);
   }
 
-  .story-glove {
-    width: 96vw;
-  }
-
   .story-impact-rings {
-    left: 58%;
-    width: 56vw;
+    left: 54%;
+    width: 48vw;
   }
 
   .section-heading {
@@ -2286,9 +2233,11 @@ body.js-ready [data-reveal].visible {
     background: linear-gradient(180deg, rgba(3, 3, 4, 0.4), rgba(3, 3, 4, 0.58) 33%, rgba(3, 3, 4, 0.97) 78%);
   }
 
-  .hero-video {
-    object-position: 58% center;
-    opacity: 0.58;
+  .hero-scene img {
+    object-fit: cover;
+    object-position: center top;
+    filter: saturate(0.72) contrast(1.08) brightness(0.68);
+    transform-origin: 50% 28%;
   }
 
   .hero-copy .eyebrow {
@@ -2330,13 +2279,6 @@ body.js-ready [data-reveal].visible {
     flex: 0 0 auto;
   }
 
-  .hero-glove {
-    right: -75vw;
-    bottom: 23vh;
-    width: 160vw;
-    opacity: 0.22;
-  }
-
   .scroll-cue {
     display: none;
   }
@@ -2365,13 +2307,11 @@ body.js-ready [data-reveal].visible {
     margin-bottom: 30px;
   }
 
-  .story-glove {
-    top: 59%;
-    width: 145vw;
-    transform:
-      translate3d(calc(74vw - var(--story-progress) * 98vw), calc(-50% + 5vh), 0)
-      scale(calc(0.4 + var(--story-progress) * 1.35))
-      rotate(calc(-12deg + var(--story-progress) * 17deg));
+  .story-arena img {
+    object-fit: cover;
+    object-position: center top;
+    transform: translate3d(0, calc(var(--story-progress) * -2.2%), 0) scale(calc(1.02 + var(--story-progress) * 0.14));
+    transform-origin: 50% 34%;
   }
 
   .story-progress {
@@ -2535,13 +2475,13 @@ body.js-ready [data-reveal].visible {
     transition-duration: 0.01ms !important;
   }
 
-  .hero-video,
   .particle-canvas {
     display: none;
   }
 
-  .hero-glove {
-    transform: rotate(-7deg);
+  .hero-scene img {
+    animation: none;
+    transform: none;
   }
 
   .scroll-story {
@@ -2557,7 +2497,6 @@ body.js-ready [data-reveal].visible {
 
   .story-arena,
   .story-vignette,
-  .story-glove,
   .story-impact-rings,
   .story-label,
   .story-progress {
