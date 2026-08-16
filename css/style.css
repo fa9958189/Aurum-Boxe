@@ -669,8 +669,6 @@ ol {
 .scroll-story {
   position: relative;
   height: 430vh;
-  --story-progress: 0;
-  --impact-progress: 0;
 }
 
 .story-sticky {
@@ -682,55 +680,73 @@ ol {
   background: #050506;
 }
 
-.story-arena,
+.gsap-story .scroll-story {
+  height: auto;
+}
+
+.gsap-story .story-sticky {
+  position: relative;
+}
+
+.story-stage,
 .story-vignette {
   position: absolute;
   inset: 0;
 }
 
-.story-arena {
+.story-stage {
   z-index: -2;
-  display: block;
   overflow: hidden;
+  background: #030304;
 }
 
-.story-arena img {
+.story-frame {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
-  filter: saturate(0.68) contrast(1.1) brightness(0.62);
-  transform: translate3d(calc(var(--story-progress) * -1.8%), 0, 0) scale(calc(1.02 + var(--story-progress) * 0.2));
-  transform-origin: 56% 52%;
-  will-change: transform;
+  opacity: 0;
+  filter: saturate(0.72) contrast(1.08) brightness(0.76);
+  transform: scale(1.015);
+  transform-origin: 62% 50%;
+  transition: opacity 360ms ease;
+  will-change: opacity, transform;
+}
+
+.story-frame.active {
+  opacity: 1;
 }
 
 .story-vignette {
+  --impact-glow: 0;
   z-index: -1;
   background:
-    linear-gradient(90deg, rgba(5, 5, 6, 0.96) 0%, rgba(5, 5, 6, 0.68) 37%, rgba(5, 5, 6, 0.16) 64%, rgba(5, 5, 6, 0.34) 100%),
-    radial-gradient(circle at 54% 53%, rgba(216, 173, 85, 0.14), transparent 27%),
-    linear-gradient(180deg, rgba(5, 5, 6, 0.72), transparent 35%, rgba(5, 5, 6, 0.92));
+    linear-gradient(90deg, rgba(5, 5, 6, 0.97) 0%, rgba(5, 5, 6, 0.74) 31%, rgba(5, 5, 6, 0.1) 59%, rgba(5, 5, 6, 0.17) 100%),
+    radial-gradient(circle at 66% 47%, rgba(216, 173, 85, 0.09), transparent 30%),
+    linear-gradient(180deg, rgba(5, 5, 6, 0.55), transparent 30%, rgba(5, 5, 6, 0.8));
 }
 
 .story-vignette::after {
   content: "";
   position: absolute;
   inset: 0;
-  opacity: calc(var(--impact-progress) * 0.5);
-  background: radial-gradient(circle at 53% 54%, rgba(244, 217, 143, 0.44), transparent 10%);
+  opacity: var(--impact-glow);
+  background: radial-gradient(circle at 69% 42%, rgba(244, 217, 143, 0.3), transparent 12%);
 }
 
 .story-impact-rings {
   position: absolute;
-  top: 54%;
-  left: 53%;
+  top: 42%;
+  left: 69%;
   z-index: 0;
-  width: 24vw;
+  width: min(22vw, 330px);
   aspect-ratio: 1;
   pointer-events: none;
-  opacity: var(--impact-progress);
-  transform: translate(-50%, -50%);
+  opacity: 0;
+  translate: -50% -50%;
+  transform: scale(0.35);
 }
 
 .story-impact-rings i {
@@ -738,19 +754,16 @@ ol {
   inset: 20%;
   border: 1px solid rgba(244, 217, 143, 0.42);
   border-radius: 50%;
-  transform: scale(calc(0.2 + var(--impact-progress) * 2.4));
 }
 
 .story-impact-rings i:nth-child(2) {
   inset: 10%;
   opacity: 0.52;
-  transform: scale(calc(0.12 + var(--impact-progress) * 1.7));
 }
 
 .story-impact-rings i:nth-child(3) {
   inset: 0;
   opacity: 0.24;
-  transform: scale(calc(0.08 + var(--impact-progress) * 1.25));
 }
 
 .story-shell {
@@ -781,9 +794,10 @@ ol {
   position: absolute;
   top: 50%;
   left: 0;
-  width: min(560px, 48vw);
+  width: min(520px, 43vw);
   pointer-events: none;
   opacity: 0;
+  visibility: hidden;
   z-index: 12;
   isolation: isolate;
   transform: translateY(calc(-44% + 36px));
@@ -793,13 +807,8 @@ ol {
 .story-copy.active {
   pointer-events: auto;
   opacity: 1;
+  visibility: visible;
   transform: translateY(-50%);
-}
-
-.story-copy-right {
-  right: auto;
-  left: 0;
-  width: min(470px, 38vw);
 }
 
 .scene-number {
@@ -2115,7 +2124,7 @@ body.js-ready [data-reveal].visible {
     object-position: center top;
   }
 
-  .story-arena img {
+  .story-frame {
     object-fit: contain;
     object-position: center;
   }
@@ -2132,7 +2141,7 @@ body.js-ready [data-reveal].visible {
   }
 
   .story-impact-rings {
-    left: 54%;
+    left: 68%;
     width: 48vw;
   }
 
@@ -2234,7 +2243,7 @@ body.js-ready [data-reveal].visible {
   }
 
   .hero-scene img {
-    object-fit: cover;
+    object-fit: contain;
     object-position: center top;
     filter: saturate(0.72) contrast(1.08) brightness(0.68);
     transform-origin: 50% 28%;
@@ -2287,6 +2296,10 @@ body.js-ready [data-reveal].visible {
     top: 92px;
   }
 
+  .story-label b {
+    display: none;
+  }
+
   .story-copy,
   .story-copy-right {
     top: 44%;
@@ -2307,11 +2320,23 @@ body.js-ready [data-reveal].visible {
     margin-bottom: 30px;
   }
 
-  .story-arena img {
-    object-fit: cover;
-    object-position: center top;
-    transform: translate3d(0, calc(var(--story-progress) * -2.2%), 0) scale(calc(1.02 + var(--story-progress) * 0.14));
-    transform-origin: 50% 34%;
+  .story-frame {
+    object-fit: contain;
+    object-position: center 27%;
+    filter: saturate(0.72) contrast(1.08) brightness(0.74);
+    transform-origin: 64% 38%;
+  }
+
+  .story-vignette {
+    background:
+      linear-gradient(180deg, rgba(5, 5, 6, 0.28) 0%, rgba(5, 5, 6, 0.08) 43%, rgba(5, 5, 6, 0.93) 71%, #050506 100%),
+      linear-gradient(90deg, rgba(5, 5, 6, 0.58), transparent 58%);
+  }
+
+  .story-impact-rings {
+    top: 37%;
+    left: 67%;
+    width: 45vw;
   }
 
   .story-progress {
@@ -2495,7 +2520,7 @@ body.js-ready [data-reveal].visible {
     overflow: visible;
   }
 
-  .story-arena,
+  .story-stage,
   .story-vignette,
   .story-impact-rings,
   .story-label,
@@ -2519,6 +2544,7 @@ body.js-ready [data-reveal].visible {
     padding: 30px;
     border: 1px solid var(--line);
     opacity: 1;
+    visibility: visible;
     transform: none;
   }
 
