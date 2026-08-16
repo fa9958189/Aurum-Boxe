@@ -94,20 +94,111 @@
       </div>
     </section>
 
-    <section class="section experience" id="experiencia">
+    <section class="section experience experience-ring-section" id="experiencia">
       <div class="shell">
-        <header class="section-heading" data-reveal>
+        <header class="section-heading experience-ring-intro" data-experience-intro>
           <div><p class="eyebrow">A experiência Aurum</p><h2>Mais que treino.<br /><em>Um método de evolução.</em></h2></div>
           <p>Uma jornada construída para desenvolver técnica, condicionamento e confiança com acompanhamento de verdade.</p>
         </header>
 
-        <div class="experience-grid">
-          <article class="experience-card experience-card-featured" data-reveal><span class="card-index">01</span><span class="card-icon">✦</span><h3>Metodologia Olímpica</h3><p>Fundamentos consistentes, progressão técnica e leitura estratégica do boxe.</p><small>Base · Técnica · Tática</small></article>
-          <article class="experience-card" data-reveal><span class="card-index">02</span><span class="card-icon">◎</span><h3>Treino técnico</h3><p>Movimentos treinados com intenção, correção e qualidade em cada repetição.</p></article>
-          <article class="experience-card" data-reveal><span class="card-index">03</span><span class="card-icon">◇</span><h3>Estratégia e disciplina</h3><p>Foco para tomar decisões melhores dentro e fora do ringue.</p></article>
-          <article class="experience-card" data-reveal><span class="card-index">04</span><span class="card-icon">↗</span><h3>Alto condicionamento</h3><p>Resistência, coordenação e potência construídas com progressão segura.</p></article>
-          <article class="experience-card experience-card-wide" data-reveal><span class="card-index">05</span><span class="card-icon">A</span><div><h3>Ambiente premium</h3><p>Uma atmosfera que eleva o foco e transforma o treino em ritual.</p></div></article>
-          <article class="experience-card" data-reveal><span class="card-index">06</span><span class="card-icon">＋</span><h3>Acompanhamento próximo</h3><p>Orientação atenta para evoluir no seu ritmo e com segurança.</p></article>
+        <div class="experience-ring-layout" data-experience-ring>
+          <div class="interactive-ring" data-interactive-ring aria-label="Ringue interativo da experiência Aurum">
+            <div class="ring-spotlight" aria-hidden="true"></div>
+            <div class="ring-atmosphere" aria-hidden="true"><i></i><i></i><i></i></div>
+
+            <div class="ring-scene" data-ring-scene>
+              <svg class="ring-structure" viewBox="0 0 1000 650" role="img" aria-label="Ringue de boxe premium visto em perspectiva">
+                <defs>
+                  <linearGradient id="ringCanvas" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="#292724" />
+                    <stop offset="0.55" stop-color="#141415" />
+                    <stop offset="1" stop-color="#09090a" />
+                  </linearGradient>
+                  <linearGradient id="ringApron" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="#171719" />
+                    <stop offset="0.5" stop-color="#080809" />
+                    <stop offset="1" stop-color="#1c1811" />
+                  </linearGradient>
+                  <linearGradient id="ropeGold" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0" stop-color="#6f5730" />
+                    <stop offset="0.5" stop-color="#f0d18a" />
+                    <stop offset="1" stop-color="#72562c" />
+                  </linearGradient>
+                  <radialGradient id="canvasGlow" cx="50%" cy="42%" r="58%">
+                    <stop offset="0" stop-color="#d8ad55" stop-opacity=".13" />
+                    <stop offset="1" stop-color="#d8ad55" stop-opacity="0" />
+                  </radialGradient>
+                  <filter id="ringShadow" x="-20%" y="-20%" width="140%" height="160%">
+                    <feDropShadow dx="0" dy="26" stdDeviation="22" flood-color="#000" flood-opacity=".8" />
+                  </filter>
+                  <filter id="postGlow" x="-100%" y="-100%" width="300%" height="300%">
+                    <feGaussianBlur stdDeviation="8" />
+                  </filter>
+                </defs>
+
+                <ellipse class="ring-floor-shadow" cx="500" cy="585" rx="430" ry="46" />
+                <g class="ring-platform" filter="url(#ringShadow)">
+                  <polygon class="ring-apron" points="68,475 932,475 858,594 142,594" fill="url(#ringApron)" />
+                  <polygon class="ring-canvas" points="168,202 832,202 932,475 68,475" fill="url(#ringCanvas)" />
+                  <polygon class="ring-canvas-glow" points="168,202 832,202 932,475 68,475" fill="url(#canvasGlow)" />
+                  <path class="ring-canvas-mark" d="M420 365a80 42 0 1 0 160 0a80 42 0 1 0-160 0" />
+                  <text class="ring-brand-mark" x="500" y="380" text-anchor="middle">AUR</text>
+                  <path class="ring-apron-line" d="M68 475H932" />
+                  <text class="ring-apron-brand" x="500" y="555" text-anchor="middle">AURUM · BOXE OLÍMPICO</text>
+                </g>
+
+                <g class="ring-ropes">
+                  <polyline class="ring-rope ring-rope-back" points="168,125 832,125 932,390 68,390 168,125" />
+                  <polyline class="ring-rope" points="168,151 832,151 932,420 68,420 168,151" />
+                  <polyline class="ring-rope" points="168,177 832,177 932,450 68,450 168,177" />
+                  <path class="ring-rope-shine" d="M168 151H832" />
+                </g>
+
+                <g class="ring-post-glows" aria-hidden="true">
+                  <circle cx="168" cy="118" r="19" /><circle cx="832" cy="118" r="19" />
+                  <circle cx="68" cy="382" r="22" /><circle cx="932" cy="382" r="22" />
+                </g>
+                <g class="ring-posts">
+                  <path class="ring-post ring-post-back" d="M168 93V218" /><path class="ring-post ring-post-back" d="M832 93V218" />
+                  <path class="ring-post" d="M68 352V500" /><path class="ring-post" d="M932 352V500" />
+                  <circle cx="168" cy="94" r="7" /><circle cx="832" cy="94" r="7" />
+                  <circle cx="68" cy="352" r="8" /><circle cx="932" cy="352" r="8" />
+                </g>
+              </svg>
+
+              <div class="ring-hotspots" role="tablist" aria-label="Diferenciais da experiência Aurum">
+                <button class="ring-hotspot ring-hotspot-1" type="button" role="tab" data-experience-point="0" aria-controls="experiencePanel"><span>01</span><i aria-hidden="true">✦</i></button>
+                <button class="ring-hotspot ring-hotspot-2" type="button" role="tab" data-experience-point="1" aria-controls="experiencePanel"><span>02</span><i aria-hidden="true">◎</i></button>
+                <button class="ring-hotspot ring-hotspot-3" type="button" role="tab" data-experience-point="2" aria-controls="experiencePanel"><span>03</span><i aria-hidden="true">◇</i></button>
+                <button class="ring-hotspot ring-hotspot-4" type="button" role="tab" data-experience-point="3" aria-controls="experiencePanel"><span>04</span><i aria-hidden="true">↗</i></button>
+                <button class="ring-hotspot ring-hotspot-5" type="button" role="tab" data-experience-point="4" aria-controls="experiencePanel"><span>05</span><i aria-hidden="true">A</i></button>
+                <button class="ring-hotspot ring-hotspot-6" type="button" role="tab" data-experience-point="5" aria-controls="experiencePanel"><span>06</span><i aria-hidden="true">＋</i></button>
+              </div>
+            </div>
+
+            <div class="ring-instruction" aria-hidden="true"><span></span> Explore os pontos do ringue</div>
+          </div>
+
+          <aside class="experience-panel" id="experiencePanel" role="tabpanel" aria-live="polite" aria-atomic="true">
+            <div class="experience-panel-top"><span data-panel-number>01</span><small>Método Aurum</small></div>
+            <div class="experience-panel-content">
+              <span class="experience-panel-symbol" data-panel-symbol aria-hidden="true">✦</span>
+              <h3 data-panel-title>Metodologia Olímpica</h3>
+              <p data-panel-description>Fundamentos consistentes, progressão técnica e leitura estratégica do boxe.</p>
+              <small data-panel-tag>Base · Técnica · Tática</small>
+            </div>
+            <div class="experience-panel-progress" aria-hidden="true"><i></i></div>
+            <p class="experience-panel-hint">Selecione um ponto para explorar o método.</p>
+          </aside>
+
+          <div class="experience-ring-index" role="tablist" aria-label="Navegar pelos diferenciais">
+            <button type="button" role="tab" data-experience-index="0">01</button>
+            <button type="button" role="tab" data-experience-index="1">02</button>
+            <button type="button" role="tab" data-experience-index="2">03</button>
+            <button type="button" role="tab" data-experience-index="3">04</button>
+            <button type="button" role="tab" data-experience-index="4">05</button>
+            <button type="button" role="tab" data-experience-index="5">06</button>
+          </div>
         </div>
       </div>
     </section>
