@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#070708" />
+  <meta name="description" content="Interface de acesso ao Painel Aurum Boxe." />
+  <title>Painel Aurum | Acesso ao sistema</title>
+  <link rel="stylesheet" href="login.css" />
+</head>
+<body class="login-page">
+  <main class="login-stage">
+    <div class="login-stage__background" aria-hidden="true"></div>
+    <div class="login-stage__light" aria-hidden="true"></div>
+    <div class="login-stage__grain" aria-hidden="true"></div>
+
+    <a class="login-back" href="../" aria-label="Voltar ao site da Aurum Boxe">
+      <span aria-hidden="true">←</span>
+      Voltar ao site
+    </a>
+
+    <section class="login-card" aria-labelledby="loginTitle">
+      <div class="login-card__edge" aria-hidden="true"></div>
+
+      <header class="login-card__header">
+        <img class="login-card__logo" src="../Fotos/Logo.jpeg" alt="Aurum Boxe" />
+        <p class="login-card__eyebrow">Sistema administrativo</p>
+        <h1 id="loginTitle">Painel <em>Aurum</em></h1>
+        <p class="login-card__lead">Acesse o ambiente de gestão da Aurum Boxe.</p>
+      </header>
+
+      <form class="login-form" aria-describedby="loginStatus">
+        <label class="login-field">
+          <span>Usuário</span>
+          <span class="login-field__control">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm7 8a7 7 0 0 0-14 0" /></svg>
+            <input type="text" name="usuario" autocomplete="username" placeholder="Digite seu usuário" />
+          </span>
+        </label>
+
+        <label class="login-field">
+          <span>Senha</span>
+          <span class="login-field__control">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2m-11 0h12v10H6V10Z" /></svg>
+            <input type="password" name="senha" autocomplete="current-password" placeholder="Digite sua senha" />
+          </span>
+        </label>
+
+        <div class="login-form__options">
+          <label class="login-check"><input type="checkbox" name="lembrar" /><span>Manter acesso</span></label>
+          <span class="login-disabled-link" aria-disabled="true">Esqueci minha senha</span>
+        </div>
+
+        <button class="login-submit" type="button">
+          Entrar
+          <span aria-hidden="true">↗</span>
+        </button>
+      </form>
+
+      <footer class="login-card__footer">
+        <span class="login-card__status-dot" aria-hidden="true"></span>
+        <p id="loginStatus">Interface inicial do sistema — autenticação em desenvolvimento.</p>
+      </footer>
+    </section>
+
+    <p class="login-stage__signature">Boxe olímpico · disciplina · performance</p>
+  </main>
+</body>
+</html>

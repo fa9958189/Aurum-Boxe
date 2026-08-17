@@ -17,6 +17,13 @@
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+@media (max-width: 380px) {
+  header.site-header .brand-image {
+    width: 112px;
+    height: 52px;
+  }
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -411,10 +418,40 @@ ol {
   font-size: 0.67rem;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 10px;
+}
+
+.header-panel-button {
+  min-height: 45px;
+  padding-inline: 17px;
+  border-color: rgba(216, 173, 85, 0.28);
+  color: var(--ivory);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.055), transparent 54%),
+    #151517;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 12px 30px rgba(0, 0, 0, 0.24);
+}
+
+@media (hover: hover) {
+  .header-panel-button:hover {
+    border-color: rgba(216, 173, 85, 0.58);
+    color: var(--gold-light);
+    background:
+      linear-gradient(135deg, rgba(216, 173, 85, 0.09), transparent 58%),
+      #1a1a1d;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09), 0 18px 38px rgba(0, 0, 0, 0.34);
+  }
+}
+
 .menu-button {
   display: none;
   width: 46px;
   height: 46px;
+  flex: 0 0 46px;
   place-content: center;
   gap: 6px;
   border: 1px solid var(--gold-line);
@@ -2724,12 +2761,26 @@ body.js-ready .structure-video-section .structure-video-stage.is-video-visible .
   padding-bottom: 68px;
 }
 
-.footer-brand p {
-  margin-top: 24px;
-  color: var(--muted);
-  font-family: Georgia, serif;
-  font-size: 1rem;
-  line-height: 1.6;
+.footer-brand .brand-image {
+  position: relative;
+  width: clamp(160px, 15vw, 196px);
+  height: 82px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.footer-brand .brand-image img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: left center;
+  filter: contrast(1.12);
 }
 
 .footer-main nav,
@@ -3104,6 +3155,25 @@ body.js-ready [data-reveal].visible {
 
   .section {
     padding: 96px 0;
+  }
+
+  .header-inner {
+    gap: 8px;
+  }
+
+  .header-actions {
+    margin-left: auto;
+  }
+
+  .header-panel-button {
+    min-height: 40px;
+    padding-inline: 12px;
+    gap: 7px;
+    font-size: 0.61rem;
+  }
+
+  .header-panel-button span {
+    font-size: 0.8rem;
   }
 
   .brand-image {
