@@ -627,40 +627,55 @@
   // Campo de partículas reutilizável dos cards de Turmas
   const trainingCardConfigs = {
     foundation: {
-      desktopCount: 44,
-      mobileCount: 24,
-      radius: 118,
-      mobileRadius: 78,
-      repulsion: 1.28,
-      spring: 0.016,
-      damping: 0.885,
+      densityFactor: 1680,
+      desktopRange: [136, 205],
+      tabletRange: [96, 132],
+      mobileRange: [58, 82],
+      radius: 174,
+      tabletRadius: 148,
+      mobileRadius: 108,
+      repulsion: 2.25,
+      spring: 0.014,
+      damping: 0.892,
       tangent: 0,
-      trailAlpha: 0.12,
-      impact: 1.75
+      trailAlpha: 0.23,
+      trailLimit: 44,
+      impact: 2.9,
+      maxSpeed: 12
     },
     evolution: {
-      desktopCount: 54,
-      mobileCount: 28,
-      radius: 132,
-      mobileRadius: 82,
-      repulsion: 1.42,
-      spring: 0.013,
-      damping: 0.912,
-      tangent: 0.085,
-      trailAlpha: 0.15,
-      impact: 1.9
+      densityFactor: 1500,
+      desktopRange: [150, 218],
+      tabletRange: [108, 142],
+      mobileRange: [64, 90],
+      radius: 190,
+      tabletRadius: 158,
+      mobileRadius: 116,
+      repulsion: 2.48,
+      spring: 0.012,
+      damping: 0.915,
+      tangent: 0.13,
+      trailAlpha: 0.27,
+      trailLimit: 52,
+      impact: 3.05,
+      maxSpeed: 13
     },
     performance: {
-      desktopCount: 48,
-      mobileCount: 24,
-      radius: 108,
-      mobileRadius: 72,
-      repulsion: 1.92,
-      spring: 0.028,
-      damping: 0.84,
-      tangent: 0.025,
-      trailAlpha: 0.19,
-      impact: 2.35
+      densityFactor: 1580,
+      desktopRange: [145, 212],
+      tabletRange: [104, 138],
+      mobileRange: [60, 86],
+      radius: 178,
+      tabletRadius: 152,
+      mobileRadius: 110,
+      repulsion: 3.2,
+      spring: 0.027,
+      damping: 0.847,
+      tangent: 0.035,
+      trailAlpha: 0.32,
+      trailLimit: 58,
+      impact: 3.6,
+      maxSpeed: 15
     }
   };
 
@@ -687,6 +702,7 @@
         this.finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
         this.particles = [];
         this.trails = [];
+        this.trailPool = [];
         this.width = 0;
         this.height = 0;
         this.pixelRatio = 1;
@@ -695,8 +711,8 @@
         this.settledFrames = 0;
         this.lastTrailTime = 0;
         this.touchTimer = 0;
-        this.impact = { x: 0, y: 0, life: 0 };
-        this.pointer = { x: -999, y: -999, lastX: -999, lastY: -999, dx: 0, dy: 0, active: false };
+        this.impact = { x: 0, y: 0, radius: 0, life: 0 };
+        this.pointer = { x: -999, y: -999, lastX: -999, lastY: -999, dx: 0, dy: 0, speed: 0, time: 0, active: false };
 
         this.animate = this.animate.bind(this);
         this.handlePointerEnter = this.handlePointerEnter.bind(this);
@@ -730,8 +746,30 @@
         this.resize();
       }
 
-      isCompact() {
-        return window.innerWidth <= 900 || !this.finePointer.matches;
+      viewportTier() {
+        if (window.innerWidth <= 700) return 'mobile';
+        if (window.innerWidth <= 1100) return 'tablet';
+        return 'desktop';
+      }
+
+      particleCount() {
+        const tier = this.viewportTier();
+        const range = this.config[`${tier}Range`];
+        const densityScale = tier === 'mobile' ? 1.65 : tier === 'tablet' ? 1.45 : 1;
+        const areaCount = Math.round((this.width * this.height) / (this.config.densityFactor * densityScale));
+        return clamp(areaCount, range[0], range[1]);
+      }
+
+      interactionRadius() {
+        const tier = this.viewportTier();
+        const baseRadius = tier === 'mobile'
+          ? this.config.mobileRadius
+          : tier === 'tablet'
+            ? this.config.tabletRadius
+            : this.config.radius;
+        const areaScale = clamp(Math.sqrt((this.width * this.height) / 250000), 0.88, 1.12);
+        const maximum = tier === 'mobile' ? 126 : tier === 'tablet' ? 174 : 212;
+        return Math.min(baseRadius * areaScale, this.width * 0.54, maximum);
       }
 
       usesDesktopPointer() {
@@ -754,8 +792,7 @@
       }
 
       createParticles() {
-        const compact = this.isCompact();
-        const count = compact ? this.config.mobileCount : this.config.desktopCount;
+        const count = this.particleCount();
         const aspect = Math.max(this.width / this.height, 0.45);
         const columns = Math.max(4, Math.ceil(Math.sqrt(count * aspect)));
         const rows = Math.ceil(count / columns);
@@ -781,13 +818,26 @@
           }
 
           const sizeSeed = Math.random();
-          const radius = sizeSeed > 0.95
-            ? 5 + Math.random() * 1.7
-            : sizeSeed > 0.72
-              ? 2.3 + Math.random() * 1.8
-              : 0.8 + Math.random() * 1.25;
-          const gold = Math.random() > (this.variant === 'evolution' ? 0.84 : 0.9);
-          const opacity = gold ? 0.16 + Math.random() * 0.15 : 0.055 + Math.random() * 0.13;
+          const isDistant = sizeSeed < 0.65;
+          const isIntermediate = sizeSeed >= 0.65 && sizeSeed < 0.9;
+          const depth = isDistant
+            ? 0.56 + Math.random() * 0.2
+            : isIntermediate
+              ? 0.82 + Math.random() * 0.18
+              : 1.08 + Math.random() * 0.22;
+          const radius = isDistant
+            ? 1 + Math.random() * 1.5
+            : isIntermediate
+              ? 3 + Math.random() * 2
+              : 6 + Math.random() * 4;
+          const goldChance = this.variant === 'evolution' ? 0.085 : 0.07;
+          const gold = Math.random() < goldChance;
+          const opacity = isDistant
+            ? 0.1 + Math.random() * 0.1
+            : isIntermediate
+              ? 0.18 + Math.random() * 0.17
+              : 0.26 + Math.random() * 0.19;
+          const graphite = isDistant ? '104, 106, 105' : isIntermediate ? '137, 137, 132' : '162, 158, 148';
 
           this.particles.push({
             x: homeX,
@@ -797,8 +847,10 @@
             vx: 0,
             vy: 0,
             radius,
+            depth,
+            gold,
             opacity,
-            color: gold ? `rgba(216, 173, 85, ${opacity})` : `rgba(151, 149, 143, ${opacity})`
+            color: gold ? `rgba(211, 169, 82, ${Math.min(opacity * 1.04, 0.44)})` : `rgba(${graphite}, ${opacity})`
           });
         }
 
@@ -819,12 +871,17 @@
         const point = this.localPoint(event);
         const previousX = this.pointer.x;
         const previousY = this.pointer.y;
+        const now = performance.now();
+        const elapsed = this.pointer.time ? clamp(now - this.pointer.time, 8, 40) : 16.67;
+        const timeScale = 16.67 / elapsed;
         this.pointer.lastX = previousX;
         this.pointer.lastY = previousY;
         this.pointer.x = point.x;
         this.pointer.y = point.y;
-        this.pointer.dx = previousX < -100 ? 0 : point.x - previousX;
-        this.pointer.dy = previousY < -100 ? 0 : point.y - previousY;
+        this.pointer.dx = previousX < -100 ? 0 : clamp((point.x - previousX) * timeScale, -28, 28);
+        this.pointer.dy = previousY < -100 ? 0 : clamp((point.y - previousY) * timeScale, -28, 28);
+        this.pointer.speed = Math.min(Math.hypot(this.pointer.dx, this.pointer.dy), 28);
+        this.pointer.time = now;
 
         this.card.style.setProperty('--card-pointer-x', `${(point.normalizedX * 100).toFixed(2)}%`);
         this.card.style.setProperty('--card-pointer-y', `${(point.normalizedY * 100).toFixed(2)}%`);
@@ -838,43 +895,49 @@
 
       spawnTrail() {
         const now = performance.now();
-        const speed = Math.hypot(this.pointer.dx, this.pointer.dy);
-        if (speed < 2.5 || now - this.lastTrailTime < 20) return;
+        const speed = this.pointer.speed;
+        if (speed < 1.8 || now - this.lastTrailTime < 18) return;
         this.lastTrailTime = now;
-        const amount = speed > 16 && this.variant === 'performance' ? 2 : 1;
+        const amount = Math.min(4, 1 + (speed > 9 ? 1 : 0) + (speed > 18 ? 1 : 0) + (speed > 23 && this.variant === 'performance' ? 1 : 0));
 
         for (let index = 0; index < amount; index += 1) {
-          const offset = Math.random() * 0.7;
-          this.trails.push({
-            x: this.pointer.x - this.pointer.dx * offset + (Math.random() - 0.5) * 7,
-            y: this.pointer.y - this.pointer.dy * offset + (Math.random() - 0.5) * 7,
-            vx: -this.pointer.dx * 0.035 + (Math.random() - 0.5) * 0.35,
-            vy: -this.pointer.dy * 0.035 + (Math.random() - 0.5) * 0.35,
-            radius: 0.7 + Math.random() * 1.6,
-            life: 1,
-            alpha: this.config.trailAlpha * (0.65 + Math.random() * 0.35),
-            gold: Math.random() > 0.74
-          });
+          const offset = Math.random() * 0.82;
+          const trail = this.trailPool.pop() || {};
+          trail.x = this.pointer.x - this.pointer.dx * offset + (Math.random() - 0.5) * 10;
+          trail.y = this.pointer.y - this.pointer.dy * offset + (Math.random() - 0.5) * 10;
+          trail.vx = -this.pointer.dx * 0.045 + (Math.random() - 0.5) * 0.7;
+          trail.vy = -this.pointer.dy * 0.045 + (Math.random() - 0.5) * 0.7;
+          trail.radius = 0.9 + Math.random() * 2.2;
+          trail.life = 1;
+          trail.decay = 0.024 + Math.random() * 0.03;
+          trail.alpha = this.config.trailAlpha * (0.72 + Math.random() * 0.28);
+          trail.gold = Math.random() < 0.18;
+          this.trails.push(trail);
         }
 
-        if (this.trails.length > 24) this.trails.splice(0, this.trails.length - 24);
+        while (this.trails.length > this.config.trailLimit) {
+          const trail = this.trails.shift();
+          if (trail) this.trailPool.push(trail);
+        }
       }
 
       impactAt(x, y, strength = this.config.impact) {
-        const radius = this.isCompact() ? this.config.mobileRadius : this.config.radius;
+        const tier = this.viewportTier();
+        const radius = tier === 'mobile' ? Math.min(this.interactionRadius() * 1.2, 138) : Math.min(this.interactionRadius() * 0.86, 160);
         for (let index = 0; index < this.particles.length; index += 1) {
           const particle = this.particles[index];
           const dx = particle.x - x;
           const dy = particle.y - y;
           const distance = Math.max(Math.hypot(dx, dy), 1);
-          if (distance > radius * 1.18) continue;
-          const force = (1 - distance / (radius * 1.18)) * strength;
+          if (distance > radius) continue;
+          const force = Math.pow(1 - distance / radius, 1.15) * strength * particle.depth;
           particle.vx += (dx / distance) * force;
           particle.vy += (dy / distance) * force;
         }
 
         this.impact.x = x;
         this.impact.y = y;
+        this.impact.radius = radius;
         this.impact.life = 1;
         this.settledFrames = 0;
         this.start();
@@ -908,6 +971,8 @@
         this.pointer.y = -999;
         this.pointer.dx = 0;
         this.pointer.dy = 0;
+        this.pointer.speed = 0;
+        this.pointer.time = 0;
         this.card.classList.remove('is-particle-active');
         this.card.style.setProperty('--card-pointer-x', '50%');
         this.card.style.setProperty('--card-pointer-y', '50%');
@@ -927,7 +992,9 @@
       }
 
       updatePhysics() {
-        const influenceRadius = this.isCompact() ? this.config.mobileRadius : this.config.radius;
+        const influenceRadius = this.interactionRadius();
+        const innerRadius = influenceRadius * 0.34;
+        const speedBoost = 1 + (this.pointer.speed / 28) * 0.9;
         let moving = false;
 
         for (let index = 0; index < this.particles.length; index += 1) {
@@ -940,11 +1007,14 @@
 
             if (distance < influenceRadius) {
               const proximity = 1 - distance / influenceRadius;
-              const force = proximity * proximity * this.config.repulsion;
+              const depthResponse = 0.62 + particle.depth * 0.48;
+              const voidForce = distance < innerRadius ? (1 - distance / innerRadius) * this.config.repulsion * 0.95 : 0;
+              const force = (Math.pow(proximity, 1.45) * this.config.repulsion * speedBoost + voidForce) * depthResponse;
               const normalX = dx / distance;
               const normalY = dy / distance;
-              particle.vx += normalX * force + this.pointer.dx * proximity * 0.014;
-              particle.vy += normalY * force + this.pointer.dy * proximity * 0.014;
+              const directionalCarry = 0.018 + particle.depth * 0.012;
+              particle.vx += normalX * force + this.pointer.dx * proximity * directionalCarry;
+              particle.vy += normalY * force + this.pointer.dy * proximity * directionalCarry;
 
               if (this.config.tangent) {
                 const direction = Math.sign(this.pointer.dx + this.pointer.dy) || 1;
@@ -954,10 +1024,18 @@
             }
           }
 
-          particle.vx += (particle.homeX - particle.x) * this.config.spring;
-          particle.vy += (particle.homeY - particle.y) * this.config.spring;
+          const returnStrength = this.config.spring * (0.78 + particle.depth * 0.25);
+          particle.vx += (particle.homeX - particle.x) * returnStrength;
+          particle.vy += (particle.homeY - particle.y) * returnStrength;
           particle.vx *= this.config.damping;
           particle.vy *= this.config.damping;
+          const particleSpeed = Math.hypot(particle.vx, particle.vy);
+          const maximumSpeed = this.config.maxSpeed * (0.72 + particle.depth * 0.28);
+          if (particleSpeed > maximumSpeed) {
+            const speedLimit = maximumSpeed / particleSpeed;
+            particle.vx *= speedLimit;
+            particle.vy *= speedLimit;
+          }
           particle.x += particle.vx;
           particle.y += particle.vy;
 
@@ -966,6 +1044,7 @@
 
         this.pointer.dx *= 0.82;
         this.pointer.dy *= 0.82;
+        this.pointer.speed *= 0.8;
 
         for (let index = this.trails.length - 1; index >= 0; index -= 1) {
           const trail = this.trails[index];
@@ -973,8 +1052,11 @@
           trail.y += trail.vy;
           trail.vx *= 0.93;
           trail.vy *= 0.93;
-          trail.life -= this.variant === 'performance' ? 0.043 : 0.052;
-          if (trail.life <= 0) this.trails.splice(index, 1);
+          trail.life -= trail.decay;
+          if (trail.life <= 0) {
+            this.trails.splice(index, 1);
+            this.trailPool.push(trail);
+          }
         }
 
         if (this.impact.life > 0) this.impact.life = Math.max(0, this.impact.life - 0.055);
@@ -990,12 +1072,14 @@
           const particle = this.particles[index];
           const speed = Math.hypot(particle.vx, particle.vy);
 
-          if (speed > 0.7) {
+          if (speed > 0.55) {
             context.beginPath();
             context.moveTo(particle.x, particle.y);
-            context.lineTo(particle.x - particle.vx * 2.6, particle.y - particle.vy * 2.6);
-            context.strokeStyle = `rgba(216, 173, 85, ${Math.min(speed * 0.012, 0.07)})`;
-            context.lineWidth = Math.max(0.4, particle.radius * 0.28);
+            context.lineTo(particle.x - particle.vx * (2.4 + particle.depth), particle.y - particle.vy * (2.4 + particle.depth));
+            context.strokeStyle = particle.gold
+              ? `rgba(216, 173, 85, ${Math.min(speed * 0.018 * particle.depth, 0.14)})`
+              : `rgba(155, 153, 147, ${Math.min(speed * 0.011 * particle.depth, 0.085)})`;
+            context.lineWidth = Math.max(0.45, particle.radius * 0.24);
             context.stroke();
           }
 
@@ -1018,8 +1102,8 @@
         if (this.impact.life > 0) {
           const progress = 1 - this.impact.life;
           context.beginPath();
-          context.arc(this.impact.x, this.impact.y, 18 + progress * 72, 0, Math.PI * 2);
-          context.strokeStyle = `rgba(216, 173, 85, ${this.impact.life * 0.075})`;
+          context.arc(this.impact.x, this.impact.y, 18 + progress * this.impact.radius, 0, Math.PI * 2);
+          context.strokeStyle = `rgba(216, 173, 85, ${this.impact.life * 0.12})`;
           context.lineWidth = 1;
           context.stroke();
         }
