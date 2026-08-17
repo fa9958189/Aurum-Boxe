@@ -2347,6 +2347,8 @@ body.js-ready .structure-video-section .structure-video-stage.is-video-visible .
 }
 
 .partners-section .partners-wall__brick {
+  --partner-logo-width: 78%;
+  --partner-logo-height: 72%;
   position: relative;
   z-index: 2;
   display: grid;
@@ -2413,6 +2415,8 @@ body.js-ready .structure-video-section .structure-video-stage.is-video-visible .
 }
 
 .partners-section .partners-wall__brick--dark {
+  --partner-logo-width: 70%;
+  --partner-logo-height: 76%;
   background:
     radial-gradient(circle at 50% 48%, rgba(26, 91, 212, 0.07), transparent 48%),
     #030405;
@@ -2444,12 +2448,16 @@ body.js-ready .structure-video-section .structure-video-stage.is-video-visible .
 }
 
 .partners-section .partners-wall__brick img {
-  position: relative;
+  position: absolute;
   z-index: 3;
+  top: 50%;
+  left: 50%;
   display: block;
-  width: 78%;
-  height: 72%;
+  width: var(--partner-logo-width);
+  height: var(--partner-logo-height);
+  max-width: none;
   object-fit: contain;
+  transform: translate(-50%, -50%);
   transition: transform 380ms var(--ease), filter 380ms ease;
 }
 
@@ -2458,8 +2466,6 @@ body.js-ready .structure-video-section .structure-video-stage.is-video-visible .
 }
 
 .partners-section .partners-wall__brick--dark img {
-  width: 70%;
-  height: 76%;
   filter: saturate(0.82) brightness(0.92);
 }
 
@@ -2491,7 +2497,7 @@ body.js-ready .structure-video-section .structure-video-stage.is-video-visible .
   }
 
   .partners-section .partners-wall__brick:hover img {
-    transform: scale(1.045);
+    transform: translate(-50%, -50%) scale(1.045);
   }
 
   .partners-section .partners-wall__brick--dark:hover img {
@@ -3434,12 +3440,12 @@ body.js-ready [data-reveal].visible {
   }
 
   .partners-section .partners-wall__brick img {
-    width: 82%;
-    height: 74%;
+    --partner-logo-width: 82%;
+    --partner-logo-height: 74%;
   }
 
   .partners-section .partners-wall__brick--dark img {
-    width: 72%;
+    --partner-logo-width: 72%;
   }
 
   .partners-section .partners-wall__brick-marker {
