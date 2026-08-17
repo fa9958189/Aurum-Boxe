@@ -342,6 +342,28 @@ ol {
   text-transform: uppercase;
 }
 
+.site-header .brand-image {
+  position: relative;
+  width: clamp(136px, 12vw, 164px);
+  height: 62px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.site-header .brand-image img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  filter: contrast(1.12);
+}
+
 .desktop-nav {
   display: flex;
   align-items: center;
@@ -2308,12 +2330,12 @@ body.js-ready .structure-video-section .structure-video-stage.is-video-visible .
 
 .partners-section .partners-foundation {
   position: relative;
-  display: grid;
+  display: flex;
   min-width: 0;
   min-height: clamp(540px, 43vw, 640px);
   padding: 18px 0;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  grid-template-rows: repeat(12, minmax(0, 1fr));
+  flex-direction: column;
+  gap: 20px;
   isolation: isolate;
 }
 
@@ -2336,13 +2358,13 @@ body.js-ready .structure-video-section .structure-video-stage.is-video-visible .
 
 .partners-section .partners-foundation::after {
   top: 49%;
-  left: 29%;
-  width: 53%;
+  left: 8%;
+  width: 84%;
   height: 1px;
   opacity: 0.46;
   background: linear-gradient(90deg, transparent, rgba(216, 173, 85, 0.64), transparent);
   box-shadow: 0 0 16px rgba(216, 173, 85, 0.16);
-  transform: rotate(4deg);
+  transform: none;
   transform-origin: center;
 }
 
@@ -2367,12 +2389,11 @@ body.js-ready .structure-video-section .structure-video-stage.is-video-visible .
 }
 
 .partners-section .partners-foundation__brick:first-child {
-  grid-area: 1 / 1 / 7 / 11;
+  flex: 1 1 0;
 }
 
 .partners-section .partners-foundation__brick:last-child {
-  z-index: 2;
-  grid-area: 7 / 3 / 13 / 13;
+  flex: 1 1 0;
 }
 
 .partners-section .partners-foundation__material {
@@ -3487,24 +3508,24 @@ body.js-ready [data-reveal].visible {
 
   .partners-section .partners-foundation::after {
     top: 50%;
-    left: 18%;
-    width: 64%;
-    transform: rotate(7deg);
+    left: 8%;
+    width: 84%;
+    transform: none;
   }
 
   .partners-section .partners-foundation__brick:first-child,
   .partners-section .partners-foundation__brick:last-child {
-    width: 97%;
+    width: 100%;
     min-height: 330px;
     grid-area: auto;
   }
 
   .partners-section .partners-foundation__brick:first-child {
-    margin-right: auto;
+    margin: 0;
   }
 
   .partners-section .partners-foundation__brick:last-child {
-    margin-left: auto;
+    margin: 0;
   }
 
   .partners-section .partners-foundation__brick-header {
