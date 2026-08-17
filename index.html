@@ -258,12 +258,21 @@
       </div>
     </section>
 
-    <section class="section structure" id="estrutura">
+    <section class="section structure structure-video-section" id="estrutura" data-structure-video-section>
       <div class="shell">
-        <header class="section-heading" data-reveal><div><p class="eyebrow">Estrutura e diferenciais</p><h2>Um ambiente preparado para <em>evolução real.</em></h2></div><p>Treino sério pede método, espaço e atenção. Cada detalhe existe para manter você presente no processo.</p></header>
-        <div class="structure-grid">
-          <figure class="structure-media" data-reveal><img src="Fotos/WhatsApp Image 2026-01-28 at 13.00.18.jpeg" alt="Equipe técnica em evento nacional de boxe" loading="lazy" /><figcaption><span>Experiência competitiva</span><strong>Conexão real com o boxe olímpico.</strong></figcaption><button class="play-button" type="button" data-video-open aria-label="Assistir vídeo da Aurum"><i>▶</i> Ver a Aurum em movimento</button></figure>
-          <div class="structure-cards"><article data-reveal><span>01</span><h3>Metodologia organizada</h3><p>Clareza sobre o que treinar e por que cada etapa importa.</p></article><article data-reveal><span>02</span><h3>Foco em técnica</h3><p>Qualidade de movimento antes de intensidade sem direção.</p></article><article data-reveal><span>03</span><h3>Acompanhamento</h3><p>Correções próximas para acelerar aprendizado com segurança.</p></article><article data-reveal><span>04</span><h3>Alta performance</h3><p>Estrutura mental e física para buscar novos limites.</p></article></div>
+        <header class="section-heading structure-video-heading" data-reveal><div><p class="eyebrow">Estrutura e diferenciais</p><h2>Um ambiente preparado para <em>evolução real.</em></h2></div></header>
+        <div class="structure-video-stage" data-structure-video-stage>
+          <img class="structure-video-atmosphere" src="media/aurum/structure/Principal-poster.jpg" alt="" aria-hidden="true" loading="lazy" decoding="async" />
+          <div class="structure-video-frame" data-structure-video-frame role="group" aria-label="Vídeo da estrutura Aurum Boxe">
+            <video class="structure-video" data-structure-video muted playsinline preload="metadata" poster="media/aurum/structure/Principal-poster.jpg" aria-label="Conheça a estrutura da Aurum Boxe">
+              <source src="media/aurum/structure/Principal.mp4" type="video/mp4" />
+            </video>
+            <div class="structure-video-controls" role="group" aria-label="Controles do vídeo">
+              <button type="button" data-structure-play aria-label="Pausar vídeo" aria-pressed="true"><span aria-hidden="true" data-structure-play-icon>Ⅱ</span><span data-structure-play-label>Pausar</span></button>
+              <button type="button" data-structure-sound aria-label="Ativar som" aria-pressed="false"><span aria-hidden="true">♪</span><span data-structure-sound-label>Ativar som</span></button>
+            </div>
+            <button class="structure-video-fallback" type="button" data-structure-fallback aria-label="Reproduzir vídeo" hidden><span aria-hidden="true">▶</span><span>Reproduzir vídeo</span></button>
+          </div>
         </div>
       </div>
     </section>
@@ -311,11 +320,6 @@
   </footer>
 
   <a class="whatsapp-float" href="https://wa.me/5563991196482?text=Ol%C3%A1%21%20Quero%20agendar%20uma%20aula%20experimental%20na%20Aurum%20Boxe%20%28Aragua%C3%ADna-TO%29." target="_blank" rel="noopener" aria-label="Agendar aula pelo WhatsApp"><span>WA</span><small>Agendar aula</small></a>
-
-  <dialog class="video-dialog" id="videoDialog" aria-labelledby="videoDialogTitle">
-    <div class="dialog-top"><strong id="videoDialogTitle">Aurum em movimento</strong><button type="button" data-video-close aria-label="Fechar vídeo">×</button></div>
-    <video id="arenaVideo" controls playsinline preload="none" poster="media/aurum/arena-cinematica.png"><source data-src="Videos/Video2.mp4" type="video/mp4" /></video>
-  </dialog>
 
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
