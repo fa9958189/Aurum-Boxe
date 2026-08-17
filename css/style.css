@@ -1884,7 +1884,7 @@ ol {
   z-index: 2;
   opacity: 0;
   background:
-    radial-gradient(circle 150px at var(--card-pointer-x, 50%) var(--card-pointer-y, 50%), rgba(216, 173, 85, 0.085), rgba(146, 140, 128, 0.018) 34%, transparent 72%);
+    radial-gradient(circle 300px at var(--card-pointer-x, 50%) var(--card-pointer-y, 50%), rgba(216, 173, 85, 0.105), rgba(146, 140, 128, 0.032) 38%, transparent 70%);
   transition: opacity 260ms ease;
 }
 
@@ -1910,24 +1910,24 @@ ol {
 }
 
 .classes .class-card.is-particle-active .class-card-particle-canvas {
-  opacity: 0.84;
+  opacity: 1;
 }
 
 .classes .class-card.is-touch-impact .class-card-spotlight {
-  opacity: 0.74;
+  opacity: 0.86;
 }
 
 .classes .class-card.is-touch-impact .class-card-particle-canvas {
-  opacity: 0.72;
+  opacity: 0.92;
 }
 
 @media (hover: none) {
   .classes .class-card-particle-canvas {
-    opacity: 0.36;
+    opacity: 0.34;
   }
 
   .classes .class-card-spotlight {
-    background: radial-gradient(circle 112px at var(--card-pointer-x, 50%) var(--card-pointer-y, 50%), rgba(216, 173, 85, 0.07), transparent 72%);
+    background: radial-gradient(circle 180px at var(--card-pointer-x, 50%) var(--card-pointer-y, 50%), rgba(216, 173, 85, 0.09), rgba(146, 140, 128, 0.022) 40%, transparent 72%);
   }
 }
 
@@ -3274,7 +3274,7 @@ body.js-ready [data-reveal].visible {
   }
 
   .classes .class-card-spotlight {
-    background: radial-gradient(circle 108px at var(--card-pointer-x, 50%) var(--card-pointer-y, 50%), rgba(216, 173, 85, 0.068), transparent 74%);
+    background: radial-gradient(circle 168px at var(--card-pointer-x, 50%) var(--card-pointer-y, 50%), rgba(216, 173, 85, 0.084), rgba(146, 140, 128, 0.02) 40%, transparent 74%);
   }
 
   .structure-media,
