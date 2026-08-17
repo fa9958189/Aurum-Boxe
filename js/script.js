@@ -1163,26 +1163,6 @@
     window.addEventListener('scroll', releaseTrainingCardPointersOnScroll, { passive: true });
   }
 
-  // FAQ acessível
-  const faqItems = [...document.querySelectorAll('.faq-item')];
-  faqItems.forEach((item) => {
-    const button = item.querySelector('button');
-    if (!button) return;
-
-    button.addEventListener('click', () => {
-      const willOpen = !item.classList.contains('open');
-      faqItems.forEach((otherItem) => {
-        otherItem.classList.remove('open');
-        otherItem.querySelector('button')?.setAttribute('aria-expanded', 'false');
-      });
-
-      if (willOpen) {
-        item.classList.add('open');
-        button.setAttribute('aria-expanded', 'true');
-      }
-    });
-  });
-
   // Vídeo cinematográfico da seção Estrutura
   const structureVideoSection = document.querySelector('[data-structure-video-section]');
   const structureVideoStage = structureVideoSection?.querySelector('[data-structure-video-stage]');
