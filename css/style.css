@@ -3167,13 +3167,22 @@ body.js-ready [data-reveal].visible {
 
   .header-panel-button {
     min-height: 40px;
-    padding-inline: 12px;
-    gap: 7px;
-    font-size: 0.61rem;
+    width: clamp(112px, 33vw, 134px);
+    padding-inline: 8px;
+    gap: 5px;
+    font-size: 0.53rem;
+    line-height: 1.12;
+    text-align: center;
+    white-space: normal;
   }
 
   .header-panel-button span {
-    font-size: 0.8rem;
+    display: none;
+  }
+
+  .site-header .brand-image {
+    width: clamp(88px, 30vw, 116px);
+    height: 50px;
   }
 
   .brand-image {
