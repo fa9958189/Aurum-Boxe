@@ -1183,34 +1183,128 @@
     });
   });
 
-  // Vídeo da estrutura em modal nativo
-  const videoDialog = document.getElementById('videoDialog');
-  const arenaVideo = document.getElementById('arenaVideo');
-  const videoOpenButton = document.querySelector('[data-video-open]');
-  const videoCloseButton = document.querySelector('[data-video-close]');
+  // Vídeo cinematográfico da seção Estrutura
+  const structureVideoSection = document.querySelector('[data-structure-video-section]');
+  const structureVideoStage = structureVideoSection?.querySelector('[data-structure-video-stage]');
+  const structureVideoFrame = structureVideoSection?.querySelector('[data-structure-video-frame]');
+  const structureVideo = structureVideoSection?.querySelector('[data-structure-video]');
+  const structurePlayButton = structureVideoSection?.querySelector('[data-structure-play]');
+  const structurePlayIcon = structureVideoSection?.querySelector('[data-structure-play-icon]');
+  const structurePlayLabel = structureVideoSection?.querySelector('[data-structure-play-label]');
+  const structureSoundButton = structureVideoSection?.querySelector('[data-structure-sound]');
+  const structureSoundLabel = structureVideoSection?.querySelector('[data-structure-sound-label]');
+  const structureFallbackButton = structureVideoSection?.querySelector('[data-structure-fallback]');
+  let structureVideoObserver = null;
+  let structurePointerFrame = 0;
 
-  const stopArenaVideo = () => {
-    if (!arenaVideo) return;
-    arenaVideo.pause();
-    arenaVideo.currentTime = 0;
-  };
+  if (structureVideoStage && structureVideoFrame && structureVideo && structurePlayButton && structureSoundButton && structureFallbackButton) {
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+    let isPlaybackZoneActive = false;
+    let hasVideoEnded = false;
 
-  videoOpenButton?.addEventListener('click', () => {
-    if (!videoDialog || !arenaVideo) return;
-    const source = arenaVideo.querySelector('source[data-src]');
-    if (source && !source.src) {
-      source.src = source.dataset.src;
-      arenaVideo.load();
-    }
-    videoDialog.showModal();
-    arenaVideo.play().catch(() => {});
-  });
+    structureVideo.defaultMuted = true;
+    structureVideo.muted = true;
+    structureVideo.volume = 0.9;
 
-  videoCloseButton?.addEventListener('click', () => videoDialog?.close());
-  videoDialog?.addEventListener('close', stopArenaVideo);
-  videoDialog?.addEventListener('click', (event) => {
-    if (event.target === videoDialog) videoDialog.close();
-  });
+    const updateStructureVideoControls = () => {
+      const isPlaying = !structureVideo.paused && !structureVideo.ended;
+      const hasSound = !structureVideo.muted;
+
+      structurePlayButton.setAttribute('aria-pressed', String(isPlaying));
+      structurePlayButton.setAttribute('aria-label', isPlaying ? 'Pausar vídeo' : 'Reproduzir vídeo');
+      if (structurePlayIcon) structurePlayIcon.textContent = isPlaying ? 'Ⅱ' : '▶';
+      if (structurePlayLabel) structurePlayLabel.textContent = isPlaying ? 'Pausar' : 'Reproduzir';
+
+      structureSoundButton.setAttribute('aria-pressed', String(hasSound));
+      structureSoundButton.setAttribute('aria-label', hasSound ? 'Silenciar vídeo' : 'Ativar som');
+      if (structureSoundLabel) structureSoundLabel.textContent = hasSound ? 'Silenciar' : 'Ativar som';
+    };
+
+    const playStructureVideo = async (restart = false) => {
+      if (restart || structureVideo.ended) {
+        structureVideo.currentTime = 0;
+        hasVideoEnded = false;
+      }
+
+      try {
+        await structureVideo.play();
+        structureFallbackButton.hidden = true;
+      } catch {
+        structureFallbackButton.hidden = false;
+        updateStructureVideoControls();
+      }
+    };
+
+    structurePlayButton.addEventListener('click', () => {
+      if (structureVideo.paused || structureVideo.ended) {
+        playStructureVideo(structureVideo.ended);
+      } else {
+        structureVideo.pause();
+      }
+    });
+
+    structureFallbackButton.addEventListener('click', () => playStructureVideo(structureVideo.ended));
+
+    structureSoundButton.addEventListener('click', () => {
+      structureVideo.muted = !structureVideo.muted;
+      updateStructureVideoControls();
+    });
+
+    structureVideo.addEventListener('play', () => {
+      structureFallbackButton.hidden = true;
+      updateStructureVideoControls();
+    });
+    structureVideo.addEventListener('pause', updateStructureVideoControls);
+    structureVideo.addEventListener('volumechange', updateStructureVideoControls);
+    structureVideo.addEventListener('ended', () => {
+      hasVideoEnded = true;
+      updateStructureVideoControls();
+    });
+    structureVideo.addEventListener('error', () => {
+      structureFallbackButton.hidden = false;
+      updateStructureVideoControls();
+    });
+
+    structureVideoObserver = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && entry.intersectionRatio >= 0.12) structureVideoStage.classList.add('is-video-visible');
+
+      if (entry.isIntersecting && entry.intersectionRatio >= 0.35) {
+        if (!isPlaybackZoneActive) {
+          isPlaybackZoneActive = true;
+          if (reducedMotion) {
+            structureFallbackButton.hidden = false;
+          } else {
+            playStructureVideo(hasVideoEnded);
+          }
+        }
+      } else if (isPlaybackZoneActive && entry.intersectionRatio < 0.16) {
+        isPlaybackZoneActive = false;
+        structureVideo.pause();
+      }
+    }, { threshold: [0, 0.12, 0.16, 0.35, 0.5] });
+    structureVideoObserver.observe(structureVideoFrame);
+
+    structureVideoStage.addEventListener('pointermove', (event) => {
+      if (reducedMotion || !finePointer.matches) return;
+      if (structurePointerFrame) window.cancelAnimationFrame(structurePointerFrame);
+      structurePointerFrame = window.requestAnimationFrame(() => {
+        const rect = structureVideoStage.getBoundingClientRect();
+        const x = clamp((event.clientX - rect.left) / rect.width);
+        const y = clamp((event.clientY - rect.top) / rect.height);
+        structureVideoStage.style.setProperty('--structure-pointer-x', `${(x * 100).toFixed(2)}%`);
+        structureVideoStage.style.setProperty('--structure-pointer-y', `${(y * 100).toFixed(2)}%`);
+        structureVideoStage.classList.add('is-pointer-active');
+      });
+    });
+
+    structureVideoStage.addEventListener('pointerleave', () => {
+      structureVideoStage.style.setProperty('--structure-pointer-x', '50%');
+      structureVideoStage.style.setProperty('--structure-pointer-y', '48%');
+      structureVideoStage.classList.remove('is-pointer-active');
+    });
+
+    updateStructureVideoControls();
+  }
 
   const currentYear = document.getElementById('currentYear');
   if (currentYear) currentYear.textContent = String(new Date().getFullYear());
@@ -1218,6 +1312,8 @@
   window.addEventListener('beforeunload', () => {
     if (particleFrame) window.cancelAnimationFrame(particleFrame);
     if (trainingCardScrollFrame) window.cancelAnimationFrame(trainingCardScrollFrame);
+    if (structurePointerFrame) window.cancelAnimationFrame(structurePointerFrame);
+    structureVideoObserver?.disconnect();
     window.removeEventListener('scroll', releaseTrainingCardPointersOnScroll);
     trainingCardFields.forEach((field) => field.destroy());
   });
