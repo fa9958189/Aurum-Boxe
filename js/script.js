@@ -37,53 +37,77 @@
     }
   });
 
-  // Parede modular de parceiros
+  // Blocos de fundação dos parceiros
   const partners = [
     {
       id: 'so-orto',
       name: 'Só Orto Clinic Medic',
       category: 'Saúde e performance',
+      description: 'Cuidado, prevenção e suporte para evolução com segurança.',
       logo: 'media/aurum/partners/so-orto-clinic-medic.png',
-      variant: 'light'
+      variant: 'light-brick'
     },
     {
       id: 'pxfull',
       name: 'Pxfull',
       category: 'Tecnologia e desenvolvimento',
+      description: 'Estrutura digital, presença e construção de marca.',
       logo: 'media/aurum/partners/pxfull.png',
-      variant: 'dark'
+      variant: 'dark-brick'
     }
   ];
 
-  const partnerWall = document.querySelector('[data-partner-brick-wall]');
-  if (partnerWall) {
-    const brickCount = 12;
-    const wallFragment = document.createDocumentFragment();
+  const partnerFoundation = document.querySelector('[data-partner-foundation]');
+  if (partnerFoundation) {
+    const foundationFragment = document.createDocumentFragment();
 
-    Array.from({ length: brickCount }, (_, index) => partners[index % partners.length]).forEach((partner, index) => {
+    partners.forEach((partner) => {
       const brick = document.createElement('article');
+      const material = document.createElement('span');
+      const header = document.createElement('div');
+      const partnerLabel = document.createElement('span');
+      const category = document.createElement('span');
+      const body = document.createElement('div');
+      const logoPlate = document.createElement('div');
       const logo = document.createElement('img');
-      const marker = document.createElement('span');
+      const copy = document.createElement('div');
+      const name = document.createElement('h3');
+      const description = document.createElement('p');
 
-      brick.className = `partners-wall__brick partners-wall__brick--${partner.variant}`;
+      brick.className = `partners-foundation__brick partners-foundation__brick--${partner.variant}`;
       brick.setAttribute('role', 'listitem');
       brick.setAttribute('aria-label', `${partner.name} — ${partner.category}`);
       brick.dataset.partner = partner.id;
 
+      material.className = 'partners-foundation__material';
+      material.setAttribute('aria-hidden', 'true');
+
+      header.className = 'partners-foundation__brick-header';
+      partnerLabel.className = 'partners-foundation__brick-label';
+      partnerLabel.textContent = 'Parceiro';
+      category.className = 'partners-foundation__brick-category';
+      category.textContent = partner.category;
+      header.append(partnerLabel, category);
+
+      body.className = 'partners-foundation__brick-body';
+      logoPlate.className = 'partners-foundation__logo-plate';
       logo.src = partner.logo;
       logo.alt = '';
       logo.loading = 'lazy';
       logo.decoding = 'async';
+      logoPlate.append(logo);
 
-      marker.className = 'partners-wall__brick-marker';
-      marker.setAttribute('aria-hidden', 'true');
-      marker.textContent = String(index + 1).padStart(2, '0');
+      copy.className = 'partners-foundation__brick-copy';
+      name.textContent = partner.name;
+      description.textContent = partner.description;
+      copy.append(name, description);
+      body.append(logoPlate, copy);
 
-      brick.append(logo, marker);
-      wallFragment.append(brick);
+      brick.append(material, header, body);
+      foundationFragment.append(brick);
     });
 
-    partnerWall.append(wallFragment);
+    partnerFoundation.append(foundationFragment);
   }
 
   // Animações de entrada progressivas
