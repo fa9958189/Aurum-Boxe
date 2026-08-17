@@ -37,6 +37,55 @@
     }
   });
 
+  // Parede modular de parceiros
+  const partners = [
+    {
+      id: 'so-orto',
+      name: 'Só Orto Clinic Medic',
+      category: 'Saúde e performance',
+      logo: 'media/aurum/partners/so-orto-clinic-medic.png',
+      variant: 'light'
+    },
+    {
+      id: 'pxfull',
+      name: 'Pxfull',
+      category: 'Tecnologia e desenvolvimento',
+      logo: 'media/aurum/partners/pxfull.png',
+      variant: 'dark'
+    }
+  ];
+
+  const partnerWall = document.querySelector('[data-partner-brick-wall]');
+  if (partnerWall) {
+    const brickCount = 12;
+    const wallFragment = document.createDocumentFragment();
+
+    Array.from({ length: brickCount }, (_, index) => partners[index % partners.length]).forEach((partner, index) => {
+      const brick = document.createElement('article');
+      const logo = document.createElement('img');
+      const marker = document.createElement('span');
+
+      brick.className = `partners-wall__brick partners-wall__brick--${partner.variant}`;
+      brick.setAttribute('role', 'listitem');
+      brick.setAttribute('aria-label', `${partner.name} — ${partner.category}`);
+      brick.dataset.partner = partner.id;
+
+      logo.src = partner.logo;
+      logo.alt = '';
+      logo.loading = 'lazy';
+      logo.decoding = 'async';
+
+      marker.className = 'partners-wall__brick-marker';
+      marker.setAttribute('aria-hidden', 'true');
+      marker.textContent = String(index + 1).padStart(2, '0');
+
+      brick.append(logo, marker);
+      wallFragment.append(brick);
+    });
+
+    partnerWall.append(wallFragment);
+  }
+
   // Animações de entrada progressivas
   const revealElements = document.querySelectorAll('[data-reveal]');
   if (reducedMotion || !('IntersectionObserver' in window)) {
