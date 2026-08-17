@@ -624,6 +624,461 @@
     }
   }
 
+  // Campo de partículas reutilizável dos cards de Turmas
+  const trainingCardConfigs = {
+    foundation: {
+      desktopCount: 44,
+      mobileCount: 24,
+      radius: 118,
+      mobileRadius: 78,
+      repulsion: 1.28,
+      spring: 0.016,
+      damping: 0.885,
+      tangent: 0,
+      trailAlpha: 0.12,
+      impact: 1.75
+    },
+    evolution: {
+      desktopCount: 54,
+      mobileCount: 28,
+      radius: 132,
+      mobileRadius: 82,
+      repulsion: 1.42,
+      spring: 0.013,
+      damping: 0.912,
+      tangent: 0.085,
+      trailAlpha: 0.15,
+      impact: 1.9
+    },
+    performance: {
+      desktopCount: 48,
+      mobileCount: 24,
+      radius: 108,
+      mobileRadius: 72,
+      repulsion: 1.92,
+      spring: 0.028,
+      damping: 0.84,
+      tangent: 0.025,
+      trailAlpha: 0.19,
+      impact: 2.35
+    }
+  };
+
+  const trainingCards = [...document.querySelectorAll('[data-card-particles]')];
+  const trainingCardFields = [];
+  let trainingCardScrollFrame = 0;
+
+  const releaseTrainingCardPointersOnScroll = () => {
+    if (trainingCardScrollFrame) return;
+    trainingCardScrollFrame = window.requestAnimationFrame(() => {
+      trainingCardScrollFrame = 0;
+      trainingCardFields.forEach((field) => field.releasePointer());
+    });
+  };
+
+  if (trainingCards.length && !reducedMotion) {
+    class CardParticleField {
+      constructor(card, config, variant) {
+        this.card = card;
+        this.canvas = card.querySelector('.class-card-particle-canvas');
+        this.context = this.canvas?.getContext('2d', { alpha: true });
+        this.config = config;
+        this.variant = variant;
+        this.finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+        this.particles = [];
+        this.trails = [];
+        this.width = 0;
+        this.height = 0;
+        this.pixelRatio = 1;
+        this.frame = 0;
+        this.visible = true;
+        this.settledFrames = 0;
+        this.lastTrailTime = 0;
+        this.touchTimer = 0;
+        this.impact = { x: 0, y: 0, life: 0 };
+        this.pointer = { x: -999, y: -999, lastX: -999, lastY: -999, dx: 0, dy: 0, active: false };
+
+        this.animate = this.animate.bind(this);
+        this.handlePointerEnter = this.handlePointerEnter.bind(this);
+        this.handlePointerMove = this.handlePointerMove.bind(this);
+        this.handlePointerLeave = this.handlePointerLeave.bind(this);
+        this.handlePointerDown = this.handlePointerDown.bind(this);
+
+        if (!this.canvas || !this.context) return;
+
+        this.card.addEventListener('pointerenter', this.handlePointerEnter, { passive: true });
+        this.card.addEventListener('pointermove', this.handlePointerMove, { passive: true });
+        this.card.addEventListener('pointerleave', this.handlePointerLeave, { passive: true });
+        this.card.addEventListener('pointerdown', this.handlePointerDown, { passive: true });
+
+        this.resizeObserver = new ResizeObserver(() => this.resize());
+        this.resizeObserver.observe(this.card);
+
+        this.visibilityObserver = new IntersectionObserver(([entry]) => {
+          this.visible = entry.isIntersecting;
+          if (!this.visible && this.frame) {
+            window.cancelAnimationFrame(this.frame);
+            this.frame = 0;
+          }
+          if (this.visible) {
+            this.draw();
+            this.start();
+          }
+        }, { rootMargin: '140px 0px', threshold: 0.01 });
+        this.visibilityObserver.observe(this.card);
+
+        this.resize();
+      }
+
+      isCompact() {
+        return window.innerWidth <= 900 || !this.finePointer.matches;
+      }
+
+      usesDesktopPointer() {
+        return window.innerWidth > 900 && this.finePointer.matches;
+      }
+
+      resize() {
+        const width = this.card.clientWidth;
+        const height = this.card.clientHeight;
+        if (!width || !height || !this.context || !this.canvas) return;
+
+        this.width = width;
+        this.height = height;
+        this.pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+        this.canvas.width = Math.round(width * this.pixelRatio);
+        this.canvas.height = Math.round(height * this.pixelRatio);
+        this.context.setTransform(this.pixelRatio, 0, 0, this.pixelRatio, 0, 0);
+        this.createParticles();
+        this.draw();
+      }
+
+      createParticles() {
+        const compact = this.isCompact();
+        const count = compact ? this.config.mobileCount : this.config.desktopCount;
+        const aspect = Math.max(this.width / this.height, 0.45);
+        const columns = Math.max(4, Math.ceil(Math.sqrt(count * aspect)));
+        const rows = Math.ceil(count / columns);
+        this.particles.length = 0;
+
+        for (let index = 0; index < count; index += 1) {
+          const column = index % columns;
+          const row = Math.floor(index / columns);
+          let homeX = ((column + 0.5) / columns) * this.width;
+          let homeY = ((row + 0.5) / rows) * this.height;
+
+          if (this.variant === 'foundation') {
+            homeX += (Math.random() - 0.5) * (this.width / columns) * 0.32;
+            homeY += (Math.random() - 0.5) * (this.height / rows) * 0.26;
+          } else if (this.variant === 'evolution') {
+            const flow = (index * 0.61803398875) % 1;
+            homeX = (0.08 + flow * 0.84) * this.width;
+            homeY = (0.07 + ((index + 0.5) / count) * 0.86) * this.height;
+            homeX += Math.sin(index * 1.7) * Math.min(18, this.width * 0.035);
+          } else {
+            homeX += (Math.random() - 0.5) * (this.width / columns) * 0.18;
+            homeY += (Math.random() - 0.5) * (this.height / rows) * 0.2;
+          }
+
+          const sizeSeed = Math.random();
+          const radius = sizeSeed > 0.95
+            ? 5 + Math.random() * 1.7
+            : sizeSeed > 0.72
+              ? 2.3 + Math.random() * 1.8
+              : 0.8 + Math.random() * 1.25;
+          const gold = Math.random() > (this.variant === 'evolution' ? 0.84 : 0.9);
+          const opacity = gold ? 0.16 + Math.random() * 0.15 : 0.055 + Math.random() * 0.13;
+
+          this.particles.push({
+            x: homeX,
+            y: homeY,
+            homeX,
+            homeY,
+            vx: 0,
+            vy: 0,
+            radius,
+            opacity,
+            color: gold ? `rgba(216, 173, 85, ${opacity})` : `rgba(151, 149, 143, ${opacity})`
+          });
+        }
+
+        this.card.dataset.particleCount = String(count);
+      }
+
+      localPoint(event) {
+        const rect = this.card.getBoundingClientRect();
+        return {
+          x: clamp(event.clientX - rect.left, 0, this.width),
+          y: clamp(event.clientY - rect.top, 0, this.height),
+          normalizedX: clamp((event.clientX - rect.left) / rect.width),
+          normalizedY: clamp((event.clientY - rect.top) / rect.height)
+        };
+      }
+
+      updatePointer(event, createTrail = true) {
+        const point = this.localPoint(event);
+        const previousX = this.pointer.x;
+        const previousY = this.pointer.y;
+        this.pointer.lastX = previousX;
+        this.pointer.lastY = previousY;
+        this.pointer.x = point.x;
+        this.pointer.y = point.y;
+        this.pointer.dx = previousX < -100 ? 0 : point.x - previousX;
+        this.pointer.dy = previousY < -100 ? 0 : point.y - previousY;
+
+        this.card.style.setProperty('--card-pointer-x', `${(point.normalizedX * 100).toFixed(2)}%`);
+        this.card.style.setProperty('--card-pointer-y', `${(point.normalizedY * 100).toFixed(2)}%`);
+
+        const tiltX = (point.normalizedY - 0.5) * -1.5;
+        const tiltY = (point.normalizedX - 0.5) * 1.7;
+        this.card.style.transform = `perspective(1100px) translateY(-10px) rotateX(${tiltX.toFixed(3)}deg) rotateY(${tiltY.toFixed(3)}deg)`;
+
+        if (createTrail) this.spawnTrail();
+      }
+
+      spawnTrail() {
+        const now = performance.now();
+        const speed = Math.hypot(this.pointer.dx, this.pointer.dy);
+        if (speed < 2.5 || now - this.lastTrailTime < 20) return;
+        this.lastTrailTime = now;
+        const amount = speed > 16 && this.variant === 'performance' ? 2 : 1;
+
+        for (let index = 0; index < amount; index += 1) {
+          const offset = Math.random() * 0.7;
+          this.trails.push({
+            x: this.pointer.x - this.pointer.dx * offset + (Math.random() - 0.5) * 7,
+            y: this.pointer.y - this.pointer.dy * offset + (Math.random() - 0.5) * 7,
+            vx: -this.pointer.dx * 0.035 + (Math.random() - 0.5) * 0.35,
+            vy: -this.pointer.dy * 0.035 + (Math.random() - 0.5) * 0.35,
+            radius: 0.7 + Math.random() * 1.6,
+            life: 1,
+            alpha: this.config.trailAlpha * (0.65 + Math.random() * 0.35),
+            gold: Math.random() > 0.74
+          });
+        }
+
+        if (this.trails.length > 24) this.trails.splice(0, this.trails.length - 24);
+      }
+
+      impactAt(x, y, strength = this.config.impact) {
+        const radius = this.isCompact() ? this.config.mobileRadius : this.config.radius;
+        for (let index = 0; index < this.particles.length; index += 1) {
+          const particle = this.particles[index];
+          const dx = particle.x - x;
+          const dy = particle.y - y;
+          const distance = Math.max(Math.hypot(dx, dy), 1);
+          if (distance > radius * 1.18) continue;
+          const force = (1 - distance / (radius * 1.18)) * strength;
+          particle.vx += (dx / distance) * force;
+          particle.vy += (dy / distance) * force;
+        }
+
+        this.impact.x = x;
+        this.impact.y = y;
+        this.impact.life = 1;
+        this.settledFrames = 0;
+        this.start();
+      }
+
+      handlePointerEnter(event) {
+        if (!this.usesDesktopPointer() || event.pointerType === 'touch') return;
+        this.pointer.active = true;
+        this.updatePointer(event, false);
+        this.card.classList.add('is-particle-active');
+        this.impactAt(this.pointer.x, this.pointer.y);
+      }
+
+      handlePointerMove(event) {
+        if (!this.usesDesktopPointer() || event.pointerType === 'touch') return;
+        this.pointer.active = true;
+        this.card.classList.add('is-particle-active');
+        this.updatePointer(event);
+        this.settledFrames = 0;
+        this.start();
+      }
+
+      handlePointerLeave(event) {
+        if (event.pointerType === 'touch') return;
+        this.releasePointer();
+      }
+
+      releasePointer() {
+        this.pointer.active = false;
+        this.pointer.x = -999;
+        this.pointer.y = -999;
+        this.pointer.dx = 0;
+        this.pointer.dy = 0;
+        this.card.classList.remove('is-particle-active');
+        this.card.style.setProperty('--card-pointer-x', '50%');
+        this.card.style.setProperty('--card-pointer-y', '50%');
+        this.card.style.transform = '';
+        this.start();
+      }
+
+      handlePointerDown(event) {
+        if (this.usesDesktopPointer() && event.pointerType !== 'touch') return;
+        const point = this.localPoint(event);
+        this.card.style.setProperty('--card-pointer-x', `${(point.normalizedX * 100).toFixed(2)}%`);
+        this.card.style.setProperty('--card-pointer-y', `${(point.normalizedY * 100).toFixed(2)}%`);
+        this.card.classList.add('is-touch-impact');
+        this.impactAt(point.x, point.y, this.config.impact * 0.92);
+        window.clearTimeout(this.touchTimer);
+        this.touchTimer = window.setTimeout(() => this.card.classList.remove('is-touch-impact'), 440);
+      }
+
+      updatePhysics() {
+        const influenceRadius = this.isCompact() ? this.config.mobileRadius : this.config.radius;
+        let moving = false;
+
+        for (let index = 0; index < this.particles.length; index += 1) {
+          const particle = this.particles[index];
+
+          if (this.pointer.active) {
+            const dx = particle.x - this.pointer.x;
+            const dy = particle.y - this.pointer.y;
+            const distance = Math.max(Math.hypot(dx, dy), 1);
+
+            if (distance < influenceRadius) {
+              const proximity = 1 - distance / influenceRadius;
+              const force = proximity * proximity * this.config.repulsion;
+              const normalX = dx / distance;
+              const normalY = dy / distance;
+              particle.vx += normalX * force + this.pointer.dx * proximity * 0.014;
+              particle.vy += normalY * force + this.pointer.dy * proximity * 0.014;
+
+              if (this.config.tangent) {
+                const direction = Math.sign(this.pointer.dx + this.pointer.dy) || 1;
+                particle.vx += -normalY * force * this.config.tangent * direction;
+                particle.vy += normalX * force * this.config.tangent * direction;
+              }
+            }
+          }
+
+          particle.vx += (particle.homeX - particle.x) * this.config.spring;
+          particle.vy += (particle.homeY - particle.y) * this.config.spring;
+          particle.vx *= this.config.damping;
+          particle.vy *= this.config.damping;
+          particle.x += particle.vx;
+          particle.y += particle.vy;
+
+          if (Math.abs(particle.vx) + Math.abs(particle.vy) > 0.025 || Math.abs(particle.x - particle.homeX) + Math.abs(particle.y - particle.homeY) > 0.12) moving = true;
+        }
+
+        this.pointer.dx *= 0.82;
+        this.pointer.dy *= 0.82;
+
+        for (let index = this.trails.length - 1; index >= 0; index -= 1) {
+          const trail = this.trails[index];
+          trail.x += trail.vx;
+          trail.y += trail.vy;
+          trail.vx *= 0.93;
+          trail.vy *= 0.93;
+          trail.life -= this.variant === 'performance' ? 0.043 : 0.052;
+          if (trail.life <= 0) this.trails.splice(index, 1);
+        }
+
+        if (this.impact.life > 0) this.impact.life = Math.max(0, this.impact.life - 0.055);
+        return moving || this.trails.length > 0 || this.impact.life > 0;
+      }
+
+      draw() {
+        if (!this.context || !this.width || !this.height) return;
+        const context = this.context;
+        context.clearRect(0, 0, this.width, this.height);
+
+        for (let index = 0; index < this.particles.length; index += 1) {
+          const particle = this.particles[index];
+          const speed = Math.hypot(particle.vx, particle.vy);
+
+          if (speed > 0.7) {
+            context.beginPath();
+            context.moveTo(particle.x, particle.y);
+            context.lineTo(particle.x - particle.vx * 2.6, particle.y - particle.vy * 2.6);
+            context.strokeStyle = `rgba(216, 173, 85, ${Math.min(speed * 0.012, 0.07)})`;
+            context.lineWidth = Math.max(0.4, particle.radius * 0.28);
+            context.stroke();
+          }
+
+          context.beginPath();
+          context.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+          context.fillStyle = particle.color;
+          context.fill();
+        }
+
+        for (let index = 0; index < this.trails.length; index += 1) {
+          const trail = this.trails[index];
+          context.beginPath();
+          context.arc(trail.x, trail.y, trail.radius, 0, Math.PI * 2);
+          context.fillStyle = trail.gold
+            ? `rgba(216, 173, 85, ${trail.alpha * trail.life})`
+            : `rgba(169, 166, 157, ${trail.alpha * trail.life})`;
+          context.fill();
+        }
+
+        if (this.impact.life > 0) {
+          const progress = 1 - this.impact.life;
+          context.beginPath();
+          context.arc(this.impact.x, this.impact.y, 18 + progress * 72, 0, Math.PI * 2);
+          context.strokeStyle = `rgba(216, 173, 85, ${this.impact.life * 0.075})`;
+          context.lineWidth = 1;
+          context.stroke();
+        }
+      }
+
+      animate() {
+        this.frame = 0;
+        if (!this.visible) return;
+        const moving = this.updatePhysics();
+        this.draw();
+
+        if (!this.pointer.active && !moving) {
+          this.settledFrames += 1;
+          if (this.settledFrames > 5) {
+            for (let index = 0; index < this.particles.length; index += 1) {
+              const particle = this.particles[index];
+              particle.x = particle.homeX;
+              particle.y = particle.homeY;
+              particle.vx = 0;
+              particle.vy = 0;
+            }
+            this.draw();
+            return;
+          }
+        } else {
+          this.settledFrames = 0;
+        }
+
+        this.start();
+      }
+
+      start() {
+        if (!this.visible || this.frame) return;
+        this.frame = window.requestAnimationFrame(this.animate);
+      }
+
+      destroy() {
+        if (this.frame) window.cancelAnimationFrame(this.frame);
+        window.clearTimeout(this.touchTimer);
+        this.resizeObserver?.disconnect();
+        this.visibilityObserver?.disconnect();
+        this.card.removeEventListener('pointerenter', this.handlePointerEnter);
+        this.card.removeEventListener('pointermove', this.handlePointerMove);
+        this.card.removeEventListener('pointerleave', this.handlePointerLeave);
+        this.card.removeEventListener('pointerdown', this.handlePointerDown);
+      }
+    }
+
+    trainingCards.forEach((card) => {
+      const variant = card.dataset.cardParticles;
+      const config = trainingCardConfigs[variant];
+      if (!config) return;
+      const field = new CardParticleField(card, config, variant);
+      if (field.context) trainingCardFields.push(field);
+    });
+
+    window.addEventListener('scroll', releaseTrainingCardPointersOnScroll, { passive: true });
+  }
+
   // FAQ acessível
   const faqItems = [...document.querySelectorAll('.faq-item')];
   faqItems.forEach((item) => {
@@ -678,5 +1133,8 @@
 
   window.addEventListener('beforeunload', () => {
     if (particleFrame) window.cancelAnimationFrame(particleFrame);
+    if (trainingCardScrollFrame) window.cancelAnimationFrame(trainingCardScrollFrame);
+    window.removeEventListener('scroll', releaseTrainingCardPointersOnScroll);
+    trainingCardFields.forEach((field) => field.destroy());
   });
 })();
