@@ -37,7 +37,7 @@
     }
   });
 
-  // Blocos de fundação dos parceiros
+  // Mural modular de parceiros
   const partners = [
     {
       id: 'so-orto',
@@ -104,6 +104,20 @@
       body.append(logoPlate, copy);
 
       brick.append(material, header, body);
+
+      if (!reducedMotion && window.matchMedia('(pointer: fine)').matches) {
+        brick.addEventListener('pointermove', (event) => {
+          const bounds = brick.getBoundingClientRect();
+          brick.style.setProperty('--partner-pointer-x', `${event.clientX - bounds.left}px`);
+          brick.style.setProperty('--partner-pointer-y', `${event.clientY - bounds.top}px`);
+        });
+
+        brick.addEventListener('pointerleave', () => {
+          brick.style.setProperty('--partner-pointer-x', '50%');
+          brick.style.setProperty('--partner-pointer-y', '50%');
+        });
+      }
+
       foundationFragment.append(brick);
     });
 
