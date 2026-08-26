@@ -2,7 +2,6 @@
   'use strict';
 
   const body = document.body;
-  const root = document.documentElement;
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const clamp = (value, min = 0, max = 1) => Math.min(Math.max(value, min), max);
 
@@ -231,27 +230,8 @@
     }
   }
 
-  // Narrativa cinematográfica controlada pelo scroll
-  const story = document.querySelector('.scroll-story');
-  const storySticky = story?.querySelector('.story-sticky');
-  const storyFrames = [...document.querySelectorAll('[data-story-frame]')];
-  const storyScenes = [...document.querySelectorAll('[data-story-scene]')];
-  const storySteps = [...document.querySelectorAll('.story-progress li')];
-  const impactRings = story?.querySelector('.story-impact-rings');
-  const storyVignetteGlow = story?.querySelector('.story-vignette');
-  let currentScene = -1;
+  // Mantém apenas o comportamento do header e o leve movimento da imagem inicial.
   let scrollTicking = false;
-
-  const setActiveScene = (index) => {
-    if (index === currentScene) return;
-    currentScene = index;
-    storyScenes.forEach((scene, sceneIndex) => scene.classList.toggle('active', sceneIndex === index));
-    storySteps.forEach((step, stepIndex) => step.classList.toggle('active', stepIndex === index));
-  };
-
-  const setFallbackFrame = (index) => {
-    storyFrames.forEach((frame, frameIndex) => frame.classList.toggle('active', frameIndex === index));
-  };
 
   const updateHeaderAndHero = () => {
     const scrollY = window.scrollY;
@@ -259,21 +239,6 @@
 
     if (hero && !reducedMotion) {
       hero.style.setProperty('--hero-scene-y', `${Math.min(scrollY * 0.035, 30)}px`);
-    }
-
-    if (story?.classList.contains('story-fallback') && !reducedMotion) {
-      const rect = story.getBoundingClientRect();
-      const scrollable = Math.max(story.offsetHeight - window.innerHeight, 1);
-      const progress = clamp(-rect.top / scrollable);
-      const sceneIndex = Math.min(storyScenes.length - 1, Math.floor(progress * storyScenes.length));
-      setActiveScene(Math.max(0, sceneIndex));
-      setFallbackFrame(Math.max(0, sceneIndex));
-
-      if (impactRings) {
-        const impactProgress = clamp((progress - 0.78) / 0.22);
-        impactRings.style.opacity = String(impactProgress * 0.72);
-        impactRings.style.transform = `scale(${0.35 + impactProgress * 0.9})`;
-      }
     }
 
     scrollTicking = false;
@@ -284,56 +249,6 @@
     scrollTicking = true;
     window.requestAnimationFrame(updateHeaderAndHero);
   };
-
-  setActiveScene(0);
-  setFallbackFrame(reducedMotion ? 2 : 0);
-
-  if (story && storySticky && storyFrames.length === 4 && !reducedMotion && window.gsap && window.ScrollTrigger) {
-    const gsap = window.gsap;
-    gsap.registerPlugin(window.ScrollTrigger);
-    root.classList.add('gsap-story');
-
-    gsap.set(storyFrames, { autoAlpha: 0, scale: 1.015 });
-    gsap.set(storyFrames[0], { autoAlpha: 1 });
-    gsap.set(impactRings, { autoAlpha: 0, scale: 0.35, transformOrigin: '50% 50%' });
-
-    const storyTimeline = gsap.timeline({
-      defaults: { ease: 'none' },
-      scrollTrigger: {
-        trigger: story,
-        start: 'top top',
-        end: () => `+=${window.innerHeight * (window.innerWidth <= 600 ? 3.2 : 4.2)}`,
-        pin: storySticky,
-        scrub: window.innerWidth <= 600 ? 0.35 : 0.75,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-        onUpdate: ({ progress }) => {
-          const sceneIndex = Math.min(3, Math.floor(progress * 4));
-          setActiveScene(sceneIndex);
-        }
-      }
-    });
-
-    storyTimeline
-      .addLabel('guard', 0)
-      .to(storyFrames[0], { scale: 1.025, duration: 0.7 }, 0)
-      .addLabel('punch', 0.72)
-      .to(storyFrames[0], { autoAlpha: 0, duration: 0.28 }, 0.72)
-      .fromTo(storyFrames[1], { autoAlpha: 0, scale: 1.015 }, { autoAlpha: 1, scale: 1.028, duration: 0.42 }, 0.72)
-      .to(storyFrames[1], { xPercent: -0.35, duration: 0.58 }, 0.95)
-      .addLabel('dodge', 1.55)
-      .to(storyFrames[1], { autoAlpha: 0, duration: 0.3 }, 1.55)
-      .fromTo(storyFrames[2], { autoAlpha: 0, scale: 1.02 }, { autoAlpha: 1, scale: 1.035, duration: 0.44 }, 1.55)
-      .to(storyFrames[2], { xPercent: -0.45, duration: 0.58 }, 1.82)
-      .addLabel('impact', 2.45)
-      .to(storyFrames[2], { autoAlpha: 0, duration: 0.32 }, 2.45)
-      .fromTo(storyFrames[3], { autoAlpha: 0, scale: 1.025 }, { autoAlpha: 1, scale: window.innerWidth <= 600 ? 1.045 : 1.075, duration: 0.72 }, 2.45)
-      .to(impactRings, { autoAlpha: 0.62, scale: 1.18, duration: 0.6 }, 2.56)
-      .to(storyVignetteGlow, { '--impact-glow': 0.42, duration: 0.55 }, 2.6)
-      .to({}, { duration: 0.3 });
-  } else if (story && !reducedMotion) {
-    story.classList.add('story-fallback');
-  }
 
   updateHeaderAndHero();
   window.addEventListener('scroll', requestScrollUpdate, { passive: true });

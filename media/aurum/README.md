@@ -1,17 +1,17 @@
 # Mídia da experiência Aurum
 
-Esta pasta concentra os assets usados pela narrativa visual da home. A sequência ativa fica em `media/aurum/hero/`:
+Esta pasta concentra os assets visuais da home. A imagem ativa do hero e as alternativas arquivadas ficam em `media/aurum/hero/`:
 
-- `scene-01-guard.jpg`: os dois atletas em guarda, antes da ação.
-- `scene-02-punch.jpg`: o atacante inicia o direto e projeta o corpo.
-- `scene-03-dodge.jpg`: o defensor sai da linha do golpe; também é o poster desktop do hero.
-- `scene-04-impact.jpg`: aproximação final da luva, sem perder a esquiva e o ringue.
+- `scene-01-guard.jpg`: imagem desktop ativa do hero, com os dois atletas em guarda.
+- `scene-02-punch.jpg`: quadro alternativo arquivado do início do golpe.
+- `scene-03-dodge.jpg`: quadro alternativo arquivado da esquiva.
+- `scene-04-impact.jpg`: quadro alternativo arquivado da aproximação da luva.
 - `hero-mobile.jpg`: composição vertical específica do hero, mantendo os dois atletas visíveis.
 - `hero-scene.mp4` (futuro): caminho reservado para um vídeo curto opcional do hero.
 
-Para trocar uma fase da narrativa, mantenha o mesmo nome e proporção 16:9 do arquivo correspondente. Os quatro quadros são declarados no bloco `.story-stage` de `index.html` e animados por `ScrollTrigger` em `js/script.js`; assim, a arte pode ser atualizada sem refazer a timeline.
+Para trocar a imagem principal no desktop, substitua `scene-01-guard.jpg` mantendo o nome e a proporção 16:9. No mobile, substitua `hero-mobile.jpg` mantendo a composição vertical.
 
-Para ativar o vídeo futuro, substitua apenas o `<picture class="hero-scene">` em `index.html` por um `<video>` com `media/aurum/hero/hero-scene.mp4` como `src` e preserve `scene-03-dodge.jpg` como `poster`. A narrativa pinada deve continuar usando os quatro JPGs, pois eles garantem controle preciso e um fallback leve no scroll.
+Para ativar o vídeo futuro, substitua apenas o `<picture class="hero-scene">` em `index.html` por um `<video>` com `media/aurum/hero/hero-scene.mp4` como `src` e preserve `scene-01-guard.jpg` como poster. Após o hero, a página segue diretamente para o ringue interativo da seção `#experiencia`.
 
 Os antigos `hero-boxers.jpg` e `hero-boxers-mobile.jpg` permanecem na raiz desta pasta somente como versões anteriores e não são mais carregados pela home.
 
